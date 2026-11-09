@@ -1,9 +1,11 @@
+
 <?php
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ShipmentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -51,6 +53,11 @@ Route::middleware(['auth', 'active'])->group(function () {
     // Main dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])
         ->name('dashboard');
+
+    // Shipment Management
+    Route::get('/shipments', [ShipmentController::class, 'index'])
+        ->middleware('role:admin,operator,customer')
+        ->name('shipments.index');
 
     // Logout
     Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
