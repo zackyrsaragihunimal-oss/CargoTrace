@@ -50,14 +50,26 @@ Route::middleware('guest')->group(function () {
 
 Route::middleware(['auth', 'active'])->group(function () {
 
-    // Main dashboard
+    // Main Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])
         ->name('dashboard');
 
     // Shipment Management
+
+    // Menampilkan daftar shipment.
     Route::get('/shipments', [ShipmentController::class, 'index'])
         ->middleware('role:admin,operator,customer')
         ->name('shipments.index');
+
+    // Menampilkan formulir tambah shipment.
+    Route::get('/shipments/create', [ShipmentController::class, 'create'])
+        ->middleware('role:admin,operator')
+        ->name('shipments.create');
+
+    // Menyimpan shipment baru.
+    Route::post('/shipments', [ShipmentController::class, 'store'])
+        ->middleware('role:admin,operator')
+        ->name('shipments.store');
 
     // Logout
     Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
