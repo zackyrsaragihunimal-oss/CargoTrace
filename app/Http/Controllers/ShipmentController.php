@@ -189,4 +189,37 @@ class ShipmentController extends Controller
             ->route('shipments.index')
             ->with('success', 'Shipment berhasil ditambahkan dengan nomor ' . $shipmentNumber . '.');
     }
+
+    /**
+     * Menampilkan detail satu shipment.
+     */
+    public function show(Request $request, Shipment $shipment): View
+    {
+        $user = $request->user();
+
+        // Customer hanya boleh melihat shipment miliknya sendiri.
+        if (
+            $user->role === 'customer' &&
+            $shipment->customer_id !== $user->id
+        ) {
+            abort(403, 'Anda tidak memiliki akses ke shipment ini.');
+        }
+
+        // Mengambil informasi shipment beserta relasinya.
+        $shipment->load([
+            'customer',
+            'carrier',
+            'originLocation',
+            'destinationLocation',
+            'creator',
+            'updater',
+            'items',
+            'trackingEvents',
+            'exceptions',
+        ]);
+
+        return view('shipments.show', [
+            'shipment' => $shipment,
+        ]);
+    }
 }

@@ -240,9 +240,9 @@
                     @forelse ($shipments as $shipment)
                         <tr>
                             <td>
-                                <span class="shipment-number">
+                                <a href="{{ route('shipments.show', $shipment->id) }}" class="shipment-number" style="text-decoration: none;">
                                     {{ $shipment->shipment_number }}
-                                </span>
+                                </a>
                                 <span class="shipment-muted">
                                     ID: {{ $shipment->id }}
                                 </span>
@@ -270,9 +270,7 @@
                             <td>{{ $shipment->carrier->name ?? '-' }}</td>
 
                             <td>
-                                {{ $shipment->estimated_arrival_at
-                                    ? $shipment->estimated_arrival_at->format('d M Y H:i')
-                                    : $shipment->expected_arrival_at->format('d M Y H:i') }}
+                                {{ optional($shipment->estimated_arrival_at ?? $shipment->expected_arrival_at)->format('d M Y H:i') ?? '-' }}
                             </td>
 
                             <td>

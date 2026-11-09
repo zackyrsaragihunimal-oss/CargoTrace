@@ -71,6 +71,11 @@ Route::middleware(['auth', 'active'])->group(function () {
         ->middleware('role:admin,operator')
         ->name('shipments.store');
 
+    // Menampilkan detail shipment.
+    Route::get('/shipments/{shipment}', [ShipmentController::class, 'show'])
+        ->middleware('role:admin,operator,customer')
+        ->name('shipments.show');
+
     // Logout
     Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
         ->name('logout');
