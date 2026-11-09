@@ -1,4 +1,3 @@
-
 <?php
 
 namespace App\Http\Controllers\Auth;
@@ -14,17 +13,11 @@ use Illuminate\View\View;
 
 class AuthenticatedSessionController extends Controller
 {
-    /**
-     * Tampilkan halaman login.
-     */
     public function create(): View
     {
         return view('auth.login');
     }
 
-    /**
-     * Proses autentikasi pengguna.
-     */
     public function store(Request $request): RedirectResponse
     {
         $credentials = $request->validate([
@@ -60,15 +53,11 @@ class AuthenticatedSessionController extends Controller
         }
 
         RateLimiter::clear($throttleKey);
-
         $request->session()->regenerate();
 
         return redirect()->intended(route('dashboard'));
     }
 
-    /**
-     * Keluar dari sistem dan mengakhiri session.
-     */
     public function destroy(Request $request): RedirectResponse
     {
         Auth::guard('web')->logout();
