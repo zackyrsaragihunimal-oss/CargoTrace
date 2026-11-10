@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ShipmentController;
+use App\Http\Controllers\TrackingEventController;
 
 /*
 |--------------------------------------------------------------------------
@@ -70,6 +71,11 @@ Route::middleware(['auth', 'active'])->group(function () {
     Route::post('/shipments', [ShipmentController::class, 'store'])
         ->middleware('role:admin,operator')
         ->name('shipments.store');
+
+    // Menyimpan pembaruan tracking (khusus admin dan operator).
+    Route::post('/shipments/{shipment}/tracking', [TrackingEventController::class, 'store'])
+        ->middleware('role:admin,operator')
+        ->name('shipments.tracking.store');
 
     // Menampilkan detail shipment.
     Route::get('/shipments/{shipment}', [ShipmentController::class, 'show'])
