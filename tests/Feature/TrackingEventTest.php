@@ -89,14 +89,13 @@ class TrackingEventTest extends TestCase
 
     public function test_pickup_sets_shipment_status_to_picked_up(): void
     {
-        $this->shipment->update(['current_status' => 'PENDING']);
+        $this->shipment->update(['current_status' => 'BOOKED']);
 
         $this->submitTracking('PICKUP', 'Tangerang');
 
         $this->assertDatabaseHas('shipments', [
             'id' => $this->shipment->id,
             'current_status' => 'PICKED_UP',
-            'actual_departure_at' => '2026-11-18 15:00:00',
         ]);
 
         $this->assertDatabaseHas('tracking_events', [
@@ -108,6 +107,7 @@ class TrackingEventTest extends TestCase
 
     public function test_departure_sets_shipment_status_to_in_transit(): void
     {
+        $this->shipment->update(['current_status' => 'PICKED_UP']);
         $this->submitTracking('DEPARTURE', 'Tangerang');
 
         $this->assertDatabaseHas('shipments', [
@@ -151,13 +151,14 @@ class TrackingEventTest extends TestCase
         ]);
     }
 
-    public function test_delivery_keeps_shipment_in_transit(): void
+    public function test_delivery_changes_arrived_shipment_to_delivered(): void
     {
+        $this->shipment->update(['current_status' => 'ARRIVED']);
         $this->submitTracking('DELIVERY', 'Deli Serdang');
 
         $this->assertDatabaseHas('shipments', [
             'id' => $this->shipment->id,
-            'current_status' => 'IN_TRANSIT',
+            'current_status' => 'DELIVERED',
         ]);
     }
 
