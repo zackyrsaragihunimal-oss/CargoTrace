@@ -42,25 +42,63 @@ class TrackingEventController extends Controller
             'event_at.required' => 'Waktu aktivitas wajib diisi.',
         ]);
 
-        DB::transaction(function () use ($validated, $request, $shipment): void {
+        $shipment->loadMissing('destinationLocation');
+
+        $destination = $shipment->destinationLocation;
+        $trackingLocation = mb_strtolower(trim($validated['location_name'] ?? ''));
+
+        $destinationNames = $destination
+            ? array_filter([
+                mb_strtolower(trim($destination->name ?? '')),
+                mb_strtolower(trim($destination->city ?? '')),
+            ])
+            : [];
+
+        $isAtDestination = $trackingLocation !== ''
+            && in_array($trackingLocation, $destinationNames, true);
+
+        $resolvedStatus = match ($validated['event_type']) {
+            'PICKUP' => 'PICKED_UP',
+            'DEPARTURE' => 'IN_TRANSIT',
+            'ARRIVAL' => $isAtDestination ? 'ARRIVED' : 'IN_TRANSIT',
+            'DELIVERY' => 'IN_TRANSIT',
+            'INSPECTION' => $shipment->current_status,
+            default => $validated['status'],
+        };
+
+        DB::transaction(function () use (
+            $validated,
+            $request,
+            $shipment,
+            $resolvedStatus,
+            $isAtDestination
+        ): void {
             $shipment->trackingEvents()->create([
                 'created_by' => $request->user()->id,
                 'event_type' => $validated['event_type'],
-                'status' => $validated['status'],
+                'status' => $resolvedStatus,
                 'event_at' => $validated['event_at'],
                 'location_name' => $validated['location_name'] ?? null,
                 'description' => $validated['description'] ?? null,
             ]);
 
-            $shipment->current_status = $validated['status'];
+            $shipment->current_status = $resolvedStatus;
             $shipment->updated_by = $request->user()->id;
 
-            if ($validated['status'] === 'PICKED_UP' && ! $shipment->actual_departure_at) {
+            if (
+                $resolvedStatus === 'PICKED_UP'
+                && ! $shipment->actual_departure_at
+            ) {
                 $shipment->actual_departure_at = $validated['event_at'];
             }
 
-            if ($validated['status'] === 'DELIVERED') {
-                $shipment->actual_arrival_at = $validated['event_at'];
+            if (
+                ($validated['event_type'] === 'ARRIVAL' && $isAtDestination)
+                || $resolvedStatus === 'DELIVERED'
+            ) {
+                if (! $shipment->actual_arrival_at) {
+                    $shipment->actual_arrival_at = $validated['event_at'];
+                }
             }
 
             $shipment->save();

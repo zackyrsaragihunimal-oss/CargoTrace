@@ -1,0 +1,179 @@
+<?php
+
+namespace Tests\Feature;
+
+use App\Models\Shipment;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\DB;
+use Tests\TestCase;
+
+class TrackingEventTest extends TestCase
+{
+    use RefreshDatabase;
+
+    private User $operator;
+    private Shipment $shipment;
+    private int $destinationId;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        // Membuat akun operator khusus untuk pengujian.
+        $this->operator = User::factory()->create();
+        $this->operator->forceFill([
+            'role' => 'operator',
+            'is_active' => true,
+        ])->save();
+
+        // Membuat lokasi asal.
+        $originId = DB::table('locations')->insertGetId([
+            'name' => 'Gudang Tangerang',
+            'location_type' => 'warehouse',
+            'city' => 'Tangerang',
+            'country' => 'Indonesia',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        // Membuat lokasi tujuan.
+        $this->destinationId = DB::table('locations')->insertGetId([
+            'name' => 'Gudang Deli Serdang',
+            'location_type' => 'warehouse',
+            'city' => 'Deli Serdang',
+            'country' => 'Indonesia',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        // Membuat carrier khusus pengujian.
+        $carrierId = DB::table('carriers')->insertGetId([
+            'code' => 'TEST-CARRIER',
+            'name' => 'CargoTrace Test Carrier',
+            'is_active' => true,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        // Membuat shipment uji.
+        $this->shipment = Shipment::create([
+            'shipment_number' => 'CT-TEST-001',
+            'customer_id' => $this->operator->id,
+            'carrier_id' => $carrierId,
+            'origin_location_id' => $originId,
+            'destination_location_id' => $this->destinationId,
+            'cargo_type' => 'Electronic Equipment',
+            'expected_departure_at' => '2026-11-18 08:00:00',
+            'expected_arrival_at' => '2026-11-20 16:00:00',
+            'current_status' => 'IN_TRANSIT',
+            'created_by' => $this->operator->id,
+        ]);
+    }
+
+    private function submitTracking(
+        string $eventType,
+        string $location,
+        string $selectedStatus = 'IN_TRANSIT'
+    ): void {
+        $this->actingAs($this->operator)
+            ->post(route('shipments.tracking.store', $this->shipment), [
+                'event_type' => $eventType,
+                'status' => $selectedStatus,
+                'event_at' => '2026-11-18 15:00:00',
+                'location_name' => $location,
+                'description' => 'Pengujian otomatis CargoTrace.',
+            ])
+            ->assertRedirect(route('shipments.show', $this->shipment));
+    }
+
+    public function test_pickup_sets_shipment_status_to_picked_up(): void
+    {
+        $this->shipment->update(['current_status' => 'PENDING']);
+
+        $this->submitTracking('PICKUP', 'Tangerang');
+
+        $this->assertDatabaseHas('shipments', [
+            'id' => $this->shipment->id,
+            'current_status' => 'PICKED_UP',
+            'actual_departure_at' => '2026-11-18 15:00:00',
+        ]);
+
+        $this->assertDatabaseHas('tracking_events', [
+            'shipment_id' => $this->shipment->id,
+            'event_type' => 'PICKUP',
+            'status' => 'PICKED_UP',
+        ]);
+    }
+
+    public function test_departure_sets_shipment_status_to_in_transit(): void
+    {
+        $this->submitTracking('DEPARTURE', 'Tangerang');
+
+        $this->assertDatabaseHas('shipments', [
+            'id' => $this->shipment->id,
+            'current_status' => 'IN_TRANSIT',
+        ]);
+    }
+
+    public function test_arrival_at_transit_location_keeps_in_transit_status(): void
+    {
+        $this->submitTracking('ARRIVAL', 'Medan');
+
+        $this->assertDatabaseHas('shipments', [
+            'id' => $this->shipment->id,
+            'current_status' => 'IN_TRANSIT',
+            'actual_arrival_at' => null,
+        ]);
+
+        $this->assertDatabaseHas('tracking_events', [
+            'shipment_id' => $this->shipment->id,
+            'event_type' => 'ARRIVAL',
+            'status' => 'IN_TRANSIT',
+            'location_name' => 'Medan',
+        ]);
+    }
+
+    public function test_arrival_at_destination_sets_arrived_status(): void
+    {
+        $this->submitTracking('ARRIVAL', 'Deli Serdang');
+
+        $this->assertDatabaseHas('shipments', [
+            'id' => $this->shipment->id,
+            'current_status' => 'ARRIVED',
+            'actual_arrival_at' => '2026-11-18 15:00:00',
+        ]);
+
+        $this->assertDatabaseHas('tracking_events', [
+            'shipment_id' => $this->shipment->id,
+            'event_type' => 'ARRIVAL',
+            'status' => 'ARRIVED',
+        ]);
+    }
+
+    public function test_delivery_keeps_shipment_in_transit(): void
+    {
+        $this->submitTracking('DELIVERY', 'Deli Serdang');
+
+        $this->assertDatabaseHas('shipments', [
+            'id' => $this->shipment->id,
+            'current_status' => 'IN_TRANSIT',
+        ]);
+    }
+
+    public function test_inspection_preserves_current_shipment_status(): void
+    {
+        $this->submitTracking('INSPECTION', 'Medan', 'DELIVERED');
+
+        $this->assertDatabaseHas('shipments', [
+            'id' => $this->shipment->id,
+            'current_status' => 'IN_TRANSIT',
+        ]);
+
+        $this->assertDatabaseHas('tracking_events', [
+            'shipment_id' => $this->shipment->id,
+            'event_type' => 'INSPECTION',
+            'status' => 'IN_TRANSIT',
+        ]);
+    }
+}
