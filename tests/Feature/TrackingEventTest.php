@@ -164,7 +164,7 @@ class TrackingEventTest extends TestCase
 
     public function test_inspection_preserves_current_shipment_status(): void
     {
-        $this->submitTracking('INSPECTION', 'Medan', 'DELIVERED');
+        $this->submitTracking('INSPECTION', 'Medan');
 
         $this->assertDatabaseHas('shipments', [
             'id' => $this->shipment->id,
@@ -176,5 +176,49 @@ class TrackingEventTest extends TestCase
             'event_type' => 'INSPECTION',
             'status' => 'IN_TRANSIT',
         ]);
+    }
+
+    public function test_tracking_rejects_event_earlier_than_last_event(): void
+    {
+        DB::table('tracking_events')->insert([
+            'shipment_id' => $this->shipment->id,
+            'created_by' => $this->operator->id,
+            'event_type' => 'DEPARTURE',
+            'status' => 'IN_TRANSIT',
+            'event_at' => '2026-11-18 16:00:00',
+            'location_name' => 'Tangerang',
+            'description' => 'Aktivitas tracking sebelumnya.',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        $this->actingAs($this->operator)
+            ->from(route('shipments.show', $this->shipment))
+            ->post(route('shipments.tracking.store', $this->shipment), [
+                'event_type' => 'INSPECTION',
+                'event_at' => '2026-11-18 15:00:00',
+                'location_name' => 'Medan',
+                'description' => 'Pengujian kronologi.',
+            ])
+            ->assertSessionHasErrors('event_at');
+
+        $this->assertDatabaseCount('tracking_events', 1);
+    }
+
+    public function test_tracking_rejects_activity_after_delivery(): void
+    {
+        $this->shipment->update(['current_status' => 'DELIVERED']);
+
+        $this->actingAs($this->operator)
+            ->from(route('shipments.show', $this->shipment))
+            ->post(route('shipments.tracking.store', $this->shipment), [
+                'event_type' => 'INSPECTION',
+                'event_at' => '2026-11-18 15:00:00',
+                'location_name' => 'Deli Serdang',
+                'description' => 'Pengujian status terminal.',
+            ])
+            ->assertSessionHasErrors('event_type');
+
+        $this->assertDatabaseCount('tracking_events', 0);
     }
 }
