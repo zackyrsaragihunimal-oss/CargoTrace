@@ -198,6 +198,41 @@ class TrackingEventTest extends TestCase
         $this->assertDatabaseCount('shipment_exceptions', 1);
     }
 
+    public function test_existing_open_departure_delay_exception_is_not_duplicated(): void
+    {
+        $this->shipment->update(['current_status' => 'PICKED_UP']);
+
+        // Menyiapkan exception keterlambatan yang masih terbuka.
+        DB::table('shipment_exceptions')->insert([
+            'shipment_id' => $this->shipment->id,
+            'exception_code' => 'DEPARTURE_DELAY',
+            'title' => 'Keterlambatan Keberangkatan',
+            'description' => 'Exception keterlambatan yang sudah tercatat.',
+            'severity' => 'MEDIUM',
+            'status' => 'OPEN',
+            'detected_at' => '2026-11-18 09:00:00',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        // Mencatat keberangkatan yang terlambat 60 menit.
+        $this->submitTracking(
+            'DEPARTURE',
+            'Tangerang',
+            'IN_TRANSIT',
+            '2026-11-18 09:00:00'
+        );
+
+        // Memastikan sistem tidak membuat exception OPEN duplikat.
+        $this->assertDatabaseCount('shipment_exceptions', 1);
+
+        $this->assertDatabaseHas('shipment_exceptions', [
+            'shipment_id' => $this->shipment->id,
+            'exception_code' => 'DEPARTURE_DELAY',
+            'status' => 'OPEN',
+        ]);
+    }
+
     public function test_arrival_at_transit_location_keeps_in_transit_status(): void
     {
         $this->submitTracking('ARRIVAL', 'Medan');
