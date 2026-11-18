@@ -171,6 +171,33 @@ class TrackingEventTest extends TestCase
         $this->assertDatabaseCount('shipment_exceptions', 1);
     }
 
+    public function test_departure_delay_of_eight_hours_updates_eta_and_creates_exception(): void
+    {
+        $this->shipment->update(['current_status' => 'PICKED_UP']);
+
+        $this->submitTracking(
+            'DEPARTURE',
+            'Tangerang',
+            'IN_TRANSIT',
+            '2026-11-18 16:00:00'
+        );
+
+        $this->assertDatabaseHas('shipments', [
+            'id' => $this->shipment->id,
+            'actual_departure_at' => '2026-11-18 16:00:00',
+            'estimated_arrival_at' => '2026-11-21 00:00:00',
+        ]);
+
+        $this->assertDatabaseHas('shipment_exceptions', [
+            'shipment_id' => $this->shipment->id,
+            'exception_code' => 'DEPARTURE_DELAY',
+            'description' => 'Keberangkatan terlambat 480 menit dari jadwal.',
+            'status' => 'OPEN',
+        ]);
+
+        $this->assertDatabaseCount('shipment_exceptions', 1);
+    }
+
     public function test_arrival_at_transit_location_keeps_in_transit_status(): void
     {
         $this->submitTracking('ARRIVAL', 'Medan');
