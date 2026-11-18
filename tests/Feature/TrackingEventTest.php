@@ -74,13 +74,14 @@ class TrackingEventTest extends TestCase
     private function submitTracking(
         string $eventType,
         string $location,
-        string $selectedStatus = 'IN_TRANSIT'
+        string $selectedStatus = 'IN_TRANSIT',
+        string $eventAt = '2026-11-18 15:00:00'
     ): void {
         $this->actingAs($this->operator)
             ->post(route('shipments.tracking.store', $this->shipment), [
                 'event_type' => $eventType,
                 'status' => $selectedStatus,
-                'event_at' => '2026-11-18 15:00:00',
+                'event_at' => $eventAt,
                 'location_name' => $location,
                 'description' => 'Pengujian otomatis CargoTrace.',
             ])
@@ -108,12 +109,65 @@ class TrackingEventTest extends TestCase
     public function test_departure_sets_shipment_status_to_in_transit(): void
     {
         $this->shipment->update(['current_status' => 'PICKED_UP']);
-        $this->submitTracking('DEPARTURE', 'Tangerang');
+        $this->submitTracking(
+            'DEPARTURE',
+            'Tangerang',
+            'IN_TRANSIT',
+            '2026-11-18 08:00:00'
+        );
 
         $this->assertDatabaseHas('shipments', [
             'id' => $this->shipment->id,
             'current_status' => 'IN_TRANSIT',
         ]);
+    }
+
+    public function test_departure_delay_below_threshold_updates_eta_without_exception(): void
+    {
+        $this->shipment->update(['current_status' => 'PICKED_UP']);
+
+        $this->submitTracking(
+            'DEPARTURE',
+            'Tangerang',
+            'IN_TRANSIT',
+            '2026-11-18 08:59:00'
+        );
+
+        $this->assertDatabaseHas('shipments', [
+            'id' => $this->shipment->id,
+            'estimated_arrival_at' => '2026-11-20 16:59:00',
+        ]);
+
+        $this->assertDatabaseMissing('shipment_exceptions', [
+            'shipment_id' => $this->shipment->id,
+            'exception_code' => 'DEPARTURE_DELAY',
+        ]);
+    }
+
+    public function test_departure_delay_at_threshold_creates_exception(): void
+    {
+        $this->shipment->update(['current_status' => 'PICKED_UP']);
+
+        $this->submitTracking(
+            'DEPARTURE',
+            'Tangerang',
+            'IN_TRANSIT',
+            '2026-11-18 09:00:00'
+        );
+
+        $this->assertDatabaseHas('shipments', [
+            'id' => $this->shipment->id,
+            'estimated_arrival_at' => '2026-11-20 17:00:00',
+        ]);
+
+        $this->assertDatabaseHas('shipment_exceptions', [
+            'shipment_id' => $this->shipment->id,
+            'exception_code' => 'DEPARTURE_DELAY',
+            'severity' => 'MEDIUM',
+            'status' => 'OPEN',
+        ]);
+
+        $this->assertDatabaseCount('shipment_exceptions', 1);
     }
 
     public function test_arrival_at_transit_location_keeps_in_transit_status(): void

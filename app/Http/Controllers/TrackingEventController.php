@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Shipment;
+use App\Services\ShipmentDelayService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -14,7 +15,11 @@ class TrackingEventController extends Controller
     /**
      * Simpan aktivitas tracking dan validasi perpindahan status shipment.
      */
-    public function store(Request $request, Shipment $shipment): RedirectResponse
+    public function store(
+        Request $request,
+        Shipment $shipment,
+        ShipmentDelayService $shipmentDelayService
+    ): RedirectResponse
     {
         $validated = $request->validate([
             'event_type' => [
@@ -42,7 +47,8 @@ class TrackingEventController extends Controller
         DB::transaction(function () use (
             $validated,
             $request,
-            $shipment
+            $shipment,
+            $shipmentDelayService
         ): void {
             // Mengunci shipment agar dua pembaruan bersamaan tidak
             // menghasilkan perpindahan status yang tidak konsisten.
@@ -125,7 +131,7 @@ class TrackingEventController extends Controller
             }
 
             // Simpan riwayat tracking.
-            $lockedShipment->trackingEvents()->create([
+            $trackingEvent = $lockedShipment->trackingEvents()->create([
                 'created_by' => $request->user()->id,
                 'event_type' => $eventType,
                 'status' => $resolvedStatus,
@@ -152,6 +158,14 @@ class TrackingEventController extends Controller
                 && ! $lockedShipment->actual_arrival_at
             ) {
                 $lockedShipment->actual_arrival_at = $eventAt;
+            }
+
+            // Hitung ulang ETA dan deteksi keterlambatan keberangkatan.
+            if ($eventType === 'DEPARTURE') {
+                $shipmentDelayService->handleDepartureDelay(
+                    $lockedShipment,
+                    $trackingEvent
+                );
             }
 
             $lockedShipment->save();
