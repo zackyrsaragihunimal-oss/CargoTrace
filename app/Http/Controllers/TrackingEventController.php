@@ -21,6 +21,7 @@ class TrackingEventController extends Controller
                 'required',
                 'string',
                 Rule::in([
+                    'BOOKING',
                     'PICKUP',
                     'DEPARTURE',
                     'ARRIVAL',
@@ -92,11 +93,11 @@ class TrackingEventController extends Controller
 
             // Tentukan status berdasarkan status sebelumnya dan aktivitas.
             $resolvedStatus = match ($eventType) {
-                'PICKUP' => in_array(
-                    $currentStatus,
-                    ['CREATED', 'BOOKED', 'PENDING'],
-                    true
-                )
+                'BOOKING' => $currentStatus === 'CREATED'
+                    ? 'BOOKED'
+                    : null,
+
+                'PICKUP' => $currentStatus === 'BOOKED'
                     ? 'PICKED_UP'
                     : null,
 

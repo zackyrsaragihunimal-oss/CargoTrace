@@ -221,4 +221,39 @@ class TrackingEventTest extends TestCase
 
         $this->assertDatabaseCount('tracking_events', 0);
     }
+
+    public function test_booking_changes_created_shipment_to_booked(): void
+    {
+        $this->shipment->update(['current_status' => 'CREATED']);
+
+        $this->submitTracking('BOOKING', 'Tangerang');
+
+        $this->assertDatabaseHas('shipments', [
+            'id' => $this->shipment->id,
+            'current_status' => 'BOOKED',
+        ]);
+
+        $this->assertDatabaseHas('tracking_events', [
+            'shipment_id' => $this->shipment->id,
+            'event_type' => 'BOOKING',
+            'status' => 'BOOKED',
+        ]);
+    }
+
+    public function test_pickup_is_rejected_before_booking(): void
+    {
+        $this->shipment->update(['current_status' => 'CREATED']);
+
+        $this->actingAs($this->operator)
+            ->from(route('shipments.show', $this->shipment))
+            ->post(route('shipments.tracking.store', $this->shipment), [
+                'event_type' => 'PICKUP',
+                'event_at' => '2026-11-18 15:00:00',
+                'location_name' => 'Tangerang',
+                'description' => 'Pengujian urutan lifecycle.',
+            ])
+            ->assertSessionHasErrors('event_type');
+
+        $this->assertDatabaseCount('tracking_events', 0);
+    }
 }

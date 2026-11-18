@@ -198,6 +198,7 @@
                 <option value="">Semua Status</option>
                 @foreach ([
                     'CREATED',
+                    'BOOKED',
                     'PENDING',
                     'PICKED_UP',
                     'IN_TRANSIT',

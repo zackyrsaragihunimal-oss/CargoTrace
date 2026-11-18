@@ -672,20 +672,12 @@
                 <div>
                     <label for="event_type" style="display:block; margin-bottom:6px; font-size:12px; font-weight:700;">Jenis Aktivitas</label>
                     <select id="event_type" name="event_type" required style="width:100%; padding:10px; border:1px solid #cbd5e1; border-radius:7px;">
-                        <option value="STATUS_UPDATE">Pembaruan Status</option>
+                        <option value="BOOKING">Konfirmasi Booking</option>
                         <option value="PICKUP">Barang Dijemput</option>
                         <option value="DEPARTURE">Keberangkatan</option>
                         <option value="ARRIVAL">Tiba di Lokasi</option>
                         <option value="DELIVERY">Pengantaran</option>
                         <option value="INSPECTION">Pemeriksaan</option>
-                    </select>
-                </div>
-                <div>
-                    <label for="tracking_status" style="display:block; margin-bottom:6px; font-size:12px; font-weight:700;">Status Pengiriman</label>
-                    <select id="tracking_status" name="status" required style="width:100%; padding:10px; border:1px solid #cbd5e1; border-radius:7px;">
-                        @foreach (['CREATED', 'PENDING', 'PICKED_UP', 'IN_TRANSIT', 'ARRIVED', 'DELIVERED', 'CANCELLED'] as $trackingStatus)
-                            <option value="{{ $trackingStatus }}" @selected($shipment->current_status === $trackingStatus)>{{ str_replace('_', ' ', $trackingStatus) }}</option>
-                        @endforeach
                     </select>
                 </div>
                 <div>
@@ -708,7 +700,7 @@
 
         @if ($shipment->trackingEvents->isNotEmpty())
             <div class="ct-timeline">
-                @foreach ($shipment->trackingEvents->sortByDesc('event_at') as $event)
+                @foreach ($shipment->trackingEvents->sortBy('event_at') as $event)
                     <div class="ct-timeline-item">
                         <strong>
                             {{ $event->event_type ?? 'Aktivitas Pengiriman' }}
