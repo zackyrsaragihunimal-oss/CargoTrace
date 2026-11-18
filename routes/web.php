@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ShipmentController;
 use App\Http\Controllers\TrackingEventController;
+use App\Http\Controllers\ShipmentExceptionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -81,6 +82,22 @@ Route::middleware(['auth', 'active'])->group(function () {
         ->middleware('role:admin,operator,customer')
         ->name('shipments.show');
 
+    // Exception Management
+
+    // Daftar exception sesuai hak akses pengguna.
+    Route::get('/exceptions', [ShipmentExceptionController::class, 'index'])
+        ->middleware('role:admin,operator,customer')
+        ->name('exceptions.index');
+
+    // Penugasan exception hanya untuk admin.
+    Route::patch('/exceptions/{exception}/assign', [ShipmentExceptionController::class, 'assign'])
+        ->middleware('role:admin')
+        ->name('exceptions.assign');
+
+    // Pembaruan status exception untuk admin dan operator.
+    Route::patch('/exceptions/{exception}', [ShipmentExceptionController::class, 'update'])
+        ->middleware('role:admin,operator')
+        ->name('exceptions.update');
     // Logout
     Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
         ->name('logout');
