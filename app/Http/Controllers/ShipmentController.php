@@ -179,6 +179,7 @@ class ShipmentController extends Controller
                 'total_volume_m3' => $validated['total_volume_m3'] ?? null,
                 'expected_departure_at' => $validated['expected_departure_at'],
                 'expected_arrival_at' => $validated['expected_arrival_at'],
+                'estimated_arrival_at' => $validated['expected_arrival_at'],
                 'current_status' => 'CREATED',
                 'created_by' => $request->user()->id,
                 'updated_by' => $request->user()->id,
