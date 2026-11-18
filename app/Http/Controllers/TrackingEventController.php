@@ -64,6 +64,7 @@ class TrackingEventController extends Controller
             }
 
             $shipment->save();
+            $shipment->touch();
         });
 
         return redirect()
