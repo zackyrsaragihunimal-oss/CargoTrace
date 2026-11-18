@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Shipment;
+use App\Services\AuditLogService;
 use App\Services\ShipmentDelayService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -18,7 +19,8 @@ class TrackingEventController extends Controller
     public function store(
         Request $request,
         Shipment $shipment,
-        ShipmentDelayService $shipmentDelayService
+        ShipmentDelayService $shipmentDelayService,
+        AuditLogService $auditLogService
     ): RedirectResponse
     {
         $validated = $request->validate([
@@ -48,7 +50,8 @@ class TrackingEventController extends Controller
             $validated,
             $request,
             $shipment,
-            $shipmentDelayService
+            $shipmentDelayService,
+            $auditLogService
         ): void {
             // Mengunci shipment agar dua pembaruan bersamaan tidak
             // menghasilkan perpindahan status yang tidak konsisten.
@@ -169,6 +172,25 @@ class TrackingEventController extends Controller
             }
 
             $lockedShipment->save();
+
+            // Catat aktivitas tracking dan perubahan status.
+            $auditLogService->record(
+                $request,
+                'TRACKING_EVENT_CREATED',
+                'TrackingEvent',
+                $trackingEvent->id,
+                [
+                    'shipment_id' => $lockedShipment->id,
+                    'shipment_status' => $currentStatus,
+                ],
+                [
+                    'shipment_id' => $lockedShipment->id,
+                    'event_type' => $eventType,
+                    'shipment_status' => $resolvedStatus,
+                    'event_at' => $eventAt->toDateTimeString(),
+                    'location_name' => $validated['location_name'] ?? null,
+                ]
+            );
         });
 
         return redirect()

@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Shipment;
+use App\Models\AuditLog;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
@@ -292,6 +293,16 @@ class TrackingEventTest extends TestCase
             'event_type' => 'BOOKING',
             'status' => 'BOOKED',
         ]);
+
+        // Memastikan aktivitas booking tercatat dengan status lama dan baru.
+        $auditLog = AuditLog::where('action', 'TRACKING_EVENT_CREATED')
+            ->where('entity_type', 'TrackingEvent')
+            ->firstOrFail();
+
+        $this->assertEquals($this->operator->id, $auditLog->user_id);
+        $this->assertEquals('CREATED', $auditLog->old_values['shipment_status']);
+        $this->assertEquals('BOOKED', $auditLog->new_values['shipment_status']);
+        $this->assertEquals('BOOKING', $auditLog->new_values['event_type']);
     }
 
     public function test_pickup_is_rejected_before_booking(): void
@@ -309,5 +320,6 @@ class TrackingEventTest extends TestCase
             ->assertSessionHasErrors('event_type');
 
         $this->assertDatabaseCount('tracking_events', 0);
+        $this->assertDatabaseCount('audit_logs', 0);
     }
 }

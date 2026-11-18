@@ -6,6 +6,7 @@ use App\Models\Shipment;
 use App\Models\User;
 use App\Models\Carrier;
 use App\Models\Location;
+use App\Services\AuditLogService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
@@ -88,7 +89,7 @@ class ShipmentController extends Controller
     /**
      * Memvalidasi dan menyimpan shipment baru.
      */
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request, AuditLogService $auditLogService): RedirectResponse
     {
         $validated = $request->validate([
             'customer_id' => [
@@ -167,8 +168,8 @@ class ShipmentController extends Controller
         } while (Shipment::where('shipment_number', $shipmentNumber)->exists());
 
         // Menyimpan shipment dalam transaksi database.
-        DB::transaction(function () use ($validated, $request, $shipmentNumber) {
-            Shipment::create([
+        DB::transaction(function () use ($validated, $request, $shipmentNumber, $auditLogService) {
+            $shipment = Shipment::create([
                 'shipment_number' => $shipmentNumber,
                 'customer_id' => $validated['customer_id'],
                 'carrier_id' => $validated['carrier_id'],
@@ -184,6 +185,20 @@ class ShipmentController extends Controller
                 'created_by' => $request->user()->id,
                 'updated_by' => $request->user()->id,
             ]);
+
+            $auditLogService->record(
+                $request,
+                'SHIPMENT_CREATED',
+                'Shipment',
+                $shipment->id,
+                null,
+                [
+                    'shipment_number' => $shipment->shipment_number,
+                    'customer_id' => $shipment->customer_id,
+                    'carrier_id' => $shipment->carrier_id,
+                    'current_status' => $shipment->current_status,
+                ]
+            );
         });
 
         return redirect()

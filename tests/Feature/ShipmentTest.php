@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Shipment;
+use App\Models\AuditLog;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
@@ -82,6 +83,16 @@ class ShipmentTest extends TestCase
             ->firstOrFail();
 
         $this->assertEquals('CREATED', $shipment->current_status);
+
+        // Memastikan pembuatan shipment tercatat dalam audit log.
+        $auditLog = AuditLog::where('action', 'SHIPMENT_CREATED')
+            ->where('entity_type', 'Shipment')
+            ->where('entity_id', $shipment->id)
+            ->firstOrFail();
+
+        $this->assertEquals($operator->id, $auditLog->user_id);
+        $this->assertEquals($shipment->shipment_number, $auditLog->new_values['shipment_number']);
+        $this->assertEquals('CREATED', $auditLog->new_values['current_status']);
 
         // ETA awal harus mengikuti jadwal kedatangan.
         $this->assertNotNull($shipment->estimated_arrival_at);
