@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Shipment;
 use App\Services\AuditLogService;
 use App\Services\ShipmentDelayService;
+use App\Services\NotificationService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -20,7 +21,8 @@ class TrackingEventController extends Controller
         Request $request,
         Shipment $shipment,
         ShipmentDelayService $shipmentDelayService,
-        AuditLogService $auditLogService
+        AuditLogService $auditLogService,
+        NotificationService $notificationService
     ): RedirectResponse
     {
         $validated = $request->validate([
@@ -51,7 +53,8 @@ class TrackingEventController extends Controller
             $request,
             $shipment,
             $shipmentDelayService,
-            $auditLogService
+            $auditLogService,
+            $notificationService
         ): void {
             // Mengunci shipment agar dua pembaruan bersamaan tidak
             // menghasilkan perpindahan status yang tidak konsisten.
@@ -172,6 +175,24 @@ class TrackingEventController extends Controller
             }
 
             $lockedShipment->save();
+
+            // Beri tahu customer jika status shipment berubah.
+            if ($currentStatus !== $resolvedStatus) {
+                $lockedShipment->loadMissing('customer');
+
+                $notificationService->send(
+                    $lockedShipment->customer,
+                    $lockedShipment,
+                    'SHIPMENT_STATUS',
+                    'Status pengiriman diperbarui',
+                    "Status pengiriman {$lockedShipment->shipment_number} berubah dari {$currentStatus} menjadi {$resolvedStatus}.",
+                    [
+                        'event_type' => $eventType,
+                        'previous_status' => $currentStatus,
+                        'current_status' => $resolvedStatus,
+                    ]
+                );
+            }
 
             // Catat aktivitas tracking dan perubahan status.
             $auditLogService->record(

@@ -89,6 +89,58 @@ class TrackingEventTest extends TestCase
             ->assertRedirect(route('shipments.show', $this->shipment));
     }
 
+    public function test_status_change_creates_notification_for_shipment_customer(): void
+    {
+        $this->shipment->update(['current_status' => 'BOOKED']);
+
+        $this->submitTracking('PICKUP', 'Tangerang');
+
+        $this->assertDatabaseHas(
+            'notifications',
+            [
+                'user_id' => $this->shipment->customer_id,
+                'shipment_id' => $this->shipment->id,
+                'type' => 'SHIPMENT_STATUS',
+                'title' => 'Status pengiriman diperbarui',
+            ]
+        );
+
+        $notification = \App\Models\Notification::query()
+            ->where('shipment_id', $this->shipment->id)
+            ->where('type', 'SHIPMENT_STATUS')
+            ->firstOrFail();
+
+        $this->assertSame(
+            'PICKUP',
+            $notification->data['event_type']
+        );
+        $this->assertSame(
+            'BOOKED',
+            $notification->data['previous_status']
+        );
+        $this->assertSame(
+            'PICKED_UP',
+            $notification->data['current_status']
+        );
+        $this->assertNull($notification->read_at);
+    }
+
+    public function test_no_notification_is_created_when_tracking_does_not_change_status(): void
+    {
+        $this->shipment->update(['current_status' => 'IN_TRANSIT']);
+
+        $this->submitTracking('ARRIVAL', 'Tangerang');
+
+        $this->assertDatabaseCount('notifications', 0);
+        $this->assertDatabaseHas(
+            'shipments',
+            [
+                'id' => $this->shipment->id,
+                'current_status' => 'IN_TRANSIT',
+            ]
+        );
+    }
+
     public function test_pickup_sets_shipment_status_to_picked_up(): void
     {
         $this->shipment->update(['current_status' => 'BOOKED']);
