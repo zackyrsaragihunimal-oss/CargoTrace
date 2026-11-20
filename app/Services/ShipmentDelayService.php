@@ -34,12 +34,12 @@ class ShipmentDelayService
             $actualDeparture
         );
 
-        // ETA diperbarui berdasarkan durasi keterlambatan keberangkatan.
-        $currentEta = $shipment->estimated_arrival_at
-            ?? $shipment->expected_arrival_at;
+        // Hitung ETA dari jadwal kedatangan awal agar tidak bertambah berulang.
+        $baseEta = $shipment->expected_arrival_at
+            ?? $shipment->estimated_arrival_at;
 
-        if ($currentEta) {
-            $shipment->estimated_arrival_at = $currentEta->copy()
+        if ($baseEta) {
+            $shipment->estimated_arrival_at = $baseEta->copy()
                 ->addMinutes($delayMinutes);
         }
 
