@@ -11,228 +11,573 @@
 @endsection
 
 @section('content')
-
 <style>
-    .ct-dashboard { color: #17304f; }
-    .ct-dashboard * { box-sizing: border-box; }
-    .ct-welcome {
-        padding: 27px;
+    .ct-admin-dashboard {
+        --admin-ink: #172033;
+        --admin-muted: #718096;
+        --admin-border: #e7ebf2;
+        --admin-surface: #ffffff;
+        --admin-bg: #f7f9fc;
+        --admin-blue: #2563eb;
+        --admin-green: #15803d;
+        --admin-amber: #b45309;
+        --admin-red: #b91c1c;
+        color: var(--admin-ink);
+    }
+
+    .ct-admin-dashboard,
+    .ct-admin-dashboard * {
+        box-sizing: border-box;
+    }
+
+    .ct-admin-heading {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: 16px;
         margin-bottom: 22px;
-        border-radius: 18px;
-        background: linear-gradient(115deg, #102e59, #1766b7);
-        color: white;
     }
-    .ct-welcome h1 { margin: 0 0 8px; color: white; font-size: 27px; }
-    .ct-welcome p { margin: 0; color: #dcecff; font-size: 14px; line-height: 1.7; }
-    .ct-stats {
+
+    .ct-admin-eyebrow {
+        margin: 0 0 7px;
+        color: var(--admin-blue);
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: .12em;
+        text-transform: uppercase;
+    }
+
+    .ct-admin-heading h1 {
+        margin: 0;
+        color: var(--admin-ink);
+        font-size: clamp(23px, 3vw, 30px);
+        font-weight: 800;
+        letter-spacing: -.04em;
+    }
+
+    .ct-admin-heading p {
+        margin: 7px 0 0;
+        color: var(--admin-muted);
+        font-size: 13px;
+        line-height: 1.6;
+    }
+
+    .ct-admin-date {
+        flex-shrink: 0;
+        padding: 9px 12px;
+        border: 1px solid var(--admin-border);
+        border-radius: 10px;
+        background: var(--admin-surface);
+        color: #526176;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .ct-admin-stats {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-        gap: 15px;
-        margin-bottom: 28px;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 13px;
+        margin-bottom: 25px;
     }
-    .ct-stat {
-        padding: 20px;
-        border: 1px solid #e5edf6;
-        border-radius: 15px;
-        background: white;
-        box-shadow: 0 5px 18px rgba(20, 45, 75, .04);
+
+    .ct-admin-stat {
+        min-width: 0;
+        padding: 18px;
+        border: 1px solid var(--admin-border);
+        border-radius: 13px;
+        background: var(--admin-surface);
+        box-shadow: 0 2px 8px rgba(15, 23, 42, .025);
     }
-    .ct-stat-label { color: #718096; font-size: 12px; font-weight: 700; }
-    .ct-stat-value { margin-top: 9px; color: #15345d; font-size: 29px; font-weight: 800; }
-    .ct-stat-note { margin-top: 5px; color: #8493a8; font-size: 11px; }
-    .ct-section { margin-bottom: 28px; }
-    .ct-section h2 { margin: 0 0 14px; color: #17365f; font-size: 19px; }
-    .ct-panel {
-        overflow-x: auto;
-        padding: 20px;
-        border: 1px solid #e5edf6;
-        border-radius: 15px;
-        background: white;
+
+    .ct-admin-stat-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 8px;
     }
-    .ct-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-    .ct-table th {
-        padding: 12px 10px;
-        color: #718096;
-        background: #f7f9fc;
-        text-align: left;
-        white-space: nowrap;
-    }
-    .ct-table td { padding: 13px 10px; border-bottom: 1px solid #edf1f6; color: #42546b; }
-    .ct-table tr:last-child td { border-bottom: 0; }
-    .ct-table a { color: #1766b7; font-weight: 700; text-decoration: none; }
-    .ct-pill {
-        display: inline-block;
-        padding: 5px 9px;
-        border-radius: 20px;
-        background: #e8f1fc;
-        color: #245b91;
+
+    .ct-admin-stat-label {
+        color: var(--admin-muted);
         font-size: 10px;
         font-weight: 800;
+        letter-spacing: .055em;
+        line-height: 1.5;
+        text-transform: uppercase;
     }
-    .ct-status-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+
+    .ct-admin-stat-mark {
+        display: inline-flex;
+        width: 29px;
+        height: 29px;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        border-radius: 9px;
+        background: #eff6ff;
+        color: var(--admin-blue);
+        font-size: 13px;
+        font-weight: 900;
+    }
+
+    .ct-admin-stat:nth-child(2) .ct-admin-stat-mark,
+    .ct-admin-stat:nth-child(3) .ct-admin-stat-mark {
+        background: #ecfdf5;
+        color: var(--admin-green);
+    }
+
+    .ct-admin-stat:nth-child(5) .ct-admin-stat-mark {
+        background: #fff7ed;
+        color: var(--admin-amber);
+    }
+
+    .ct-admin-stat-value {
+        margin-top: 13px;
+        color: var(--admin-ink);
+        font-size: 29px;
+        font-weight: 800;
+        letter-spacing: -.045em;
+        line-height: 1;
+        overflow-wrap: anywhere;
+    }
+
+    .ct-admin-stat-note {
+        margin-top: 8px;
+        color: #8994a5;
+        font-size: 11px;
+        line-height: 1.45;
+    }
+
+    .ct-admin-section {
+        margin-bottom: 23px;
+    }
+
+    .ct-admin-section-heading {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
         gap: 12px;
+        margin-bottom: 12px;
     }
-    .ct-status-item { padding: 15px; border-radius: 12px; background: #f5f8fc; }
-    .ct-status-item strong { display: block; color: #17365f; font-size: 22px; }
-    .ct-status-item span { color: #718096; font-size: 11px; }
-    .ct-empty { padding: 24px; color: #8493a8; text-align: center; font-size: 13px; }
-    .ct-links { display: flex; flex-wrap: wrap; gap: 10px; }
-    .ct-links a {
-        padding: 11px 15px;
+
+    .ct-admin-section-heading h2 {
+        margin: 0;
+        color: var(--admin-ink);
+        font-size: 16px;
+        font-weight: 800;
+        letter-spacing: -.02em;
+    }
+
+    .ct-admin-section-caption {
+        color: var(--admin-muted);
+        font-size: 11px;
+    }
+
+    .ct-admin-panel {
+        overflow: hidden;
+        border: 1px solid var(--admin-border);
+        border-radius: 13px;
+        background: var(--admin-surface);
+        box-shadow: 0 2px 8px rgba(15, 23, 42, .025);
+    }
+
+    .ct-admin-status-grid {
+        display: grid;
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+        gap: 10px;
+        padding: 15px;
+    }
+
+    .ct-admin-status-item {
+        min-width: 0;
+        padding: 15px 12px;
+        border: 1px solid var(--admin-border);
         border-radius: 10px;
-        background: #edf5ff;
-        color: #1766b7;
+        background: var(--admin-bg);
+    }
+
+    .ct-admin-status-item strong {
+        display: block;
+        color: var(--admin-ink);
+        font-size: 23px;
+        font-weight: 800;
+        letter-spacing: -.04em;
+    }
+
+    .ct-admin-status-item span {
+        display: block;
+        margin-top: 5px;
+        color: var(--admin-muted);
+        font-size: 10px;
+        font-weight: 700;
+        line-height: 1.4;
+        overflow-wrap: anywhere;
+    }
+
+    .ct-admin-table-wrap {
+        overflow-x: auto;
+        width: 100%;
+    }
+
+    .ct-admin-table {
+        width: 100%;
+        border-collapse: collapse;
+        text-align: left;
         font-size: 12px;
+        white-space: nowrap;
+    }
+
+    .ct-admin-table th {
+        padding: 13px 16px;
+        border-bottom: 1px solid var(--admin-border);
+        background: #fafbfd;
+        color: #7b8798;
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: .055em;
+        text-transform: uppercase;
+    }
+
+    .ct-admin-table td {
+        padding: 14px 16px;
+        border-bottom: 1px solid #eef1f5;
+        color: #526176;
+        vertical-align: middle;
+    }
+
+    .ct-admin-table tbody tr:last-child td {
+        border-bottom: 0;
+    }
+
+    .ct-admin-table tbody tr:hover {
+        background: #fafcff;
+    }
+
+    .ct-admin-table a {
+        color: var(--admin-blue);
         font-weight: 800;
         text-decoration: none;
     }
-    @media(max-width:600px) {
-        .ct-welcome { padding: 22px; }
-        .ct-welcome h1 { font-size: 23px; }
-        .ct-panel { padding: 12px; }
+
+    .ct-admin-table a:hover {
+        text-decoration: underline;
+    }
+
+    .ct-admin-route {
+        color: #526176;
+        font-weight: 600;
+    }
+
+    .ct-admin-route-arrow {
+        padding: 0 5px;
+        color: #9aa5b4;
+    }
+
+    .ct-admin-pill {
+        display: inline-flex;
+        align-items: center;
+        padding: 5px 9px;
+        border: 1px solid #dbeafe;
+        border-radius: 20px;
+        background: #eff6ff;
+        color: #1d4ed8;
+        font-size: 9px;
+        font-weight: 800;
+        letter-spacing: .025em;
+    }
+
+    .ct-admin-empty {
+        padding: 30px 18px;
+        color: #8994a5;
+        font-size: 12px;
+        text-align: center;
+    }
+
+    .ct-admin-management {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 12px;
+        padding: 14px;
+    }
+
+    .ct-admin-management-link {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        min-width: 0;
+        padding: 15px;
+        border: 1px solid var(--admin-border);
+        border-radius: 10px;
+        background: #fff;
+        color: var(--admin-ink);
+        text-decoration: none;
+        transition: border-color .18s ease, background .18s ease, transform .18s ease;
+    }
+
+    .ct-admin-management-link:hover {
+        transform: translateY(-2px);
+        border-color: #bfdbfe;
+        background: #f8fbff;
+    }
+
+    .ct-admin-management-link strong {
+        display: block;
+        font-size: 12px;
+        font-weight: 800;
+    }
+
+    .ct-admin-management-link small {
+        display: block;
+        margin-top: 4px;
+        color: var(--admin-muted);
+        font-size: 10px;
+        line-height: 1.4;
+    }
+
+    .ct-admin-management-arrow {
+        color: var(--admin-blue);
+        font-size: 17px;
+        font-weight: 800;
+    }
+
+    @media (max-width: 1100px) {
+        .ct-admin-stats {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        .ct-admin-status-grid {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+    }
+
+    @media (max-width: 650px) {
+        .ct-admin-heading {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .ct-admin-stats {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 9px;
+        }
+
+        .ct-admin-stat {
+            padding: 14px;
+        }
+
+        .ct-admin-stat-value {
+            font-size: 25px;
+        }
+
+        .ct-admin-status-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            padding: 10px;
+        }
+
+        .ct-admin-management {
+            grid-template-columns: 1fr;
+            padding: 10px;
+        }
+
+        .ct-admin-section-heading {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .ct-admin-management-link {
+            transition: none;
+        }
     }
 </style>
 
-<div class="ct-dashboard">
-
-    <section class="ct-welcome" id="overview">
-        <h1>Welcome, {{ $user->name }}!</h1>
-        <p>
-            Centralized monitoring of CargoTrace logistics operations.
-            Berikut ringkasan kondisi sistem berdasarkan data terbaru.
-        </p>
+<div class="ct-admin-dashboard">
+    <section class="ct-admin-heading" id="overview">
+        <div>
+            <p class="ct-admin-eyebrow">CargoTrace / Control Center</p>
+            <h1>Welcome back, {{ $user->name }}.</h1>
+            <p>Monitor platform activity, shipment progress, and system operations from one place.</p>
+        </div>
+        <div class="ct-admin-date">{{ now()->format('d M Y') }}</div>
     </section>
 
-    <section class="ct-stats">
-        <article class="ct-stat">
-            <div class="ct-stat-label">TOTAL SHIPMENTS</div>
-            <div class="ct-stat-value">{{ number_format($totalShipments) }}</div>
-            <div class="ct-stat-note">Seluruh pengiriman terdaftar</div>
+    <section class="ct-admin-stats" aria-label="Platform statistics">
+        <article class="ct-admin-stat">
+            <div class="ct-admin-stat-top">
+                <span class="ct-admin-stat-label">Total Shipments</span>
+                <span class="ct-admin-stat-mark" aria-hidden="true">S</span>
+            </div>
+            <div class="ct-admin-stat-value">{{ number_format($totalShipments) }}</div>
+            <div class="ct-admin-stat-note">All registered shipments</div>
         </article>
 
-        <article class="ct-stat">
-            <div class="ct-stat-label">ACTIVE USERS</div>
-            <div class="ct-stat-value">{{ number_format($activeUsers) }}</div>
-            <div class="ct-stat-note">Semua role dengan akun aktif</div>
+        <article class="ct-admin-stat">
+            <div class="ct-admin-stat-top">
+                <span class="ct-admin-stat-label">Active Users</span>
+                <span class="ct-admin-stat-mark" aria-hidden="true">U</span>
+            </div>
+            <div class="ct-admin-stat-value">{{ number_format($activeUsers) }}</div>
+            <div class="ct-admin-stat-note">Accounts currently active</div>
         </article>
 
-        <article class="ct-stat">
-            <div class="ct-stat-label">CUSTOMERS</div>
-            <div class="ct-stat-value">{{ number_format($totalCustomers) }}</div>
-            <div class="ct-stat-note">Total akun customer</div>
+        <article class="ct-admin-stat">
+            <div class="ct-admin-stat-top">
+                <span class="ct-admin-stat-label">Customers</span>
+                <span class="ct-admin-stat-mark" aria-hidden="true">C</span>
+            </div>
+            <div class="ct-admin-stat-value">{{ number_format($totalCustomers) }}</div>
+            <div class="ct-admin-stat-note">Registered customer accounts</div>
         </article>
 
-        <article class="ct-stat">
-            <div class="ct-stat-label">OPERATORS</div>
-            <div class="ct-stat-value">{{ number_format($totalOperators) }}</div>
-            <div class="ct-stat-note">Total akun operator</div>
+        <article class="ct-admin-stat">
+            <div class="ct-admin-stat-top">
+                <span class="ct-admin-stat-label">Operators</span>
+                <span class="ct-admin-stat-mark" aria-hidden="true">O</span>
+            </div>
+            <div class="ct-admin-stat-value">{{ number_format($totalOperators) }}</div>
+            <div class="ct-admin-stat-note">Registered operator accounts</div>
         </article>
 
-        <article class="ct-stat">
-            <div class="ct-stat-label">OPEN EXCEPTIONS</div>
-            <div class="ct-stat-value">{{ number_format($openExceptions) }}</div>
-            <div class="ct-stat-note">Open dan sedang ditangani</div>
+        <article class="ct-admin-stat">
+            <div class="ct-admin-stat-top">
+                <span class="ct-admin-stat-label">Open Exceptions</span>
+                <span class="ct-admin-stat-mark" aria-hidden="true">!</span>
+            </div>
+            <div class="ct-admin-stat-value">{{ number_format($openExceptions) }}</div>
+            <div class="ct-admin-stat-note">Open and in progress</div>
         </article>
     </section>
 
-    <section class="ct-section">
-        <h2>Shipment Status Overview</h2>
-        <div class="ct-panel">
-            <div class="ct-status-grid">
-                @forelse (['CREATED', 'BOOKED', 'PICKED_UP', 'IN_TRANSIT', 'ARRIVED', 'DELIVERED'] as $status)
-                    <div class="ct-status-item">
+    <section class="ct-admin-section" aria-labelledby="shipment-status-heading">
+        <div class="ct-admin-section-heading">
+            <h2 id="shipment-status-heading">Shipment Status Overview</h2>
+            <span class="ct-admin-section-caption">Current platform distribution</span>
+        </div>
+        <div class="ct-admin-panel">
+            <div class="ct-admin-status-grid">
+                @foreach (['CREATED', 'BOOKED', 'PICKED_UP', 'IN_TRANSIT', 'ARRIVED', 'DELIVERED'] as $status)
+                    <div class="ct-admin-status-item">
                         <strong>{{ number_format((int) ($shipmentStatusCounts[$status] ?? 0)) }}</strong>
                         <span>{{ str_replace('_', ' ', $status) }}</span>
                     </div>
-                @empty
-                    <div class="ct-empty">Belum ada data status pengiriman.</div>
-                @endforelse
+                @endforeach
             </div>
         </div>
     </section>
 
-    <section class="ct-section" id="shipments">
-        <h2>Recent Shipments</h2>
-        <div class="ct-panel">
+    <section class="ct-admin-section" id="shipments">
+        <div class="ct-admin-section-heading">
+            <h2>Recent Shipments</h2>
+            <span class="ct-admin-section-caption">Latest 6 registered shipments</span>
+        </div>
+        <div class="ct-admin-panel">
             @if ($recentShipments->isEmpty())
-                <div class="ct-empty">Belum ada pengiriman yang tercatat.</div>
+                <div class="ct-admin-empty">No shipments have been recorded yet.</div>
             @else
-                <table class="ct-table">
-                    <thead>
-                        <tr>
-                            <th>Shipment Number</th>
-                            <th>Customer</th>
-                            <th>Route</th>
-                            <th>Status</th>
-                            <th>Created</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($recentShipments as $shipment)
+                <div class="ct-admin-table-wrap">
+                    <table class="ct-admin-table">
+                        <thead>
                             <tr>
-                                <td>
-                                    <a href="{{ route('shipments.show', $shipment) }}">
-                                        {{ $shipment->shipment_number }}
-                                    </a>
-                                </td>
-                                <td>{{ $shipment->customer?->name ?? '-' }}</td>
-                                <td>
-                                    {{ $shipment->originLocation?->city ?? '-' }}
-                                    &rarr;
-                                    {{ $shipment->destinationLocation?->city ?? '-' }}
-                                </td>
-                                <td><span class="ct-pill">{{ str_replace('_', ' ', $shipment->current_status) }}</span></td>
-                                <td>{{ $shipment->created_at?->format('d M Y') ?? '-' }}</td>
+                                <th>Shipment Number</th>
+                                <th>Customer</th>
+                                <th>Route</th>
+                                <th>Status</th>
+                                <th>Created</th>
                             </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @foreach ($recentShipments as $shipment)
+                                <tr>
+                                    <td>
+                                        <a href="{{ route('shipments.show', $shipment) }}">
+                                            {{ $shipment->shipment_number }}
+                                        </a>
+                                    </td>
+                                    <td>{{ $shipment->customer?->name ?? '-' }}</td>
+                                    <td>
+                                        <span class="ct-admin-route">{{ $shipment->originLocation?->city ?? '-' }}</span>
+                                        <span class="ct-admin-route-arrow">&rarr;</span>
+                                        <span class="ct-admin-route">{{ $shipment->destinationLocation?->city ?? '-' }}</span>
+                                    </td>
+                                    <td>
+                                        <span class="ct-admin-pill">{{ str_replace('_', ' ', $shipment->current_status) }}</span>
+                                    </td>
+                                    <td>{{ $shipment->created_at?->format('d M Y') ?? '-' }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
             @endif
         </div>
     </section>
 
-    <section class="ct-section" id="activities">
-        <h2>Recent System Activities</h2>
-        <div class="ct-panel">
+    <section class="ct-admin-section" id="activities">
+        <div class="ct-admin-section-heading">
+            <h2>Recent System Activities</h2>
+            <span class="ct-admin-section-caption">Latest 6 audit log records</span>
+        </div>
+        <div class="ct-admin-panel">
             @if ($recentActivities->isEmpty())
-                <div class="ct-empty">Belum ada aktivitas audit yang tercatat.</div>
+                <div class="ct-admin-empty">No system activities have been recorded yet.</div>
             @else
-                <table class="ct-table">
-                    <thead>
-                        <tr>
-                            <th>Activity</th>
-                            <th>User</th>
-                            <th>Entity</th>
-                            <th>Time</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($recentActivities as $activity)
+                <div class="ct-admin-table-wrap">
+                    <table class="ct-admin-table">
+                        <thead>
                             <tr>
-                                <td><span class="ct-pill">{{ $activity->action }}</span></td>
-                                <td>{{ $activity->user?->name ?? 'System / Unknown' }}</td>
-                                <td>{{ $activity->entity_type }} #{{ $activity->entity_id ?? '-' }}</td>
-                                <td>{{ $activity->created_at?->format('d M Y H:i') ?? '-' }}</td>
+                                <th>Activity</th>
+                                <th>User</th>
+                                <th>Entity</th>
+                                <th>Time</th>
                             </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @foreach ($recentActivities as $activity)
+                                <tr>
+                                    <td><span class="ct-admin-pill">{{ $activity->action }}</span></td>
+                                    <td>{{ $activity->user?->name ?? 'System / Unknown' }}</td>
+                                    <td>{{ $activity->entity_type }} #{{ $activity->entity_id ?? '-' }}</td>
+                                    <td>{{ $activity->created_at?->format('d M Y H:i') ?? '-' }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
             @endif
         </div>
     </section>
 
-    <section class="ct-section" id="management">
-        <h2>System Management</h2>
-        <div class="ct-panel">
-            <div class="ct-links">
-                <a href="{{ route('shipments.index') }}">Manage Shipments</a>
-                <a href="{{ route('exceptions.index') }}">Manage Exceptions</a>
-                <a href="{{ route('notifications.index') }}">View Notifications</a>
+    <section class="ct-admin-section" id="management">
+        <div class="ct-admin-section-heading">
+            <h2>System Management</h2>
+            <span class="ct-admin-section-caption">Quick access to administration tools</span>
+        </div>
+        <div class="ct-admin-panel">
+            <div class="ct-admin-management">
+                <a class="ct-admin-management-link" href="{{ route('shipments.index') }}">
+                    <span>
+                        <strong>Manage Shipments</strong>
+                        <small>Review and manage shipment records</small>
+                    </span>
+                    <span class="ct-admin-management-arrow" aria-hidden="true">&rarr;</span>
+                </a>
+                <a class="ct-admin-management-link" href="{{ route('exceptions.index') }}">
+                    <span>
+                        <strong>Manage Exceptions</strong>
+                        <small>Review and assign shipment issues</small>
+                    </span>
+                    <span class="ct-admin-management-arrow" aria-hidden="true">&rarr;</span>
+                </a>
+                <a class="ct-admin-management-link" href="{{ route('notifications.index') }}">
+                    <span>
+                        <strong>View Notifications</strong>
+                        <small>Open the system notification center</small>
+                    </span>
+                    <span class="ct-admin-management-arrow" aria-hidden="true">&rarr;</span>
+                </a>
             </div>
         </div>
     </section>
-
 </div>
 @endsection
