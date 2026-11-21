@@ -239,7 +239,7 @@
         </div>
 
         <img
-            src="{{ asset('images/jek-hero.png') }}"
+            src="{{ asset('images/CargoTrace_JEK_Mascot_Pack/04_Dashboard_Roles/jek-operator.png') }}"
             alt="JEK - CargoTrace Mascot"
             class="ct-op-mascot"
         >

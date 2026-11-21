@@ -238,9 +238,37 @@
         }
     }
 
+    .ct-customer-hero-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+    }
+
+    .ct-customer-hero-copy {
+        min-width: 0;
+        flex: 1;
+    }
+
+    .ct-customer-hero-mascot {
+        display: block;
+        width: clamp(110px, 18vw, 175px);
+        max-height: 175px;
+        object-fit: contain;
+        flex: 0 0 auto;
+    }
     @media (max-width: 700px) {
         .ct-customer-hero {
             padding: 22px;
+        }
+
+        .ct-customer-hero-inner {
+            gap: 10px;
+        }
+
+        .ct-customer-hero-mascot {
+            width: 105px;
+            max-height: 125px;
         }
 
         .ct-customer-hero h1 {
@@ -282,12 +310,21 @@
 <div class="ct-customer">
 
     <section class="ct-customer-hero" id="overview">
-        <h1>Welcome, {{ $user->name }}!</h1>
-        <p>
-            Selamat datang di CargoTrace. Pantau seluruh pengiriman
-            milik Anda, lihat perkembangan status, dan dapatkan
-            informasi terbaru mengenai perjalanan barang.
-        </p>
+        <div class="ct-customer-hero-inner">
+            <div class="ct-customer-hero-copy">
+                <h1>Welcome, {{ $user->name }}!</h1>
+                <p>
+                    Selamat datang di CargoTrace. Pantau seluruh pengiriman
+                    milik Anda, lihat perkembangan status, dan dapatkan
+                    informasi terbaru mengenai perjalanan barang.
+                </p>
+            </div>
+            <img
+                class="ct-customer-hero-mascot"
+                src="{{ asset('images/CargoTrace_JEK_Mascot_Pack/04_Dashboard_Roles/jek-customer.png') }}"
+                alt="JEK CargoTrace Customer"
+            >
+        </div>
     </section>
 
     <section class="ct-customer-stats">

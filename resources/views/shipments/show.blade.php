@@ -503,7 +503,7 @@
 
         <div class="ct-hero-mascot">
             <img
-                src="{{ asset('images/jek-package.png') }}"
+                src="{{ asset('images/CargoTrace_JEK_Mascot_Pack/02_Shipment_Delivery/jek-package.png') }}"
                 alt="JEK membawa paket CargoTrace"
             >
         </div>
