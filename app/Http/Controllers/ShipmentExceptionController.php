@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ShipmentException;
 use App\Models\User;
 use App\Services\AuditLogService;
+use App\Services\NotificationService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -75,7 +76,8 @@ class ShipmentExceptionController extends Controller
     public function assign(
         Request $request,
         ShipmentException $exception,
-        AuditLogService $auditLogService
+        AuditLogService $auditLogService,
+        NotificationService $notificationService
     ): RedirectResponse {
         abort_unless($request->user()->isAdmin(), 403);
 
@@ -95,7 +97,8 @@ class ShipmentExceptionController extends Controller
             $request,
             $exception,
             $validated,
-            $auditLogService
+            $auditLogService,
+            $notificationService
         ) {
             $lockedException = ShipmentException::query()
                 ->lockForUpdate()
@@ -112,6 +115,28 @@ class ShipmentExceptionController extends Controller
 
             $lockedException->assigned_to = $validated['assigned_to'];
             $lockedException->save();
+
+            // Beri tahu operator baru jika penugasannya berubah.
+            if ((int) $oldAssignee !== (int) $lockedException->assigned_to) {
+                $lockedException->loadMissing('shipment');
+
+                $assignedOperator = User::findOrFail(
+                    $lockedException->assigned_to
+                );
+
+                $notificationService->send(
+                    $assignedOperator,
+                    $lockedException->shipment,
+                    'EXCEPTION_ASSIGNED',
+                    'Exception pengiriman ditugaskan',
+                    "Anda ditugaskan menangani exception {$lockedException->exception_code} pada pengiriman {$lockedException->shipment->shipment_number}.",
+                    [
+                        'exception_id' => $lockedException->id,
+                        'exception_code' => $lockedException->exception_code,
+                        'status' => $lockedException->status,
+                    ]
+                );
+            }
 
             $auditLogService->record(
                 $request,
@@ -134,7 +159,8 @@ class ShipmentExceptionController extends Controller
     public function update(
         Request $request,
         ShipmentException $exception,
-        AuditLogService $auditLogService
+        AuditLogService $auditLogService,
+        NotificationService $notificationService
     ): RedirectResponse {
         $user = $request->user();
 
@@ -171,7 +197,8 @@ class ShipmentExceptionController extends Controller
             $request,
             $exception,
             $validated,
-            $auditLogService
+            $auditLogService,
+            $notificationService
         ) {
             $lockedException = ShipmentException::query()
                 ->lockForUpdate()
@@ -220,6 +247,27 @@ class ShipmentExceptionController extends Controller
                     'resolved_at' => $lockedException->resolved_at?->toDateTimeString(),
                 ]
             );
+
+            // Beri tahu customer ketika exception berhasil diselesaikan.
+            if ($validated['status'] === 'RESOLVED') {
+                $lockedException->loadMissing('shipment.customer');
+
+                $customer = $lockedException->shipment->customer;
+
+                if ($customer) {
+                    $notificationService->send(
+                        $customer,
+                        $lockedException->shipment,
+                        'EXCEPTION_RESOLVED',
+                        'Masalah pengiriman telah diselesaikan',
+                        "Masalah pada pengiriman {$lockedException->shipment->shipment_number} telah diselesaikan.",
+                        [
+                            'exception_id' => $lockedException->id,
+                            'exception_code' => $lockedException->exception_code,
+                        ]
+                    );
+                }
+            }
         });
 
         return redirect()

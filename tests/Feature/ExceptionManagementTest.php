@@ -116,6 +116,30 @@ class ExceptionManagementTest extends TestCase
             $operator->id,
             $auditLog->new_values['assigned_to']
         );
+
+        // Pastikan operator menerima notifikasi penugasan.
+        $this->assertDatabaseHas('notifications', [
+            'user_id' => $operator->id,
+            'shipment_id' => $shipment->id,
+            'type' => 'EXCEPTION_ASSIGNED',
+            'title' => 'Exception pengiriman ditugaskan',
+        ]);
+
+        // Penugasan ulang kepada operator yang sama tidak membuat duplikat.
+        $this->actingAs($admin)
+            ->patch(route('exceptions.assign', $exception), [
+                'assigned_to' => $operator->id,
+            ])
+            ->assertRedirect(route('exceptions.index'));
+
+        $this->assertSame(
+            1,
+            DB::table('notifications')
+                ->where('user_id', $operator->id)
+                ->where('shipment_id', $shipment->id)
+                ->where('type', 'EXCEPTION_ASSIGNED')
+                ->count()
+        );
     }
 
     /**
@@ -188,6 +212,23 @@ class ExceptionManagementTest extends TestCase
         $updatedException = $exception->fresh();
 
         $this->assertNotNull($updatedException->resolved_at);
+
+        // Pastikan customer menerima notifikasi penyelesaian.
+        $this->assertDatabaseHas('notifications', [
+            'user_id' => $customer->id,
+            'shipment_id' => $shipment->id,
+            'type' => 'EXCEPTION_RESOLVED',
+            'title' => 'Masalah pengiriman telah diselesaikan',
+        ]);
+
+        $this->assertSame(
+            1,
+            DB::table('notifications')
+                ->where('user_id', $customer->id)
+                ->where('shipment_id', $shipment->id)
+                ->where('type', 'EXCEPTION_RESOLVED')
+                ->count()
+        );
 
         $auditLog = AuditLog::where('action', 'EXCEPTION_STATUS_UPDATED')
             ->where('entity_type', 'ShipmentException')
