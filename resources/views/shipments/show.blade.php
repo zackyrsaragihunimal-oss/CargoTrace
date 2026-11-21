@@ -15,266 +15,264 @@
 
 <style>
     .ct-detail {
-        color: #172b4d;
+        width: 100%;
         max-width: 1450px;
-        margin: auto;
+        margin: 0 auto;
+        color: #172033;
     }
 
     .ct-heading {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        gap: 15px;
         flex-wrap: wrap;
-        margin-bottom: 24px;
+        gap: 14px;
+        margin-bottom: 20px;
     }
 
     .ct-heading h1 {
-        font-size: 27px;
-        font-weight: 800;
-        color: #102b55;
         margin: 0 0 6px;
+        color: #172b4d;
+        font-size: 24px;
+        font-weight: 750;
+        letter-spacing: -.5px;
     }
 
     .ct-heading p {
-        color: #71839e;
-        font-size: 13px;
         margin: 0;
+        color: #64748b;
+        font-size: 13px;
+        line-height: 1.6;
     }
 
     .ct-back {
         display: inline-flex;
         align-items: center;
+        justify-content: center;
         gap: 8px;
-        padding: 11px 17px;
-        background: white;
-        color: #2458a6;
-        border: 1px solid #dce7f6;
-        border-radius: 10px;
-        text-decoration: none;
-        font-size: 13px;
+        min-height: 40px;
+        padding: 9px 14px;
+        border: 1px solid #dce3ed;
+        border-radius: 8px;
+        background: #fff;
+        color: #2563eb;
+        font-size: 12px;
         font-weight: 700;
-        transition: .2s;
+        text-decoration: none;
+        transition: background .2s ease, border-color .2s ease;
     }
 
     .ct-back:hover {
-        background: #edf5ff;
-        transform: translateY(-2px);
+        border-color: #bfdbfe;
+        background: #eff6ff;
     }
 
     .ct-hero {
         position: relative;
-        overflow: hidden;
         display: grid;
-        grid-template-columns: 1.4fr .8fr;
+        grid-template-columns: minmax(0, 1.5fr) minmax(180px, .65fr);
         align-items: center;
         gap: 20px;
-        padding: 30px;
-        margin-bottom: 22px;
-        border-radius: 20px;
-        background: linear-gradient(120deg, #102b55, #1556a8 70%, #2589ed);
-        color: white;
-        box-shadow: 0 12px 30px rgba(16, 55, 110, .15);
-    }
-
-    .ct-hero::after {
-        content: "";
-        position: absolute;
-        width: 300px;
-        height: 300px;
-        border: 1px solid rgba(255,255,255,.12);
-        border-radius: 50%;
-        right: 12%;
-        top: -180px;
+        overflow: hidden;
+        padding: 25px 28px;
+        margin-bottom: 18px;
+        border: 1px solid #dbeafe;
+        border-radius: 14px;
+        background: linear-gradient(115deg, #eff6ff, #fff 75%);
     }
 
     .ct-eyebrow {
         display: inline-block;
-        padding: 7px 12px;
-        background: rgba(255,255,255,.13);
-        border: 1px solid rgba(255,255,255,.18);
+        margin-bottom: 12px;
+        padding: 6px 10px;
+        border: 1px solid #dbeafe;
         border-radius: 20px;
-        color: #dcecff;
-        font-size: 11px;
-        font-weight: 700;
-        letter-spacing: 1px;
-        margin-bottom: 13px;
+        background: #fff;
+        color: #2563eb;
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: .7px;
     }
 
     .ct-hero h2 {
-        color: white;
-        font-size: clamp(22px, 3vw, 31px);
+        margin: 0 0 10px;
+        color: #172b4d;
+        font-size: clamp(22px, 3vw, 29px);
         font-weight: 800;
         overflow-wrap: anywhere;
-        margin: 0 0 13px;
     }
 
     .ct-hero p {
-        color: #d6e8ff;
-        font-size: 13px;
-        line-height: 1.7;
+        max-width: 560px;
         margin: 0;
+        color: #64748b;
+        font-size: 12px;
+        line-height: 1.7;
     }
 
     .ct-hero-status {
         display: inline-block;
-        margin-top: 19px;
-        padding: 8px 14px;
-        border-radius: 30px;
-        background: #e0f2fe;
-        color: #075985;
-        font-size: 11px;
+        margin-top: 15px;
+        padding: 7px 12px;
+        border: 1px solid #bfdbfe;
+        border-radius: 20px;
+        background: #dbeafe;
+        color: #1d4ed8;
+        font-size: 10px;
         font-weight: 800;
     }
 
     .ct-hero-mascot {
+        position: relative;
+        z-index: 1;
         display: flex;
         justify-content: center;
         align-items: center;
-        position: relative;
-        z-index: 1;
     }
 
     .ct-hero-mascot img {
+        display: block;
         width: 100%;
-        max-width: 245px;
-        max-height: 270px;
+        max-width: 190px;
+        max-height: 190px;
         object-fit: contain;
-        filter: drop-shadow(0 12px 15px rgba(0,0,0,.15));
     }
 
     .ct-panel {
-        background: white;
-        border: 1px solid #e5edf7;
-        border-radius: 17px;
-        padding: 23px;
-        margin-bottom: 20px;
-        box-shadow: 0 5px 18px rgba(30, 64, 110, .035);
+        padding: 20px;
+        margin-bottom: 16px;
+        border: 1px solid #e5eaf1;
+        border-radius: 12px;
+        background: #fff;
     }
 
     .ct-panel-heading {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        gap: 10px;
         flex-wrap: wrap;
-        margin-bottom: 20px;
+        gap: 10px;
+        margin-bottom: 16px;
     }
 
     .ct-panel-heading h3 {
         margin: 0;
-        color: #17345f;
-        font-size: 16px;
-        font-weight: 800;
+        color: #172b4d;
+        font-size: 15px;
+        font-weight: 750;
     }
 
     .ct-panel-heading span {
-        color: #8a9bb2;
-        font-size: 11px;
+        color: #94a3b8;
+        font-size: 10px;
+        font-weight: 600;
     }
 
     .ct-route {
         display: grid;
-        grid-template-columns: 1fr auto 1fr;
+        grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
         align-items: center;
         gap: 18px;
-        padding: 23px;
-        border: 1px solid #e7eef8;
-        border-radius: 14px;
-        background: #f8fbff;
+        padding: 20px;
+        border: 1px solid #edf0f5;
+        border-radius: 10px;
+        background: #f8fafc;
     }
 
     .ct-route-label {
-        color: #8a9bb2;
+        margin-bottom: 7px;
+        color: #94a3b8;
         font-size: 10px;
         font-weight: 800;
-        letter-spacing: 1px;
-        margin-bottom: 8px;
+        letter-spacing: .7px;
     }
 
     .ct-route-city {
-        color: #17345f;
-        font-size: 19px;
-        font-weight: 800;
+        color: #172b4d;
+        font-size: 18px;
+        font-weight: 750;
         overflow-wrap: anywhere;
     }
 
     .ct-route-country {
-        color: #8495ac;
-        font-size: 12px;
         margin-top: 5px;
+        color: #64748b;
+        font-size: 11px;
     }
 
     .ct-route-icon {
-        width: 48px;
-        height: 48px;
         display: grid;
+        width: 42px;
+        height: 42px;
         place-items: center;
+        border: 1px solid #dbeafe;
         border-radius: 50%;
-        color: white;
-        font-size: 22px;
-        background: linear-gradient(135deg, #1671df, #48a4ff);
-        box-shadow: 0 5px 14px rgba(22,113,223,.2);
+        background: #eff6ff;
+        color: #2563eb;
+        font-size: 20px;
     }
 
     .ct-grid {
         display: grid;
         grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 14px;
+        gap: 12px;
     }
 
     .ct-info {
-        padding: 17px;
-        background: #f8fbff;
-        border: 1px solid #edf2f9;
-        border-radius: 12px;
         min-width: 0;
+        padding: 15px;
+        border: 1px solid #edf0f5;
+        border-radius: 9px;
+        background: #fafbfc;
     }
 
     .ct-info small {
         display: block;
-        color: #8798af;
-        font-size: 11px;
-        margin-bottom: 8px;
+        margin-bottom: 7px;
+        color: #94a3b8;
+        font-size: 10px;
     }
 
     .ct-info strong {
         display: block;
-        color: #24436e;
-        font-size: 13px;
-        font-weight: 750;
+        color: #334155;
+        font-size: 12px;
+        font-weight: 700;
         overflow-wrap: anywhere;
     }
 
     .ct-schedule {
         display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 14px;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 12px;
     }
 
     .ct-schedule-item {
-        padding: 19px;
-        border-radius: 13px;
-        border: 1px solid #e6eef9;
-        background: linear-gradient(145deg, #f8fbff, #fff);
+        padding: 15px;
+        border: 1px solid #edf0f5;
+        border-radius: 9px;
+        background: #fafbfc;
     }
 
     .ct-schedule-item small {
         display: block;
-        color: #8294ad;
-        font-size: 11px;
         margin-bottom: 8px;
+        color: #94a3b8;
+        font-size: 10px;
     }
 
     .ct-schedule-item strong {
-        color: #1d4f91;
-        font-size: 15px;
+        color: #1e40af;
+        font-size: 12px;
+        font-weight: 750;
         overflow-wrap: anywhere;
     }
 
     .ct-table-wrap {
         width: 100%;
         overflow-x: auto;
+        border: 1px solid #edf0f5;
+        border-radius: 9px;
     }
 
     .ct-table {
@@ -284,47 +282,65 @@
     }
 
     .ct-table th {
-        padding: 14px;
-        text-align: left;
-        background: #f3f7fd;
-        color: #71839d;
+        padding: 12px 13px;
+        border-bottom: 1px solid #e5eaf1;
+        background: #f6f8fb;
+        color: #64748b;
         font-size: 10px;
-        letter-spacing: .6px;
+        font-weight: 750;
+        letter-spacing: .4px;
+        text-align: left;
         text-transform: uppercase;
-        border-bottom: 1px solid #e5edf7;
+        white-space: nowrap;
     }
 
     .ct-table td {
-        padding: 15px 14px;
-        color: #405776;
-        font-size: 12px;
-        border-bottom: 1px solid #edf2f8;
+        padding: 13px;
+        border-bottom: 1px solid #edf0f5;
+        color: #475569;
+        font-size: 11px;
+        vertical-align: middle;
+    }
+
+    .ct-table tbody tr {
+        transition: background .15s ease;
     }
 
     .ct-table tbody tr:hover {
-        background: #f9fbff;
+        background: #fafcff;
+    }
+
+    .ct-table tbody tr:last-child td {
+        border-bottom: 0;
+    }
+
+    .ct-table td strong {
+        color: #334155;
+        font-weight: 700;
     }
 
     .ct-muted {
-        color: #93a2b6;
-        font-size: 11px;
+        margin-top: 4px;
+        color: #94a3b8;
+        font-size: 10px;
+        line-height: 1.5;
     }
 
     .ct-empty {
+        padding: 28px 12px !important;
+        color: #94a3b8 !important;
         text-align: center;
-        padding: 27px 12px !important;
-        color: #91a1b6 !important;
     }
 
     .ct-timeline {
-        border-left: 2px solid #dceafa;
         margin-left: 8px;
-        padding-left: 25px;
+        padding-left: 23px;
+        border-left: 2px solid #dbeafe;
     }
 
     .ct-timeline-item {
         position: relative;
-        padding-bottom: 25px;
+        padding-bottom: 23px;
     }
 
     .ct-timeline-item:last-child {
@@ -332,96 +348,105 @@
     }
 
     .ct-timeline-item::before {
-        content: "";
         position: absolute;
-        left: -32px;
         top: 2px;
-        width: 12px;
-        height: 12px;
-        border: 3px solid #e4f0ff;
+        left: -30px;
+        width: 10px;
+        height: 10px;
+        border: 3px solid #dbeafe;
         border-radius: 50%;
-        background: #1976e8;
-        box-shadow: 0 0 0 2px white;
+        background: #2563eb;
+        content: "";
     }
 
     .ct-timeline-item strong {
         display: block;
-        color: #24436e;
-        font-size: 13px;
         margin-bottom: 7px;
+        color: #1e3a5f;
+        font-size: 12px;
+        font-weight: 750;
     }
 
     .ct-timeline-item p {
-        color: #71839b;
-        font-size: 12px;
         margin: 5px 0;
+        color: #64748b;
+        font-size: 11px;
         line-height: 1.6;
+        overflow-wrap: anywhere;
     }
 
     .ct-timeline-item small {
         display: inline-block;
-        color: #91a1b6;
-        font-size: 10px;
         margin-top: 5px;
+        color: #94a3b8;
+        font-size: 10px;
     }
 
     .ct-exception {
         display: inline-block;
-        padding: 6px 10px;
+        padding: 5px 9px;
+        border: 1px solid #fed7aa;
         border-radius: 20px;
-        background: #fff3df;
-        color: #a65d00;
+        background: #fff7ed;
+        color: #c2410c;
         font-size: 10px;
-        font-weight: 800;
+        font-weight: 750;
     }
 
     .ct-footer-note {
         display: flex;
         align-items: center;
-        gap: 12px;
-        padding: 17px 20px;
-        background: #edf6ff;
-        border: 1px solid #dcecff;
-        border-radius: 13px;
-        color: #41658f;
-        font-size: 12px;
+        gap: 10px;
+        padding: 14px 17px;
+        border: 1px solid #dbeafe;
+        border-radius: 10px;
+        background: #eff6ff;
+        color: #475569;
+        font-size: 11px;
         line-height: 1.6;
     }
 
     .ct-footer-note strong {
-        color: #174f91;
+        flex-shrink: 0;
+        color: #1d4ed8;
+        font-weight: 750;
     }
 
     @media (max-width: 900px) {
-        .ct-grid {
+        .ct-grid,
+        .ct-schedule {
             grid-template-columns: repeat(2, minmax(0, 1fr));
         }
     }
 
     @media (max-width: 650px) {
+        .ct-heading h1 {
+            font-size: 21px;
+        }
+
         .ct-hero {
             grid-template-columns: 1fr;
-            padding: 23px;
+            padding: 20px;
         }
 
         .ct-hero-mascot img {
-            max-width: 180px;
-            max-height: 190px;
+            max-width: 145px;
+            max-height: 145px;
         }
 
         .ct-route {
             gap: 9px;
-            padding: 15px;
+            padding: 14px;
         }
 
         .ct-route-city {
-            font-size: 15px;
+            font-size: 14px;
         }
 
         .ct-route-icon {
-            width: 37px;
-            height: 37px;
-            font-size: 17px;
+            width: 34px;
+            height: 34px;
+            font-size: 16px;
         }
 
         .ct-grid,
@@ -430,11 +455,18 @@
         }
 
         .ct-panel {
-            padding: 17px;
+            padding: 14px;
         }
 
-        .ct-heading h1 {
-            font-size: 23px;
+        .ct-footer-note {
+            align-items: flex-start;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .ct-back,
+        .ct-table tbody tr {
+            transition: none;
         }
     }
 </style>
