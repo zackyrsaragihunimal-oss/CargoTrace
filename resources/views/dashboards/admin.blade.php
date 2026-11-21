@@ -13,13 +13,13 @@
 @section('content')
 <style>
     .ct-admin-dashboard {
-        --admin-ink: #172033;
-        --admin-muted: #718096;
-        --admin-border: #e7ebf2;
-        --admin-surface: #ffffff;
-        --admin-bg: #f7f9fc;
-        --admin-blue: #2563eb;
-        --admin-green: #15803d;
+        --admin-ink: #142B45;
+        --admin-muted: #64766C;
+        --admin-border: #E1EAE4;
+        --admin-surface: #FFFFFF;
+        --admin-bg: #F3F7F4;
+        --admin-blue: #287A57;
+        --admin-green: #287A57;
         --admin-amber: #b45309;
         --admin-red: #b91c1c;
         color: var(--admin-ink);
@@ -36,6 +36,28 @@
         align-items: flex-end;
         gap: 16px;
         margin-bottom: 22px;
+    }
+
+    .ct-admin-heading-copy {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .ct-admin-heading-side {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 18px;
+        flex-shrink: 0;
+    }
+
+    .ct-admin-mascot {
+        display: block;
+        width: 112px;
+        height: 112px;
+        object-fit: contain;
+        object-position: center bottom;
+        background: transparent;
     }
 
     .ct-admin-eyebrow {
@@ -68,7 +90,7 @@
         border: 1px solid var(--admin-border);
         border-radius: 10px;
         background: var(--admin-surface);
-        color: #526176;
+        color: #526B60;
         font-size: 12px;
         font-weight: 700;
     }
@@ -113,7 +135,7 @@
         justify-content: center;
         flex-shrink: 0;
         border-radius: 9px;
-        background: #eff6ff;
+        background: #E8F3EC;
         color: var(--admin-blue);
         font-size: 13px;
         font-weight: 900;
@@ -121,7 +143,7 @@
 
     .ct-admin-stat:nth-child(2) .ct-admin-stat-mark,
     .ct-admin-stat:nth-child(3) .ct-admin-stat-mark {
-        background: #ecfdf5;
+        background: #E8F3EC;
         color: var(--admin-green);
     }
 
@@ -142,7 +164,7 @@
 
     .ct-admin-stat-note {
         margin-top: 8px;
-        color: #8994a5;
+        color: #91A198;
         font-size: 11px;
         line-height: 1.45;
     }
@@ -229,7 +251,7 @@
     .ct-admin-table th {
         padding: 13px 16px;
         border-bottom: 1px solid var(--admin-border);
-        background: #fafbfd;
+        background: #F7FAF8;
         color: #7b8798;
         font-size: 10px;
         font-weight: 800;
@@ -239,8 +261,8 @@
 
     .ct-admin-table td {
         padding: 14px 16px;
-        border-bottom: 1px solid #eef1f5;
-        color: #526176;
+        border-bottom: 1px solid #E1EAE4;
+        color: #526B60;
         vertical-align: middle;
     }
 
@@ -249,7 +271,7 @@
     }
 
     .ct-admin-table tbody tr:hover {
-        background: #fafcff;
+        background: #F3F7F4;
     }
 
     .ct-admin-table a {
@@ -263,23 +285,23 @@
     }
 
     .ct-admin-route {
-        color: #526176;
+        color: #526B60;
         font-weight: 600;
     }
 
     .ct-admin-route-arrow {
         padding: 0 5px;
-        color: #9aa5b4;
+        color: #91A198;
     }
 
     .ct-admin-pill {
         display: inline-flex;
         align-items: center;
         padding: 5px 9px;
-        border: 1px solid #dbeafe;
+        border: 1px solid #C9E3D3;
         border-radius: 20px;
-        background: #eff6ff;
-        color: #1d4ed8;
+        background: #E8F3EC;
+        color: #1D6245;
         font-size: 9px;
         font-weight: 800;
         letter-spacing: .025em;
@@ -287,7 +309,7 @@
 
     .ct-admin-empty {
         padding: 30px 18px;
-        color: #8994a5;
+        color: #91A198;
         font-size: 12px;
         text-align: center;
     }
@@ -316,8 +338,8 @@
 
     .ct-admin-management-link:hover {
         transform: translateY(-2px);
-        border-color: #bfdbfe;
-        background: #f8fbff;
+        border-color: #B5D9C2;
+        background: #F7FAF8;
     }
 
     .ct-admin-management-link strong {
@@ -354,6 +376,16 @@
         .ct-admin-heading {
             align-items: flex-start;
             flex-direction: column;
+        }
+
+        .ct-admin-heading-side {
+            width: 100%;
+            justify-content: space-between;
+        }
+
+        .ct-admin-mascot {
+            width: 88px;
+            height: 88px;
         }
 
         .ct-admin-stats {
@@ -394,12 +426,20 @@
 
 <div class="ct-admin-dashboard">
     <section class="ct-admin-heading" id="overview">
-        <div>
+        <div class="ct-admin-heading-copy">
             <p class="ct-admin-eyebrow">CargoTrace / Control Center</p>
             <h1>Welcome back, {{ $user->name }}.</h1>
             <p>Monitor platform activity, shipment progress, and system operations from one place.</p>
         </div>
-        <div class="ct-admin-date">{{ now()->format('d M Y') }}</div>
+
+        <div class="ct-admin-heading-side">
+            <div class="ct-admin-date">{{ now()->format('d M Y') }}</div>
+            <img
+                src="{{ asset('images/CargoTrace_JEK_Mascot_Pack/04_Dashboard_Roles/jek-admin.png') }}"
+                alt="JEK - CargoTrace Administrator Mascot"
+                class="ct-admin-mascot"
+            >
+        </div>
     </section>
 
     <section class="ct-admin-stats" aria-label="Platform statistics">
