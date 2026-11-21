@@ -1,200 +1,361 @@
-
 @extends('layouts.app')
 
 @section('title', 'Tambah Shipment')
 
 @section('sidebar-menu')
-    <a href="{{ route('shipments.index') }}"
-       class="sidebar-link">
+    <a href="{{ route('shipments.index') }}" class="sidebar-link">
         <span>Shipment List</span>
     </a>
 @endsection
 
 @section('content')
 <style>
-    .create-shipment {
+    .ct-create {
+        width: 100%;
         max-width: 1100px;
         margin: 0 auto;
-        color: #172554;
+        color: #172033;
     }
 
-    .page-heading {
-        margin-bottom: 24px;
+    .ct-create-heading {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 14px;
+        margin-bottom: 22px;
     }
 
-    .page-heading h2 {
-        margin: 0 0 8px;
-        font-size: 25px;
-        font-weight: 700;
-        color: #172554;
+    .ct-create-heading h1 {
+        margin: 0 0 7px;
+        color: #172b4d;
+        font-size: 24px;
+        font-weight: 800;
+        letter-spacing: -.4px;
     }
 
-    .page-heading p {
+    .ct-create-heading p {
         margin: 0;
         color: #64748b;
-        font-size: 14px;
-    }
-
-    .form-card {
-        background: #ffffff;
-        border: 1px solid #e2e8f0;
-        border-radius: 14px;
-        padding: 28px;
-        margin-bottom: 22px;
-        box-shadow: 0 4px 15px rgba(15, 23, 42, 0.04);
-    }
-
-    .form-section-title {
-        font-size: 17px;
-        font-weight: 700;
-        color: #1e3a8a;
-        margin: 0 0 22px;
-        padding-bottom: 13px;
-        border-bottom: 1px solid #e2e8f0;
-    }
-
-    .form-grid {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 20px;
-    }
-
-    .form-group {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-    }
-
-    .form-group.full-width {
-        grid-column: 1 / -1;
-    }
-
-    .form-group label {
-        font-size: 13px;
-        font-weight: 600;
-        color: #334155;
-    }
-
-    .required {
-        color: #dc2626;
-    }
-
-    .form-control {
-        width: 100%;
-        min-height: 44px;
-        padding: 10px 12px;
-        border: 1px solid #cbd5e1;
-        border-radius: 8px;
-        background: #ffffff;
-        color: #1e293b;
-        font-size: 14px;
-        outline: none;
-        box-sizing: border-box;
-    }
-
-    .form-control:focus {
-        border-color: #2563eb;
-        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.10);
-    }
-
-    textarea.form-control {
-        min-height: 90px;
-        resize: vertical;
-    }
-
-    .form-hint {
         font-size: 12px;
-        color: #64748b;
+        line-height: 1.6;
     }
 
-    .field-error {
-        font-size: 12px;
-        color: #dc2626;
-    }
-
-    .form-actions {
-        display: flex;
-        justify-content: flex-end;
-        gap: 12px;
-        margin-top: 24px;
-    }
-
-    .btn {
+    .ct-create-back {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        min-height: 43px;
-        padding: 10px 20px;
+        gap: 8px;
+        min-height: 40px;
+        padding: 9px 14px;
+        border: 1px solid #dce3ed;
         border-radius: 8px;
-        font-size: 14px;
-        font-weight: 600;
+        background: #fff;
+        color: #2563eb;
+        font-size: 12px;
+        font-weight: 700;
         text-decoration: none;
-        cursor: pointer;
-        border: none;
+        transition: background .2s ease;
     }
 
-    .btn-primary {
-        background: #2563eb;
-        color: #ffffff;
+    .ct-create-back:hover {
+        background: #eff6ff;
     }
 
-    .btn-primary:hover {
-        background: #1d4ed8;
+    .ct-create-intro {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 18px 20px;
+        margin-bottom: 18px;
+        border: 1px solid #dbeafe;
+        border-radius: 12px;
+        background: #eff6ff;
     }
 
-    .btn-secondary {
-        background: #f1f5f9;
-        color: #334155;
+    .ct-create-intro-icon {
+        display: grid;
+        flex-shrink: 0;
+        width: 42px;
+        height: 42px;
+        place-items: center;
+        border-radius: 10px;
+        background: #dbeafe;
+        color: #2563eb;
+        font-size: 20px;
+        font-weight: 800;
     }
 
-    .btn-secondary:hover {
-        background: #e2e8f0;
+    .ct-create-intro strong {
+        display: block;
+        margin-bottom: 4px;
+        color: #1e3a5f;
+        font-size: 13px;
     }
 
-    .alert-error {
-        padding: 14px 18px;
-        margin-bottom: 20px;
+    .ct-create-intro p {
+        margin: 0;
+        color: #64748b;
+        font-size: 11px;
+        line-height: 1.6;
+    }
+
+    .ct-create-alert {
+        padding: 14px 17px;
+        margin-bottom: 18px;
         border: 1px solid #fecaca;
         border-radius: 9px;
         background: #fef2f2;
         color: #b91c1c;
-        font-size: 13px;
+        font-size: 12px;
+    }
+
+    .ct-create-alert strong {
+        display: block;
+        margin-bottom: 7px;
+    }
+
+    .ct-create-alert ul {
+        margin: 0;
+        padding-left: 20px;
+        line-height: 1.8;
+    }
+
+    .ct-create-form {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .ct-create-card {
+        padding: 22px;
+        border: 1px solid #e5eaf1;
+        border-radius: 12px;
+        background: #fff;
+    }
+
+    .ct-create-section-heading {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding-bottom: 16px;
+        margin-bottom: 18px;
+        border-bottom: 1px solid #edf0f5;
+    }
+
+    .ct-create-section-number {
+        display: grid;
+        flex-shrink: 0;
+        width: 34px;
+        height: 34px;
+        place-items: center;
+        border: 1px solid #dbeafe;
+        border-radius: 9px;
+        background: #eff6ff;
+        color: #2563eb;
+        font-size: 12px;
+        font-weight: 800;
+    }
+
+    .ct-create-section-heading h2 {
+        margin: 0 0 4px;
+        color: #172b4d;
+        font-size: 14px;
+        font-weight: 750;
+    }
+
+    .ct-create-section-heading p {
+        margin: 0;
+        color: #94a3b8;
+        font-size: 10px;
+    }
+
+    .ct-create-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+    }
+
+    .ct-create-field {
+        display: flex;
+        min-width: 0;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .ct-create-field.full-width {
+        grid-column: 1 / -1;
+    }
+
+    .ct-create-field label {
+        color: #334155;
+        font-size: 11px;
+        font-weight: 700;
+    }
+
+    .ct-create-required {
+        color: #dc2626;
+    }
+
+    .ct-create-control {
+        box-sizing: border-box;
+        width: 100%;
+        min-height: 43px;
+        padding: 10px 12px;
+        border: 1px solid #dce3ed;
+        border-radius: 8px;
+        outline: none;
+        background: #fff;
+        color: #334155;
+        font-family: inherit;
+        font-size: 12px;
+        transition: border-color .2s ease, box-shadow .2s ease;
+    }
+
+    .ct-create-control:focus {
+        border-color: #60a5fa;
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, .09);
+    }
+
+    .ct-create-control::placeholder {
+        color: #a0aabc;
+    }
+
+    .ct-create-hint {
+        color: #94a3b8;
+        font-size: 10px;
+        line-height: 1.5;
+    }
+
+    .ct-create-error {
+        color: #dc2626;
+        font-size: 10px;
+        line-height: 1.5;
+    }
+
+    .ct-create-route-note {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        padding: 12px;
+        margin-top: 17px;
+        border: 1px solid #e0f2fe;
+        border-radius: 8px;
+        background: #f0f9ff;
+        color: #475569;
+        font-size: 10px;
+        line-height: 1.6;
+    }
+
+    .ct-create-route-note strong {
+        color: #0369a1;
+    }
+
+    .ct-create-actions {
+        display: flex;
+        justify-content: flex-end;
+        flex-wrap: wrap;
+        gap: 10px;
+        padding-top: 3px;
+    }
+
+    .ct-create-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-height: 42px;
+        padding: 10px 18px;
+        border: 1px solid transparent;
+        border-radius: 8px;
+        font-family: inherit;
+        font-size: 11px;
+        font-weight: 750;
+        text-decoration: none;
+        cursor: pointer;
+        transition: background .2s ease, border-color .2s ease;
+    }
+
+    .ct-create-button-secondary {
+        border-color: #dce3ed;
+        background: #fff;
+        color: #475569;
+    }
+
+    .ct-create-button-secondary:hover {
+        background: #f8fafc;
+    }
+
+    .ct-create-button-primary {
+        background: #2563eb;
+        color: #fff;
+    }
+
+    .ct-create-button-primary:hover {
+        background: #1d4ed8;
     }
 
     @media (max-width: 700px) {
-        .form-grid {
+        .ct-create-heading h1 {
+            font-size: 21px;
+        }
+
+        .ct-create-grid {
             grid-template-columns: 1fr;
         }
 
-        .form-group.full-width {
+        .ct-create-field.full-width {
             grid-column: auto;
         }
 
-        .form-card {
-            padding: 20px;
+        .ct-create-card {
+            padding: 16px;
         }
 
-        .form-actions {
+        .ct-create-actions {
             flex-direction: column-reverse;
         }
 
-        .form-actions .btn {
+        .ct-create-button {
             width: 100%;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .ct-create-back,
+        .ct-create-control,
+        .ct-create-button {
+            transition: none;
         }
     }
 </style>
 
-<div class="create-shipment">
+<div class="ct-create">
 
-    <div class="page-heading">
-        <h2>Tambah Shipment</h2>
-        <p>Masukkan informasi pengiriman baru ke dalam sistem CargoTrace.</p>
+    <div class="ct-create-heading">
+        <div>
+            <h1>Buat Shipment Baru</h1>
+            <p>Lengkapi informasi pengiriman untuk mendaftarkan shipment ke CargoTrace.</p>
+        </div>
+
+        <a href="{{ route('shipments.index') }}" class="ct-create-back">
+            <span>&larr;</span>
+            Kembali ke Shipment List
+        </a>
+    </div>
+
+    <div class="ct-create-intro">
+        <div class="ct-create-intro-icon">+</div>
+        <div>
+            <strong>Registrasi Pengiriman</strong>
+            <p>Isi setiap bagian formulir dengan informasi yang benar. Nomor shipment akan dibuat otomatis oleh sistem setelah data berhasil disimpan.</p>
+        </div>
     </div>
 
     @if ($errors->any())
-        <div class="alert-error">
-            <strong>Data belum dapat disimpan.</strong>
-            <ul style="margin: 8px 0 0; padding-left: 20px;">
+        <div class="ct-create-alert">
+            <strong>Data belum dapat disimpan. Periksa kembali informasi berikut:</strong>
+            <ul>
                 @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>
                 @endforeach
@@ -202,21 +363,27 @@
         </div>
     @endif
 
-    <form action="{{ route('shipments.store') }}" method="POST">
+    <form action="{{ route('shipments.store') }}" method="POST" class="ct-create-form">
         @csrf
 
         <!-- Informasi Utama -->
-        <div class="form-card">
-            <h3 class="form-section-title">Informasi Utama</h3>
+        <section class="ct-create-card">
+            <div class="ct-create-section-heading">
+                <div class="ct-create-section-number">01</div>
+                <div>
+                    <h2>Informasi Utama</h2>
+                    <p>Identitas customer, carrier, dan jenis pengiriman.</p>
+                </div>
+            </div>
 
-            <div class="form-grid">
+            <div class="ct-create-grid">
 
-                <div class="form-group">
+                <div class="ct-create-field">
                     <label for="customer_id">
-                        Customer <span class="required">*</span>
+                        Customer <span class="ct-create-required">*</span>
                     </label>
 
-                    <select name="customer_id" id="customer_id" class="form-control" required>
+                    <select name="customer_id" id="customer_id" class="ct-create-control" required>
                         <option value="">-- Pilih Customer --</option>
 
                         @foreach ($customers as $customer)
@@ -228,16 +395,16 @@
                     </select>
 
                     @error('customer_id')
-                        <span class="field-error">{{ $message }}</span>
+                        <span class="ct-create-error">{{ $message }}</span>
                     @enderror
                 </div>
 
-                <div class="form-group">
+                <div class="ct-create-field">
                     <label for="carrier_id">
-                        Carrier <span class="required">*</span>
+                        Carrier <span class="ct-create-required">*</span>
                     </label>
 
-                    <select name="carrier_id" id="carrier_id" class="form-control" required>
+                    <select name="carrier_id" id="carrier_id" class="ct-create-control" required>
                         <option value="">-- Pilih Carrier --</option>
 
                         @foreach ($carriers as $carrier)
@@ -249,20 +416,20 @@
                     </select>
 
                     @error('carrier_id')
-                        <span class="field-error">{{ $message }}</span>
+                        <span class="ct-create-error">{{ $message }}</span>
                     @enderror
                 </div>
 
-                <div class="form-group full-width">
+                <div class="ct-create-field full-width">
                     <label for="cargo_type">
-                        Jenis Cargo <span class="required">*</span>
+                        Jenis Cargo <span class="ct-create-required">*</span>
                     </label>
 
                     <input
                         type="text"
                         name="cargo_type"
                         id="cargo_type"
-                        class="form-control"
+                        class="ct-create-control"
                         placeholder="Contoh: Electronic Equipment"
                         value="{{ old('cargo_type') }}"
                         maxlength="100"
@@ -270,25 +437,31 @@
                     >
 
                     @error('cargo_type')
-                        <span class="field-error">{{ $message }}</span>
+                        <span class="ct-create-error">{{ $message }}</span>
                     @enderror
                 </div>
 
             </div>
-        </div>
+        </section>
 
         <!-- Rute Pengiriman -->
-        <div class="form-card">
-            <h3 class="form-section-title">Rute Pengiriman</h3>
+        <section class="ct-create-card">
+            <div class="ct-create-section-heading">
+                <div class="ct-create-section-number">02</div>
+                <div>
+                    <h2>Rute Pengiriman</h2>
+                    <p>Tentukan lokasi awal dan tujuan shipment.</p>
+                </div>
+            </div>
 
-            <div class="form-grid">
+            <div class="ct-create-grid">
 
-                <div class="form-group">
+                <div class="ct-create-field">
                     <label for="origin_location_id">
-                        Lokasi Asal <span class="required">*</span>
+                        Lokasi Asal <span class="ct-create-required">*</span>
                     </label>
 
-                    <select name="origin_location_id" id="origin_location_id" class="form-control" required>
+                    <select name="origin_location_id" id="origin_location_id" class="ct-create-control" required>
                         <option value="">-- Pilih Lokasi Asal --</option>
 
                         @foreach ($locations as $location)
@@ -300,16 +473,16 @@
                     </select>
 
                     @error('origin_location_id')
-                        <span class="field-error">{{ $message }}</span>
+                        <span class="ct-create-error">{{ $message }}</span>
                     @enderror
                 </div>
 
-                <div class="form-group">
+                <div class="ct-create-field">
                     <label for="destination_location_id">
-                        Lokasi Tujuan <span class="required">*</span>
+                        Lokasi Tujuan <span class="ct-create-required">*</span>
                     </label>
 
-                    <select name="destination_location_id" id="destination_location_id" class="form-control" required>
+                    <select name="destination_location_id" id="destination_location_id" class="ct-create-control" required>
                         <option value="">-- Pilih Lokasi Tujuan --</option>
 
                         @foreach ($locations as $location)
@@ -321,119 +494,136 @@
                     </select>
 
                     @error('destination_location_id')
-                        <span class="field-error">{{ $message }}</span>
+                        <span class="ct-create-error">{{ $message }}</span>
                     @enderror
                 </div>
 
             </div>
-        </div>
+
+            <div class="ct-create-route-note">
+                <strong>Catatan:</strong>
+                Lokasi asal dan tujuan harus berbeda. Pilih lokasi yang sesuai dengan rute pengiriman.
+            </div>
+        </section>
 
         <!-- Detail Cargo -->
-        <div class="form-card">
-            <h3 class="form-section-title">Detail Cargo</h3>
+        <section class="ct-create-card">
+            <div class="ct-create-section-heading">
+                <div class="ct-create-section-number">03</div>
+                <div>
+                    <h2>Detail Cargo</h2>
+                    <p>Masukkan berat dan volume total barang yang dikirim.</p>
+                </div>
+            </div>
 
-            <div class="form-grid">
+            <div class="ct-create-grid">
 
-                <div class="form-group">
+                <div class="ct-create-field">
                     <label for="total_weight_kg">Total Berat (KG)</label>
 
                     <input
                         type="number"
                         name="total_weight_kg"
                         id="total_weight_kg"
-                        class="form-control"
+                        class="ct-create-control"
                         placeholder="Contoh: 150"
                         value="{{ old('total_weight_kg') }}"
                         min="0.001"
                         step="0.001"
                     >
 
-                    <span class="form-hint">Opsional. Masukkan berat dalam kilogram.</span>
+                    <span class="ct-create-hint">Opsional. Masukkan berat dalam kilogram.</span>
 
                     @error('total_weight_kg')
-                        <span class="field-error">{{ $message }}</span>
+                        <span class="ct-create-error">{{ $message }}</span>
                     @enderror
                 </div>
 
-                <div class="form-group">
+                <div class="ct-create-field">
                     <label for="total_volume_m3">Total Volume (M³)</label>
 
                     <input
                         type="number"
                         name="total_volume_m3"
                         id="total_volume_m3"
-                        class="form-control"
+                        class="ct-create-control"
                         placeholder="Contoh: 2.5"
                         value="{{ old('total_volume_m3') }}"
                         min="0.001"
                         step="0.001"
                     >
 
-                    <span class="form-hint">Opsional. Masukkan volume dalam meter kubik.</span>
+                    <span class="ct-create-hint">Opsional. Masukkan volume dalam meter kubik.</span>
 
                     @error('total_volume_m3')
-                        <span class="field-error">{{ $message }}</span>
+                        <span class="ct-create-error">{{ $message }}</span>
                     @enderror
                 </div>
 
             </div>
-        </div>
+        </section>
 
         <!-- Jadwal Pengiriman -->
-        <div class="form-card">
-            <h3 class="form-section-title">Jadwal Pengiriman</h3>
+        <section class="ct-create-card">
+            <div class="ct-create-section-heading">
+                <div class="ct-create-section-number">04</div>
+                <div>
+                    <h2>Jadwal Pengiriman</h2>
+                    <p>Tentukan estimasi waktu keberangkatan dan kedatangan.</p>
+                </div>
+            </div>
 
-            <div class="form-grid">
+            <div class="ct-create-grid">
 
-                <div class="form-group">
+                <div class="ct-create-field">
                     <label for="expected_departure_at">
-                        Jadwal Keberangkatan <span class="required">*</span>
+                        Jadwal Keberangkatan <span class="ct-create-required">*</span>
                     </label>
 
                     <input
                         type="datetime-local"
                         name="expected_departure_at"
                         id="expected_departure_at"
-                        class="form-control"
+                        class="ct-create-control"
                         value="{{ old('expected_departure_at') }}"
                         required
                     >
 
                     @error('expected_departure_at')
-                        <span class="field-error">{{ $message }}</span>
+                        <span class="ct-create-error">{{ $message }}</span>
                     @enderror
                 </div>
 
-                <div class="form-group">
+                <div class="ct-create-field">
                     <label for="expected_arrival_at">
-                        Jadwal Kedatangan <span class="required">*</span>
+                        Jadwal Kedatangan <span class="ct-create-required">*</span>
                     </label>
 
                     <input
                         type="datetime-local"
                         name="expected_arrival_at"
                         id="expected_arrival_at"
-                        class="form-control"
+                        class="ct-create-control"
                         value="{{ old('expected_arrival_at') }}"
                         required
                     >
 
                     @error('expected_arrival_at')
-                        <span class="field-error">{{ $message }}</span>
+                        <span class="ct-create-error">{{ $message }}</span>
                     @enderror
                 </div>
 
             </div>
-        </div>
+        </section>
 
-        <!-- Tombol Aksi -->
-        <div class="form-actions">
-            <a href="{{ route('shipments.index') }}" class="btn btn-secondary">
+        <div class="ct-create-actions">
+            <a href="{{ route('shipments.index') }}" class="ct-create-button ct-create-button-secondary">
                 Batal
             </a>
 
-            <button type="submit" class="btn btn-primary">
+            <button type="submit" class="ct-create-button ct-create-button-primary">
                 Simpan Shipment
+                <span>&rarr;</span>
             </button>
         </div>
 
