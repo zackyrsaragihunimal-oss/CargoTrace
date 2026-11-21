@@ -100,10 +100,13 @@
 
         .guest-mascot {
             display: block;
-            width: min(100%, 340px);
-            max-height: 350px;
+            width: min(100%, 380px);
+            max-height: 390px;
             object-fit: contain;
+            object-position: center;
             margin: 20px auto 0;
+            background: transparent;
+            filter: drop-shadow(0 12px 18px rgba(0,0,0,.16));
         }
 
         .guest-visual-footer {
@@ -362,7 +365,7 @@
                 </p>
 
                 <img
-                    src="{{ asset('images/jek-hero.png') }}"
+                    src="{{ asset('images/CargoTrace_JEK_Mascot_Pack/01_General_Authentication/jek-welcome.png') }}"
                     alt="JEK - CargoTrace Mascot"
                     class="guest-mascot"
                 >
