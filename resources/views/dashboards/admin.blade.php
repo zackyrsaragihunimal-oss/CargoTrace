@@ -1195,7 +1195,7 @@
     /* ===== END LIVE OPERATIONAL ANALYTICS ===== */
 </style>
 
-<div class="ct-admin-dashboard">
+<div class="ct-admin-dashboard" data-admin-dashboard>
     <section class="ct-admin-heading" id="overview">
         <div class="ct-admin-heading-copy">
             <p class="ct-admin-eyebrow">CargoTrace / Control Center</p>
@@ -1219,7 +1219,7 @@
                 <span class="ct-admin-stat-label">Total Shipments</span>
                 <span class="ct-admin-stat-mark" aria-hidden="true">S</span>
             </div>
-            <div class="ct-admin-stat-value">{{ number_format($totalShipments) }}</div>
+            <div class="ct-admin-stat-value" data-stat="totalShipments">{{ number_format($totalShipments) }}</div>
             <div class="ct-admin-stat-note">All registered shipments</div>
         </article>
 
@@ -1255,7 +1255,7 @@
                 <span class="ct-admin-stat-label">Open Exceptions</span>
                 <span class="ct-admin-stat-mark" aria-hidden="true">!</span>
             </div>
-            <div class="ct-admin-stat-value">{{ number_format($openExceptions) }}</div>
+            <div class="ct-admin-stat-value" data-stat="openExceptions">{{ number_format($openExceptions) }}</div>
             <div class="ct-admin-stat-note">Open and in progress</div>
         </article>
     </section>
@@ -1264,34 +1264,35 @@
         <div class="ct-admin-section-heading">
             <h2>Operational Performance</h2>
             <span class="ct-admin-section-caption">Shipment monitoring overview</span>
+            <span class="ct-admin-section-caption" data-stats-updated aria-live="polite">Connecting to live updates...</span>
         </div>
 
         <div class="ct-live-analytics-grid">
             <article class="ct-live-metric" style="--metric-tint:#E8F3EC;--metric-color:#287A57;">
                 <span class="ct-live-metric-icon" aria-hidden="true">A</span>
                 <div class="ct-live-metric-label">Active Shipments</div>
-                <div class="ct-live-metric-value">{{ number_format($activeShipments) }}</div>
+                <div class="ct-live-metric-value" data-stat="activeShipments">{{ number_format($activeShipments) }}</div>
                 <div class="ct-live-metric-note">Not yet delivered or cancelled</div>
             </article>
 
             <article class="ct-live-metric" style="--metric-tint:#EAF3FB;--metric-color:#4385B8;">
                 <span class="ct-live-metric-icon" aria-hidden="true">T</span>
                 <div class="ct-live-metric-label">In Transit</div>
-                <div class="ct-live-metric-value">{{ number_format($inTransitShipments) }}</div>
+                <div class="ct-live-metric-value" data-stat="inTransitShipments">{{ number_format($inTransitShipments) }}</div>
                 <div class="ct-live-metric-note">Currently moving to destination</div>
             </article>
 
             <article class="ct-live-metric" style="--metric-tint:#E8F3EC;--metric-color:#287A57;">
                 <span class="ct-live-metric-icon" aria-hidden="true">D</span>
                 <div class="ct-live-metric-label">Delivered</div>
-                <div class="ct-live-metric-value">{{ number_format($deliveredShipments) }}</div>
+                <div class="ct-live-metric-value" data-stat="deliveredShipments">{{ number_format($deliveredShipments) }}</div>
                 <div class="ct-live-metric-note">Successfully delivered shipments</div>
             </article>
 
             <article class="ct-live-metric" style="--metric-tint:#FFF3E5;--metric-color:#B96C22;">
                 <span class="ct-live-metric-icon" aria-hidden="true">!</span>
                 <div class="ct-live-metric-label">Delayed</div>
-                <div class="ct-live-metric-value">{{ number_format($delayedShipments) }}</div>
+                <div class="ct-live-metric-value" data-stat="delayedShipments">{{ number_format($delayedShipments) }}</div>
                 <div class="ct-live-metric-note">Past estimated or expected arrival</div>
             </article>
         </div>
@@ -1342,7 +1343,7 @@
                             <strong>In Transit</strong>
                             <span>Shipments currently moving</span>
                         </div>
-                        <span class="ct-live-insight-number">{{ number_format($inTransitShipments) }}</span>
+                        <span class="ct-live-insight-number" data-stat="inTransitShipments">{{ number_format($inTransitShipments) }}</span>
                     </div>
 
                     <div class="ct-live-insight">
@@ -1351,7 +1352,7 @@
                             <strong>Successfully Delivered</strong>
                             <span>Completed shipment journeys</span>
                         </div>
-                        <span class="ct-live-insight-number">{{ number_format($deliveredShipments) }}</span>
+                        <span class="ct-live-insight-number" data-stat="deliveredShipments">{{ number_format($deliveredShipments) }}</span>
                     </div>
 
                     <div class="ct-live-insight">
@@ -1360,7 +1361,7 @@
                             <strong>Delayed Shipments</strong>
                             <span>Arrival time has passed</span>
                         </div>
-                        <span class="ct-live-insight-number">{{ number_format($delayedShipments) }}</span>
+                        <span class="ct-live-insight-number" data-stat="delayedShipments">{{ number_format($delayedShipments) }}</span>
                     </div>
                 </div>
             </article>

@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\AdminDashboardStatsUpdated;
 use App\Models\Shipment;
 use App\Models\User;
 use App\Models\Carrier;
 use App\Models\Location;
+use App\Services\AdminDashboardStatsService;
 use App\Services\AuditLogService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
@@ -89,7 +91,7 @@ class ShipmentController extends Controller
     /**
      * Memvalidasi dan menyimpan shipment baru.
      */
-    public function store(Request $request, AuditLogService $auditLogService): RedirectResponse
+    public function store(Request $request, AuditLogService $auditLogService, AdminDashboardStatsService $adminDashboardStatsService): RedirectResponse
     {
         $validated = $request->validate([
             'customer_id' => [
@@ -200,6 +202,8 @@ class ShipmentController extends Controller
                 ]
             );
         });
+
+        AdminDashboardStatsUpdated::dispatch($adminDashboardStatsService->getStats());
 
         return redirect()
             ->route('shipments.index')

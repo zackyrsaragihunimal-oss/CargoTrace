@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\AdminDashboardStatsUpdated;
 use App\Models\ShipmentException;
 use App\Models\User;
+use App\Services\AdminDashboardStatsService;
 use App\Services\AuditLogService;
 use App\Services\NotificationService;
 use Illuminate\Contracts\View\View;
@@ -160,7 +162,8 @@ class ShipmentExceptionController extends Controller
         Request $request,
         ShipmentException $exception,
         AuditLogService $auditLogService,
-        NotificationService $notificationService
+        NotificationService $notificationService,
+        AdminDashboardStatsService $adminDashboardStatsService
     ): RedirectResponse {
         $user = $request->user();
 
@@ -269,6 +272,8 @@ class ShipmentExceptionController extends Controller
                 }
             }
         });
+
+        AdminDashboardStatsUpdated::dispatch($adminDashboardStatsService->getStats());
 
         return redirect()
             ->route('exceptions.index')

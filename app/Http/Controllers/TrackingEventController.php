@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\AdminDashboardStatsUpdated;
 use App\Models\Shipment;
+use App\Services\AdminDashboardStatsService;
 use App\Services\AuditLogService;
 use App\Services\ShipmentDelayService;
 use App\Services\NotificationService;
@@ -22,7 +24,8 @@ class TrackingEventController extends Controller
         Shipment $shipment,
         ShipmentDelayService $shipmentDelayService,
         AuditLogService $auditLogService,
-        NotificationService $notificationService
+        NotificationService $notificationService,
+        AdminDashboardStatsService $adminDashboardStatsService
     ): RedirectResponse
     {
         $validated = $request->validate([
@@ -213,6 +216,8 @@ class TrackingEventController extends Controller
                 ]
             );
         });
+
+        AdminDashboardStatsUpdated::dispatch($adminDashboardStatsService->getStats());
 
         return redirect()
             ->route('shipments.show', $shipment)
