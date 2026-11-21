@@ -7,7 +7,7 @@
 
 <div class="auth-card">
     <div class="auth-heading">
-        <h1>Create Your Account</h1>
+        <h1>Buat Akun CargoTrace</h1>
         <p>Daftarkan akun CargoTrace untuk memantau status dan informasi pengiriman barang Anda.</p>
     </div>
 
@@ -23,7 +23,7 @@
         @csrf
 
         <div class="form-group">
-            <label for="name">Full Name</label>
+            <label for="name">Nama Lengkap</label>
             <input
                 type="text"
                 id="name"
@@ -41,7 +41,7 @@
         </div>
 
         <div class="form-group">
-            <label for="email">Email Address</label>
+            <label for="email">Alamat Email</label>
             <input
                 type="email"
                 id="email"
@@ -58,7 +58,7 @@
         </div>
 
         <div class="form-group">
-            <label for="phone">Phone Number</label>
+            <label for="phone">Nomor Telepon</label>
             <input
                 type="tel"
                 id="phone"
@@ -75,7 +75,7 @@
         </div>
 
         <div class="form-group">
-            <label for="password">Password</label>
+            <label for="password">Kata Sandi</label>
             <input
                 type="password"
                 id="password"
@@ -91,7 +91,7 @@
         </div>
 
         <div class="form-group">
-            <label for="password_confirmation">Confirm Password</label>
+            <label for="password_confirmation">Konfirmasi Kata Sandi</label>
             <input
                 type="password"
                 id="password_confirmation"
@@ -104,7 +104,7 @@
         </div>
 
         <button type="submit" class="btn-primary">
-            Create CargoTrace Account
+            Buat Akun CargoTrace
         </button>
     </form>
 

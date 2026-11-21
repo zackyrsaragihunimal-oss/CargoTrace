@@ -422,6 +422,232 @@
             transition: none;
         }
     }
+
+    /* ===== PREMIUM ADMIN DASHBOARD V1 ===== */
+
+    .ct-admin-heading {
+        position: relative;
+        overflow: hidden;
+        min-height: 190px;
+        padding: 28px 30px;
+        align-items: center;
+        border: 1px solid rgba(255,255,255,.12);
+        border-radius: 20px;
+        background:
+            radial-gradient(circle at 85% 15%, rgba(110,190,145,.25), transparent 30%),
+            linear-gradient(120deg, #142B45 0%, #1D4650 58%, #287A57 100%);
+        box-shadow: 0 12px 28px rgba(20,43,69,.13);
+    }
+
+    .ct-admin-heading::after {
+        content: "";
+        position: absolute;
+        width: 230px;
+        height: 230px;
+        right: 100px;
+        bottom: -165px;
+        border: 1px solid rgba(255,255,255,.12);
+        border-radius: 50%;
+        pointer-events: none;
+    }
+
+    .ct-admin-heading-copy,
+    .ct-admin-heading-side {
+        position: relative;
+        z-index: 1;
+    }
+
+    .ct-admin-eyebrow {
+        color: #B9E8CE;
+        letter-spacing: .16em;
+    }
+
+    .ct-admin-heading h1 {
+        color: #FFFFFF;
+        font-size: clamp(25px, 3vw, 34px);
+    }
+
+    .ct-admin-heading p {
+        color: rgba(255,255,255,.78);
+    }
+
+    .ct-admin-date {
+        border-color: rgba(255,255,255,.2);
+        background: rgba(255,255,255,.12);
+        color: #FFFFFF;
+        backdrop-filter: blur(8px);
+    }
+
+    .ct-admin-mascot {
+        filter: drop-shadow(0 8px 10px rgba(0,0,0,.18));
+        transition: transform .25s ease;
+    }
+
+    .ct-admin-mascot:hover {
+        transform: translateY(-5px);
+    }
+
+    .ct-admin-stat {
+        position: relative;
+        overflow: hidden;
+        padding: 20px;
+        border-radius: 16px;
+        border-top: 3px solid #287A57;
+        box-shadow: 0 5px 15px rgba(20,43,69,.045);
+        transition: transform .22s ease, box-shadow .22s ease;
+    }
+
+    .ct-admin-stat:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 24px rgba(20,43,69,.09);
+    }
+
+    .ct-admin-stat:nth-child(2) {
+        border-top-color: #4385B8;
+    }
+
+    .ct-admin-stat:nth-child(3) {
+        border-top-color: #4D9478;
+    }
+
+    .ct-admin-stat:nth-child(4) {
+        border-top-color: #8B78BB;
+    }
+
+    .ct-admin-stat:nth-child(5) {
+        border-top-color: #D99445;
+    }
+
+    .ct-admin-stat:nth-child(2) .ct-admin-stat-mark {
+        background: #EAF3FB;
+        color: #4385B8;
+    }
+
+    .ct-admin-stat:nth-child(3) .ct-admin-stat-mark {
+        background: #E8F3EC;
+        color: #287A57;
+    }
+
+    .ct-admin-stat:nth-child(4) .ct-admin-stat-mark {
+        background: #F0EDFA;
+        color: #806AB0;
+    }
+
+    .ct-admin-stat:nth-child(5) .ct-admin-stat-mark {
+        background: #FFF3E5;
+        color: #B96C22;
+    }
+
+    .ct-admin-stat-value {
+        font-size: 32px;
+    }
+
+    .ct-admin-status-item {
+        border-left: 3px solid #91A198;
+        border-radius: 11px;
+        background: linear-gradient(145deg, #FFFFFF, #F3F7F4);
+        transition: transform .2s ease, box-shadow .2s ease;
+    }
+
+    .ct-admin-status-item:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 7px 16px rgba(20,43,69,.07);
+    }
+
+    .ct-admin-status-item:nth-child(1) {
+        border-left-color: #91A198;
+    }
+
+    .ct-admin-status-item:nth-child(2) {
+        border-left-color: #4385B8;
+    }
+
+    .ct-admin-status-item:nth-child(3) {
+        border-left-color: #8B78BB;
+    }
+
+    .ct-admin-status-item:nth-child(4) {
+        border-left-color: #D99445;
+    }
+
+    .ct-admin-status-item:nth-child(5) {
+        border-left-color: #287A57;
+    }
+
+    .ct-admin-status-item:nth-child(6) {
+        border-left-color: #1D6245;
+    }
+
+    .ct-admin-panel {
+        border-radius: 16px;
+        box-shadow: 0 5px 16px rgba(20,43,69,.035);
+    }
+
+    .ct-admin-management-link {
+        min-height: 76px;
+        border-radius: 13px;
+        background: linear-gradient(145deg, #FFFFFF, #F8FBF9);
+        transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+    }
+
+    .ct-admin-management-link:hover {
+        transform: translateY(-4px);
+        border-color: #8FC4A5;
+        background: #FFFFFF;
+        box-shadow: 0 9px 20px rgba(40,122,87,.09);
+    }
+
+    .ct-admin-management-link strong {
+        color: #142B45;
+        font-size: 13px;
+    }
+
+    .ct-admin-management-arrow {
+        display: inline-flex;
+        width: 30px;
+        height: 30px;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        border-radius: 9px;
+        background: #E8F3EC;
+        color: #287A57;
+        transition: transform .2s ease, background .2s ease;
+    }
+
+    .ct-admin-management-link:hover .ct-admin-management-arrow {
+        transform: translateX(3px);
+        background: #287A57;
+        color: #FFFFFF;
+    }
+
+    @media (max-width: 650px) {
+        .ct-admin-heading {
+            min-height: 0;
+            padding: 22px 19px;
+            border-radius: 16px;
+        }
+
+        .ct-admin-heading h1 {
+            font-size: 25px;
+        }
+
+        .ct-admin-stat {
+            padding: 15px;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .ct-admin-stat,
+        .ct-admin-status-item,
+        .ct-admin-mascot,
+        .ct-admin-management-link,
+        .ct-admin-management-arrow {
+            transition: none;
+        }
+    }
+
+    /* ===== END PREMIUM ADMIN DASHBOARD V1 ===== */
 </style>
 
 <div class="ct-admin-dashboard">

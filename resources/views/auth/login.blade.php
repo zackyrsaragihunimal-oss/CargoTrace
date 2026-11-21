@@ -7,7 +7,7 @@
 <div class="auth-card">
 
     <div class="auth-heading">
-        <h1>Welcome Back</h1>
+        <h1>Selamat Datang Kembali</h1>
         <p>Masuk ke akun CargoTrace untuk mengelola dan memantau aktivitas pengiriman Anda.</p>
     </div>
 
@@ -23,7 +23,7 @@
         @csrf
 
         <div class="form-group">
-            <label for="email">Email Address</label>
+            <label for="email">Alamat Email</label>
             <input
                 type="email"
                 id="email"
@@ -41,7 +41,7 @@
         </div>
 
         <div class="form-group">
-            <label for="password">Password</label>
+            <label for="password">Kata Sandi</label>
             <input
                 type="password"
                 id="password"
@@ -62,7 +62,7 @@
         </label>
 
         <button type="submit" class="btn-primary">
-            Sign In to CargoTrace
+            Masuk ke CargoTrace
         </button>
     </form>
 
