@@ -13,144 +13,269 @@
 @section('content')
 
 <style>
-    .ct-customer { color: #17304f; }
-    .ct-customer * { box-sizing: border-box; }
+    .ct-customer {
+        color: #172033;
+        width: 100%;
+    }
+
+    .ct-customer * {
+        box-sizing: border-box;
+    }
 
     .ct-customer-hero {
-        padding: 28px;
+        position: relative;
+        overflow: hidden;
+        padding: 28px 30px;
         margin-bottom: 22px;
-        border-radius: 19px;
-        background: linear-gradient(115deg, #102e59, #1766b7);
-        color: #fff;
+        border: 1px solid #e5eaf1;
+        border-radius: 16px;
+        background: #fff;
     }
+
     .ct-customer-hero h1 {
         margin: 0 0 9px;
-        color: #fff;
-        font-size: 27px;
+        color: #172b4d;
+        font-size: 25px;
+        font-weight: 750;
+        letter-spacing: -.6px;
     }
+
     .ct-customer-hero p {
+        max-width: 680px;
         margin: 0;
-        color: #dcecff;
-        font-size: 14px;
+        color: #64748b;
+        font-size: 13px;
         line-height: 1.8;
     }
 
     .ct-customer-stats {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(165px, 1fr));
-        gap: 15px;
-        margin-bottom: 28px;
-    }
-    .ct-customer-stat {
-        padding: 20px;
-        border: 1px solid #e5edf6;
-        border-radius: 15px;
-        background: #fff;
-        box-shadow: 0 5px 18px rgba(20, 45, 75, .04);
-    }
-    .ct-customer-stat span {
-        color: #718096;
-        font-size: 11px;
-        font-weight: 800;
-    }
-    .ct-customer-stat strong {
-        display: block;
-        margin-top: 9px;
-        color: #15345d;
-        font-size: 29px;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 14px;
+        margin-bottom: 26px;
     }
 
-    .ct-customer-section { margin-bottom: 28px; }
-    .ct-customer-section h2 {
-        margin: 0 0 14px;
-        color: #17365f;
-        font-size: 19px;
+    .ct-customer-stat {
+        min-width: 0;
+        padding: 19px;
+        border: 1px solid #e5eaf1;
+        border-radius: 12px;
+        background: #fff;
+        transition: border-color .2s ease, transform .2s ease;
     }
+
+    .ct-customer-stat:hover {
+        border-color: #cbd8ea;
+        transform: translateY(-2px);
+    }
+
+    .ct-customer-stat span {
+        display: block;
+        color: #64748b;
+        font-size: 10px;
+        font-weight: 750;
+        letter-spacing: .45px;
+        line-height: 1.5;
+    }
+
+    .ct-customer-stat strong {
+        display: block;
+        margin-top: 10px;
+        color: #172b4d;
+        font-size: 27px;
+        font-weight: 750;
+        line-height: 1.2;
+    }
+
+    .ct-customer-section {
+        margin-bottom: 25px;
+    }
+
+    .ct-customer-section h2 {
+        margin: 0 0 13px;
+        color: #172b4d;
+        font-size: 17px;
+        font-weight: 750;
+        letter-spacing: -.2px;
+    }
+
     .ct-customer-panel {
         overflow-x: auto;
-        padding: 19px;
-        border: 1px solid #e5edf6;
-        border-radius: 15px;
+        padding: 17px;
+        border: 1px solid #e5eaf1;
+        border-radius: 12px;
         background: #fff;
     }
+
     .ct-customer-table {
         width: 100%;
         border-collapse: collapse;
-        font-size: 13px;
-    }
-    .ct-customer-table th {
-        padding: 12px 10px;
-        background: #f7f9fc;
-        color: #718096;
-        text-align: left;
+        font-size: 12px;
         white-space: nowrap;
     }
-    .ct-customer-table td {
-        padding: 13px 10px;
-        border-bottom: 1px solid #edf1f6;
-        color: #42546b;
-    }
-    .ct-customer-table tr:last-child td { border-bottom: 0; }
-    .ct-customer-table a {
-        color: #1766b7;
-        font-weight: 800;
-        text-decoration: none;
-    }
-    .ct-customer-pill {
-        display: inline-block;
-        padding: 5px 9px;
-        border-radius: 20px;
-        background: #e8f1fc;
-        color: #245b91;
-        font-size: 10px;
-        font-weight: 800;
-    }
-    .ct-customer-empty {
-        padding: 24px;
-        color: #8493a8;
-        font-size: 13px;
-        text-align: center;
-    }
-    .ct-customer-notification {
-        padding: 14px 4px;
-        border-bottom: 1px solid #edf1f6;
-    }
-    .ct-customer-notification:last-child { border-bottom: 0; }
-    .ct-customer-notification h3 {
-        margin: 0 0 6px;
-        color: #17365f;
-        font-size: 14px;
-    }
-    .ct-customer-notification p {
-        margin: 0 0 7px;
+
+    .ct-customer-table th {
+        padding: 12px 11px;
+        background: #f6f8fb;
         color: #64748b;
-        font-size: 13px;
-        line-height: 1.6;
+        font-size: 10px;
+        font-weight: 750;
+        letter-spacing: .4px;
+        text-align: left;
     }
-    .ct-customer-notification small {
-        color: #94a3b8;
-        font-size: 11px;
+
+    .ct-customer-table th:first-child {
+        border-radius: 7px 0 0 7px;
     }
-    .ct-customer-actions {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-        margin-top: 20px;
+
+    .ct-customer-table th:last-child {
+        border-radius: 0 7px 7px 0;
     }
-    .ct-customer-actions a {
-        padding: 11px 15px;
-        border-radius: 10px;
-        background: #edf5ff;
-        color: #1766b7;
+
+    .ct-customer-table td {
+        padding: 14px 11px;
+        border-bottom: 1px solid #edf0f5;
+        color: #475569;
+        vertical-align: middle;
+    }
+
+    .ct-customer-table tr:last-child td {
+        border-bottom: 0;
+    }
+
+    .ct-customer-table a {
+        color: #2563eb;
         font-size: 12px;
-        font-weight: 800;
+        font-weight: 700;
         text-decoration: none;
     }
 
-    @media(max-width:600px) {
-        .ct-customer-hero { padding: 22px; }
-        .ct-customer-hero h1 { font-size: 23px; }
-        .ct-customer-panel { padding: 12px; }
+    .ct-customer-table a:hover {
+        text-decoration: underline;
+    }
+
+    .ct-customer-pill {
+        display: inline-block;
+        padding: 5px 9px;
+        border: 1px solid #dbeafe;
+        border-radius: 20px;
+        background: #eff6ff;
+        color: #1d4ed8;
+        font-size: 10px;
+        font-weight: 750;
+        white-space: nowrap;
+    }
+
+    .ct-customer-empty {
+        padding: 28px 18px;
+        color: #94a3b8;
+        font-size: 12px;
+        text-align: center;
+    }
+
+    .ct-customer-notification {
+        padding: 15px 5px;
+        border-bottom: 1px solid #edf0f5;
+    }
+
+    .ct-customer-notification:last-child {
+        border-bottom: 0;
+    }
+
+    .ct-customer-notification h3 {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin: 0 0 7px;
+        color: #172b4d;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    .ct-customer-notification p {
+        margin: 0 0 8px;
+        color: #64748b;
+        font-size: 12px;
+        line-height: 1.7;
+    }
+
+    .ct-customer-notification small {
+        color: #94a3b8;
+        font-size: 10px;
+    }
+
+    .ct-customer-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 9px;
+        margin-top: 17px;
+    }
+
+    .ct-customer-actions a {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 38px;
+        padding: 9px 13px;
+        border: 1px solid #dbeafe;
+        border-radius: 8px;
+        background: #eff6ff;
+        color: #1d4ed8;
+        font-size: 11px;
+        font-weight: 700;
+        text-decoration: none;
+        transition: background .2s ease;
+    }
+
+    .ct-customer-actions a:hover {
+        background: #dbeafe;
+    }
+
+    @media (max-width: 1100px) {
+        .ct-customer-stats {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+    }
+
+    @media (max-width: 700px) {
+        .ct-customer-hero {
+            padding: 22px;
+        }
+
+        .ct-customer-hero h1 {
+            font-size: 22px;
+        }
+
+        .ct-customer-stats {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        .ct-customer-stat {
+            padding: 15px;
+        }
+
+        .ct-customer-stat strong {
+            font-size: 24px;
+        }
+
+        .ct-customer-panel {
+            padding: 12px;
+        }
+    }
+
+    @media (max-width: 380px) {
+        .ct-customer-stats {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .ct-customer-stat,
+        .ct-customer-actions a {
+            transition: none;
+        }
     }
 </style>
 
