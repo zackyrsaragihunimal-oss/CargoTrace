@@ -7,6 +7,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ShipmentController;
 use App\Http\Controllers\TrackingEventController;
 use App\Http\Controllers\ShipmentExceptionController;
+use App\Http\Controllers\NotificationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -54,6 +55,16 @@ Route::middleware(['auth', 'active'])->group(function () {
     // Main Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])
         ->name('dashboard');
+
+    // Notification Center
+    Route::get('/notifications', [NotificationController::class, 'index'])
+        ->name('notifications.index');
+
+    Route::patch('/notifications/read-all', [NotificationController::class, 'markAllRead'])
+        ->name('notifications.read-all');
+
+    Route::patch('/notifications/{notification}/read', [NotificationController::class, 'markRead'])
+        ->name('notifications.read');
 
     // Shipment Management
 

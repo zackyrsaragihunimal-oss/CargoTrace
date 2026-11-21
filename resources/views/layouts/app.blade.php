@@ -186,6 +186,25 @@
                 Dashboard
             </a>
 
+            @php
+                $unreadNotificationCount = auth()->user()
+                    ->notifications()
+                    ->whereNull('read_at')
+                    ->count();
+            @endphp
+
+            <a href="{{ route('notifications.index') }}"
+               class="{{ request()->routeIs('notifications.*') ? 'active' : '' }}"
+               style="display:flex; justify-content:space-between; align-items:center;">
+                <span>Notifications</span>
+
+                @if ($unreadNotificationCount > 0)
+                    <span style="background:#ef4444; color:white; border-radius:20px; padding:3px 8px; font-size:10px; font-weight:700;">
+                        {{ $unreadNotificationCount > 99 ? '99+' : $unreadNotificationCount }}
+                    </span>
+                @endif
+            </a>
+
             @yield('sidebar-menu')
         </nav>
 
