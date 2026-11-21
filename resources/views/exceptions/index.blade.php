@@ -18,197 +18,351 @@
 @section('content')
 
 <style>
-    .exception-page { color: #172b4d; }
+    .exception-page {
+        width: 100%;
+        color: #172033;
+    }
 
     .exception-heading {
         display: flex;
         justify-content: space-between;
         align-items: center;
         flex-wrap: wrap;
-        gap: 12px;
+        gap: 14px;
         margin-bottom: 22px;
     }
 
     .exception-heading h2 {
-        font-size: 23px;
-        margin-bottom: 6px;
+        margin: 0 0 7px;
+        color: #172b4d;
+        font-size: 24px;
+        font-weight: 800;
+        letter-spacing: -.4px;
     }
 
     .exception-heading p {
-        color: #718096;
-        font-size: 13px;
+        margin: 0;
+        color: #64748b;
+        font-size: 12px;
+        line-height: 1.6;
     }
 
     .exception-panel {
-        background: white;
-        border: 1px solid #e5eaf2;
+        padding: 22px;
+        border: 1px solid #e5eaf1;
         border-radius: 12px;
-        padding: 20px;
-        box-shadow: 0 3px 12px rgba(20, 45, 80, .04);
+        background: #fff;
     }
 
     .exception-filters {
         display: flex;
+        align-items: center;
         flex-wrap: wrap;
         gap: 10px;
-        margin-bottom: 20px;
+        padding-bottom: 18px;
+        margin-bottom: 18px;
+        border-bottom: 1px solid #edf0f5;
     }
 
     .exception-filters select,
     .exception-form select,
     .exception-form textarea {
-        min-height: 40px;
-        padding: 9px 11px;
+        box-sizing: border-box;
+        width: 100%;
+        min-height: 41px;
+        padding: 10px 12px;
         border: 1px solid #dce3ed;
         border-radius: 8px;
-        background: white;
-        color: #243b53;
-        font-size: 13px;
-        width: 100%;
+        outline: none;
+        background: #fff;
+        color: #334155;
+        font-family: inherit;
+        font-size: 11px;
+        transition: border-color .2s ease, box-shadow .2s ease;
     }
 
     .exception-filters select {
         width: auto;
-        min-width: 160px;
+        min-width: 165px;
+    }
+
+    .exception-filters select:focus,
+    .exception-form select:focus,
+    .exception-form textarea:focus {
+        border-color: #60a5fa;
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, .09);
     }
 
     .exception-filters button,
     .exception-btn {
-        border: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 40px;
+        padding: 9px 15px;
+        border: 1px solid transparent;
         border-radius: 8px;
-        padding: 10px 15px;
-        background: #1769e0;
-        color: white;
-        font-size: 12px;
-        font-weight: 700;
-        cursor: pointer;
+        background: #2563eb;
+        color: #fff;
+        font-family: inherit;
+        font-size: 11px;
+        font-weight: 750;
         text-decoration: none;
-        display: inline-block;
+        cursor: pointer;
+        transition: background .2s ease;
+    }
+
+    .exception-filters button:hover,
+    .exception-btn:hover {
+        background: #1d4ed8;
     }
 
     .exception-filters a {
         display: inline-flex;
         align-items: center;
-        padding: 9px;
+        justify-content: center;
+        min-height: 38px;
+        padding: 8px 12px;
+        border: 1px solid #e5eaf1;
+        border-radius: 8px;
+        background: #fff;
         color: #64748b;
+        font-size: 11px;
+        font-weight: 650;
         text-decoration: none;
-        font-size: 13px;
     }
 
-    .exception-table-wrap { overflow-x: auto; }
+    .exception-filters a:hover {
+        background: #f8fafc;
+        color: #334155;
+    }
+
+    .exception-table-wrap {
+        width: 100%;
+        overflow-x: auto;
+        border: 1px solid #edf0f5;
+        border-radius: 9px;
+    }
 
     .exception-table {
         width: 100%;
         min-width: 1050px;
-        border-collapse: collapse;
+        border-collapse: separate;
+        border-spacing: 0;
     }
 
     .exception-table th {
-        padding: 13px 12px;
-        background: #f5f8fc;
+        padding: 14px 13px;
+        border-bottom: 1px solid #e5eaf1;
+        background: #f8fafc;
         color: #64748b;
         text-align: left;
-        font-size: 11px;
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: .45px;
         text-transform: uppercase;
-        letter-spacing: .4px;
-        border-bottom: 1px solid #e7edf5;
+        white-space: nowrap;
     }
 
     .exception-table td {
-        padding: 15px 12px;
-        border-bottom: 1px solid #edf1f6;
+        padding: 15px 13px;
+        border-bottom: 1px solid #edf0f5;
         vertical-align: top;
-        font-size: 13px;
         color: #334155;
+        font-size: 11px;
+        line-height: 1.6;
+    }
+
+    .exception-table tbody tr:last-child td {
+        border-bottom: 0;
+    }
+
+    .exception-table tbody tr:hover td {
+        background: #fbfdff;
     }
 
     .exception-code {
-        color: #1769e0;
-        font-weight: 700;
+        color: #2563eb;
+        font-weight: 750;
+        text-decoration: none;
+    }
+
+    .exception-code:hover {
+        color: #1d4ed8;
+        text-decoration: underline;
     }
 
     .exception-muted {
         display: block;
-        color: #8492a6;
-        font-size: 11px;
         margin-top: 5px;
+        color: #94a3b8;
+        font-size: 10px;
+        line-height: 1.5;
     }
 
     .exception-badge {
-        display: inline-block;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
         padding: 5px 9px;
         border-radius: 20px;
-        font-size: 10px;
-        font-weight: 700;
+        font-size: 9px;
+        font-weight: 800;
+        letter-spacing: .2px;
         white-space: nowrap;
     }
 
-    .severity-low { background: #dcfce7; color: #166534; }
-    .severity-medium { background: #fef3c7; color: #92400e; }
-    .severity-high { background: #ffedd5; color: #c2410c; }
-    .severity-critical { background: #fee2e2; color: #b91c1c; }
+    .severity-low {
+        background: #dcfce7;
+        color: #166534;
+    }
 
-    .status-open { background: #dbeafe; color: #1d4ed8; }
-    .status-in-progress { background: #fef3c7; color: #92400e; }
-    .status-resolved { background: #dcfce7; color: #166534; }
+    .severity-medium {
+        background: #fef3c7;
+        color: #92400e;
+    }
+
+    .severity-high {
+        background: #ffedd5;
+        color: #c2410c;
+    }
+
+    .severity-critical {
+        background: #fee2e2;
+        color: #b91c1c;
+    }
+
+    .status-open {
+        background: #dbeafe;
+        color: #1d4ed8;
+    }
+
+    .status-in-progress {
+        background: #fef3c7;
+        color: #92400e;
+    }
+
+    .status-resolved {
+        background: #dcfce7;
+        color: #166534;
+    }
 
     .exception-form {
         display: flex;
+        min-width: 175px;
         flex-direction: column;
         gap: 8px;
-        min-width: 175px;
     }
 
     .exception-form label {
-        color: #64748b;
-        font-size: 11px;
-        font-weight: 700;
+        margin-top: 3px;
+        color: #475569;
+        font-size: 10px;
+        font-weight: 750;
     }
 
     .exception-form textarea {
-        min-height: 65px;
+        min-height: 75px;
         resize: vertical;
+        line-height: 1.5;
     }
 
-    .exception-form .exception-btn { align-self: flex-start; }
+    .exception-form textarea::placeholder {
+        color: #a0aabc;
+    }
+
+    .exception-form .exception-btn {
+        align-self: flex-start;
+    }
 
     .exception-success {
-        padding: 12px 15px;
+        padding: 13px 16px;
         margin-bottom: 16px;
-        border-radius: 8px;
-        background: #dcfce7;
+        border: 1px solid #bbf7d0;
+        border-radius: 9px;
+        background: #f0fdf4;
         color: #166534;
-        font-size: 13px;
+        font-size: 11px;
+        line-height: 1.6;
     }
 
     .exception-error {
-        padding: 12px 15px;
+        padding: 13px 16px;
         margin-bottom: 16px;
-        border-radius: 8px;
-        background: #fee2e2;
-        color: #991b1b;
-        font-size: 13px;
+        border: 1px solid #fecaca;
+        border-radius: 9px;
+        background: #fef2f2;
+        color: #b91c1c;
+        font-size: 11px;
+        line-height: 1.7;
+    }
+
+    .exception-error ul {
+        margin: 7px 0 0 18px;
+        padding: 0;
     }
 
     .exception-empty {
-        padding: 45px 20px;
+        padding: 48px 20px;
+        color: #94a3b8;
         text-align: center;
-        color: #718096;
+        font-size: 11px;
+        line-height: 1.7;
     }
 
     .exception-empty strong {
         display: block;
-        color: #334155;
         margin-bottom: 7px;
-        font-size: 16px;
+        color: #334155;
+        font-size: 15px;
+        font-weight: 750;
     }
 
-    .exception-pagination { padding-top: 18px; }
+    .exception-pagination {
+        padding-top: 18px;
+    }
 
-    @media (max-width: 600px) {
-        .exception-panel { padding: 13px; }
-        .exception-heading h2 { font-size: 20px; }
-        .exception-filters select { flex: 1; }
+    .exception-pagination nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    @media (max-width: 700px) {
+        .exception-heading h2 {
+            font-size: 21px;
+        }
+
+        .exception-panel {
+            padding: 15px;
+        }
+
+        .exception-filters {
+            align-items: stretch;
+        }
+
+        .exception-filters select {
+            flex: 1 1 100%;
+            width: 100%;
+        }
+
+        .exception-filters button,
+        .exception-filters a {
+            flex: 1;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .exception-filters select,
+        .exception-form select,
+        .exception-form textarea,
+        .exception-filters button,
+        .exception-btn,
+        .exception-filters a {
+            transition: none;
+        }
     }
 </style>
 
