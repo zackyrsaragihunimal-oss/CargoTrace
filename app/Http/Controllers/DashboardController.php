@@ -37,6 +37,52 @@ class DashboardController extends Controller
             ->groupBy('current_status')
             ->pluck('total', 'current_status');
 
+        // Tren pengiriman selama tujuh hari terakhir.
+        $trendStart = now()->startOfDay()->subDays(6);
+        $trendEnd = now()->endOfDay();
+
+        $dailyShipmentCounts = Shipment::query()
+            ->whereBetween('created_at', [$trendStart, $trendEnd])
+            ->selectRaw('DATE(created_at) as shipment_date, COUNT(*) as total')
+            ->groupBy('shipment_date')
+            ->pluck('total', 'shipment_date');
+
+        // Tanggal tanpa pengiriman ditampilkan dengan nilai nol.
+        $shipmentTrend = [];
+
+        for ($daysAgo = 6; $daysAgo >= 0; $daysAgo--) {
+            $date = now()->subDays($daysAgo)->toDateString();
+
+            $shipmentTrend[] = [
+                'date' => $date,
+                'label' => now()->subDays($daysAgo)->format('d M'),
+                'total' => (int) ($dailyShipmentCounts[$date] ?? 0),
+            ];
+        }
+
+        $activeShipments = Shipment::query()
+            ->whereNotIn('current_status', ['DELIVERED', 'CANCELLED'])
+            ->count();
+
+        $inTransitShipments = Shipment::where(
+            'current_status',
+            'IN_TRANSIT'
+        )->count();
+
+        $deliveredShipments = Shipment::where(
+            'current_status',
+            'DELIVERED'
+        )->count();
+
+        // Gunakan ETA terbaru, atau jadwal kedatangan awal jika ETA kosong.
+        $delayedShipments = Shipment::query()
+            ->whereNotIn('current_status', ['DELIVERED', 'CANCELLED'])
+            ->whereRaw(
+                'COALESCE(estimated_arrival_at, expected_arrival_at) < ?',
+                [now()]
+            )
+            ->count();
+
         return view('dashboards.admin', [
             'user' => $user,
             'totalShipments' => Shipment::count(),
@@ -44,13 +90,21 @@ class DashboardController extends Controller
             'totalCustomers' => User::where('role', 'customer')->count(),
             'totalOperators' => User::where('role', 'operator')->count(),
             'openExceptions' => ShipmentException::whereIn('status', ['OPEN', 'IN_PROGRESS'])->count(),
+
             'shipmentStatusCounts' => $shipmentStatusCounts,
+            'activeShipments' => $activeShipments,
+            'inTransitShipments' => $inTransitShipments,
+            'deliveredShipments' => $deliveredShipments,
+            'delayedShipments' => $delayedShipments,
+            'shipmentTrend' => $shipmentTrend,
+
             'recentShipments' => Shipment::with([
                 'customer',
                 'carrier',
                 'originLocation',
                 'destinationLocation',
             ])->latest()->limit(6)->get(),
+
             'recentActivities' => AuditLog::with('user')
                 ->latest('created_at')
                 ->limit(6)
