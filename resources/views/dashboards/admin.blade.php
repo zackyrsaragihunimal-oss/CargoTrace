@@ -648,6 +648,551 @@
     }
 
     /* ===== END PREMIUM ADMIN DASHBOARD V1 ===== */
+
+    /* ===== PREMIUM ADMIN DASHBOARD V2 ===== */
+
+    /* Welcome banner */
+    .ct-admin-heading {
+        min-height: 205px;
+        padding: 32px 34px;
+        border-radius: 22px;
+        background:
+            radial-gradient(ellipse at 8% 110%, rgba(76,157,112,.30), transparent 38%),
+            radial-gradient(circle at 90% 10%, rgba(157,220,183,.22), transparent 28%),
+            linear-gradient(115deg, #10283F 0%, #173D4A 48%, #287A57 100%);
+        box-shadow: 0 16px 35px rgba(20,43,69,.16);
+    }
+
+    .ct-admin-heading::before {
+        content: "";
+        position: absolute;
+        width: 300px;
+        height: 300px;
+        right: 5%;
+        top: -205px;
+        border: 1px solid rgba(255,255,255,.13);
+        border-radius: 50%;
+        box-shadow:
+            0 0 0 28px rgba(255,255,255,.025),
+            0 0 0 58px rgba(255,255,255,.02);
+        pointer-events: none;
+    }
+
+    .ct-admin-heading::after {
+        width: 260px;
+        height: 260px;
+        right: 17%;
+        bottom: -215px;
+        border-color: rgba(255,255,255,.14);
+    }
+
+    .ct-admin-heading h1 {
+        font-size: clamp(27px, 3.2vw, 37px);
+        letter-spacing: -.045em;
+        text-shadow: 0 2px 12px rgba(0,0,0,.12);
+    }
+
+    .ct-admin-heading p {
+        max-width: 560px;
+        font-size: 13px;
+    }
+
+    .ct-admin-mascot {
+        width: 132px;
+        height: 132px;
+        filter: drop-shadow(0 12px 13px rgba(0,0,0,.22));
+    }
+
+    .ct-admin-date {
+        padding: 11px 15px;
+        border-radius: 12px;
+        font-size: 12px;
+        letter-spacing: .02em;
+    }
+
+    /* Statistics cards */
+    .ct-admin-stats {
+        gap: 15px;
+        margin-top: 4px;
+        margin-bottom: 30px;
+    }
+
+    .ct-admin-stat {
+        min-height: 150px;
+        padding: 20px 19px;
+        border: 1px solid #E1EAE4;
+        border-top: 3px solid #287A57;
+        border-radius: 17px;
+        background: linear-gradient(150deg, #FFFFFF 55%, #F1F8F3 100%);
+        box-shadow: 0 6px 18px rgba(20,43,69,.045);
+    }
+
+    .ct-admin-stat:nth-child(2) {
+        background: linear-gradient(150deg, #FFFFFF 55%, #EFF6FC 100%);
+    }
+
+    .ct-admin-stat:nth-child(3) {
+        background: linear-gradient(150deg, #FFFFFF 55%, #EFF7F2 100%);
+    }
+
+    .ct-admin-stat:nth-child(4) {
+        background: linear-gradient(150deg, #FFFFFF 55%, #F4F1FA 100%);
+    }
+
+    .ct-admin-stat:nth-child(5) {
+        background: linear-gradient(150deg, #FFFFFF 55%, #FFF6EC 100%);
+    }
+
+    .ct-admin-stat-mark {
+        width: 36px;
+        height: 36px;
+        border-radius: 11px;
+        font-size: 14px;
+    }
+
+    .ct-admin-stat-value {
+        margin-top: 17px;
+        font-size: 34px;
+    }
+
+    .ct-admin-stat-note {
+        font-size: 11px;
+        color: #71877B;
+    }
+
+    /* Section hierarchy */
+    .ct-admin-section-heading {
+        margin-bottom: 15px;
+    }
+
+    .ct-admin-section-heading h2 {
+        position: relative;
+        padding-left: 12px;
+        font-size: 17px;
+    }
+
+    .ct-admin-section-heading h2::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 3px;
+        bottom: 3px;
+        width: 3px;
+        border-radius: 5px;
+        background: linear-gradient(180deg, #287A57, #75B58E);
+    }
+
+    .ct-admin-section-caption {
+        font-size: 11px;
+        color: #71877B;
+    }
+
+    /* Shipment monitoring panel */
+    .ct-admin-panel {
+        border-radius: 17px;
+        box-shadow: 0 7px 20px rgba(20,43,69,.045);
+    }
+
+    .ct-admin-status-grid {
+        gap: 11px;
+        padding: 17px;
+        background:
+            radial-gradient(circle at 100% 0%, rgba(40,122,87,.045), transparent 35%),
+            #FFFFFF;
+    }
+
+    .ct-admin-status-item {
+        min-height: 88px;
+        padding: 15px 13px;
+        border-radius: 12px;
+        background: linear-gradient(145deg, #FFFFFF, #F1F6F3);
+    }
+
+    .ct-admin-status-item strong {
+        font-size: 27px;
+    }
+
+    .ct-admin-status-item span {
+        margin-top: 8px;
+        font-size: 10px;
+        letter-spacing: .025em;
+    }
+
+    .ct-admin-status-item:nth-child(2) {
+        background: linear-gradient(145deg, #FFFFFF, #F0F6FC);
+    }
+
+    .ct-admin-status-item:nth-child(3) {
+        background: linear-gradient(145deg, #FFFFFF, #F4F1FA);
+    }
+
+    .ct-admin-status-item:nth-child(4) {
+        background: linear-gradient(145deg, #FFFFFF, #FFF6EC);
+    }
+
+    /* Recent shipments table */
+    .ct-admin-table th {
+        padding-top: 15px;
+        padding-bottom: 15px;
+        background: #F0F6F2;
+        color: #526B60;
+    }
+
+    .ct-admin-table td {
+        padding-top: 16px;
+        padding-bottom: 16px;
+    }
+
+    .ct-admin-table tbody tr {
+        transition: background .18s ease;
+    }
+
+    .ct-admin-pill {
+        padding: 6px 10px;
+        font-size: 9px;
+    }
+
+    /* Management shortcuts */
+    .ct-admin-management {
+        gap: 14px;
+        padding: 17px;
+    }
+
+    .ct-admin-management-link {
+        min-height: 88px;
+        padding: 17px;
+        border-radius: 14px;
+        box-shadow: 0 3px 10px rgba(20,43,69,.025);
+    }
+
+    .ct-admin-management-link strong {
+        font-size: 13px;
+    }
+
+    .ct-admin-management-link small {
+        font-size: 11px;
+        line-height: 1.55;
+    }
+
+    .ct-admin-management-arrow {
+        width: 36px;
+        height: 36px;
+        border-radius: 11px;
+        font-size: 19px;
+    }
+
+    @media (max-width: 1100px) {
+        .ct-admin-heading {
+            padding: 27px;
+        }
+
+        .ct-admin-mascot {
+            width: 112px;
+            height: 112px;
+        }
+    }
+
+    @media (max-width: 650px) {
+        .ct-admin-heading {
+            padding: 22px 19px;
+            min-height: 0;
+        }
+
+        .ct-admin-heading h1 {
+            font-size: 26px;
+        }
+
+        .ct-admin-heading-side {
+            align-items: center;
+        }
+
+        .ct-admin-mascot {
+            width: 94px;
+            height: 94px;
+        }
+
+        .ct-admin-status-grid {
+            gap: 8px;
+            padding: 11px;
+        }
+
+        .ct-admin-status-item {
+            min-height: 78px;
+            padding: 12px 10px;
+        }
+
+        .ct-admin-management {
+            gap: 10px;
+        }
+    }
+
+    /* ===== END PREMIUM ADMIN DASHBOARD V2 ===== */
+
+    /* ===== LIVE OPERATIONAL ANALYTICS ===== */
+    .ct-live-analytics {
+        margin-bottom: 27px;
+    }
+
+    .ct-live-analytics-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 14px;
+        margin-bottom: 16px;
+    }
+
+    .ct-live-metric {
+        position: relative;
+        overflow: hidden;
+        min-width: 0;
+        padding: 19px 20px;
+        border: 1px solid #E1EAE4;
+        border-radius: 16px;
+        background: #FFFFFF;
+        box-shadow: 0 5px 17px rgba(20,43,69,.045);
+    }
+
+    .ct-live-metric::after {
+        content: "";
+        position: absolute;
+        width: 75px;
+        height: 75px;
+        right: -25px;
+        bottom: -35px;
+        border-radius: 50%;
+        background: var(--metric-tint, #E8F3EC);
+        opacity: .75;
+    }
+
+    .ct-live-metric-label {
+        color: #718276;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: .045em;
+        text-transform: uppercase;
+    }
+
+    .ct-live-metric-value {
+        position: relative;
+        z-index: 1;
+        margin-top: 12px;
+        color: #142B45;
+        font-size: 31px;
+        font-weight: 850;
+        letter-spacing: -.045em;
+        line-height: 1.1;
+    }
+
+    .ct-live-metric-note {
+        position: relative;
+        z-index: 1;
+        margin-top: 8px;
+        color: #819087;
+        font-size: 10px;
+    }
+
+    .ct-live-metric-icon {
+        display: inline-flex;
+        width: 34px;
+        height: 34px;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 13px;
+        border-radius: 11px;
+        background: var(--metric-tint, #E8F3EC);
+        color: var(--metric-color, #287A57);
+        font-size: 15px;
+        font-weight: 900;
+    }
+
+    .ct-live-analytics-lower {
+        display: grid;
+        grid-template-columns: minmax(0, 1.65fr) minmax(230px, .85fr);
+        gap: 16px;
+    }
+
+    .ct-live-panel {
+        min-width: 0;
+        padding: 21px;
+        border: 1px solid #E1EAE4;
+        border-radius: 17px;
+        background: #FFFFFF;
+        box-shadow: 0 5px 17px rgba(20,43,69,.04);
+    }
+
+    .ct-live-panel-heading {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 22px;
+    }
+
+    .ct-live-panel-heading h3 {
+        margin: 0;
+        color: #142B45;
+        font-size: 14px;
+        font-weight: 850;
+    }
+
+    .ct-live-panel-heading p {
+        margin: 5px 0 0;
+        color: #819087;
+        font-size: 10px;
+    }
+
+    .ct-live-period {
+        flex-shrink: 0;
+        padding: 7px 10px;
+        border: 1px solid #DCEAE1;
+        border-radius: 9px;
+        background: #F3F8F5;
+        color: #287A57;
+        font-size: 10px;
+        font-weight: 800;
+    }
+
+    .ct-live-chart {
+        display: grid;
+        grid-template-columns: repeat(7, minmax(0, 1fr));
+        align-items: end;
+        gap: 12px;
+        min-height: 175px;
+        padding: 12px 5px 0;
+        border-bottom: 1px solid #E8EEE9;
+        background: repeating-linear-gradient(
+            to bottom,
+            transparent 0,
+            transparent 42px,
+            #EEF3EF 43px,
+            transparent 44px
+        );
+    }
+
+    .ct-live-chart-column {
+        display: flex;
+        min-width: 0;
+        height: 100%;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 8px;
+    }
+
+    .ct-live-chart-value {
+        color: #536B5D;
+        font-size: 10px;
+        font-weight: 800;
+    }
+
+    .ct-live-chart-track {
+        display: flex;
+        width: min(100%, 32px);
+        height: 112px;
+        align-items: flex-end;
+        justify-content: center;
+    }
+
+    .ct-live-chart-bar {
+        width: 100%;
+        min-height: 5px;
+        border-radius: 7px 7px 3px 3px;
+        background: linear-gradient(180deg, #54A77A, #287A57);
+        box-shadow: 0 3px 8px rgba(40,122,87,.15);
+        transition: height .3s ease;
+    }
+
+    .ct-live-chart-label {
+        padding-bottom: 10px;
+        color: #819087;
+        font-size: 10px;
+        font-weight: 700;
+    }
+
+    .ct-live-insight-list {
+        display: grid;
+        gap: 12px;
+    }
+
+    .ct-live-insight {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        padding: 12px;
+        border: 1px solid #E8EEE9;
+        border-radius: 12px;
+        background: #FAFCFA;
+    }
+
+    .ct-live-insight-dot {
+        width: 9px;
+        height: 9px;
+        flex-shrink: 0;
+        border-radius: 50%;
+        background: var(--insight-color, #287A57);
+        box-shadow: 0 0 0 4px var(--insight-tint, #E8F3EC);
+    }
+
+    .ct-live-insight-copy {
+        min-width: 0;
+        flex: 1;
+    }
+
+    .ct-live-insight-copy strong {
+        display: block;
+        color: #243D32;
+        font-size: 11px;
+        font-weight: 800;
+    }
+
+    .ct-live-insight-copy span {
+        display: block;
+        margin-top: 4px;
+        color: #819087;
+        font-size: 10px;
+    }
+
+    .ct-live-insight-number {
+        color: #142B45;
+        font-size: 17px;
+        font-weight: 850;
+    }
+
+    @media (max-width: 1000px) {
+        .ct-live-analytics-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .ct-live-analytics-lower {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 520px) {
+        .ct-live-analytics-grid {
+            gap: 9px;
+        }
+
+        .ct-live-metric {
+            padding: 15px;
+        }
+
+        .ct-live-metric-value {
+            font-size: 26px;
+        }
+
+        .ct-live-panel {
+            padding: 15px;
+        }
+
+        .ct-live-chart {
+            gap: 5px;
+        }
+
+        .ct-live-chart-track {
+            width: 22px;
+        }
+    }
+    /* ===== END LIVE OPERATIONAL ANALYTICS ===== */
 </style>
 
 <div class="ct-admin-dashboard">
@@ -715,6 +1260,112 @@
         </article>
     </section>
 
+    <section class="ct-live-analytics" aria-label="Operational analytics">
+        <div class="ct-admin-section-heading">
+            <h2>Operational Performance</h2>
+            <span class="ct-admin-section-caption">Shipment monitoring overview</span>
+        </div>
+
+        <div class="ct-live-analytics-grid">
+            <article class="ct-live-metric" style="--metric-tint:#E8F3EC;--metric-color:#287A57;">
+                <span class="ct-live-metric-icon" aria-hidden="true">A</span>
+                <div class="ct-live-metric-label">Active Shipments</div>
+                <div class="ct-live-metric-value">{{ number_format($activeShipments) }}</div>
+                <div class="ct-live-metric-note">Not yet delivered or cancelled</div>
+            </article>
+
+            <article class="ct-live-metric" style="--metric-tint:#EAF3FB;--metric-color:#4385B8;">
+                <span class="ct-live-metric-icon" aria-hidden="true">T</span>
+                <div class="ct-live-metric-label">In Transit</div>
+                <div class="ct-live-metric-value">{{ number_format($inTransitShipments) }}</div>
+                <div class="ct-live-metric-note">Currently moving to destination</div>
+            </article>
+
+            <article class="ct-live-metric" style="--metric-tint:#E8F3EC;--metric-color:#287A57;">
+                <span class="ct-live-metric-icon" aria-hidden="true">D</span>
+                <div class="ct-live-metric-label">Delivered</div>
+                <div class="ct-live-metric-value">{{ number_format($deliveredShipments) }}</div>
+                <div class="ct-live-metric-note">Successfully delivered shipments</div>
+            </article>
+
+            <article class="ct-live-metric" style="--metric-tint:#FFF3E5;--metric-color:#B96C22;">
+                <span class="ct-live-metric-icon" aria-hidden="true">!</span>
+                <div class="ct-live-metric-label">Delayed</div>
+                <div class="ct-live-metric-value">{{ number_format($delayedShipments) }}</div>
+                <div class="ct-live-metric-note">Past estimated or expected arrival</div>
+            </article>
+        </div>
+
+        <div class="ct-live-analytics-lower">
+            <article class="ct-live-panel">
+                <div class="ct-live-panel-heading">
+                    <div>
+                        <h3>Shipment Creation Trend</h3>
+                        <p>Daily registered shipments over the last seven days</p>
+                    </div>
+                    <span class="ct-live-period">LAST 7 DAYS</span>
+                </div>
+
+                @php
+                    $trendMax = max(1, collect($shipmentTrend)->max('total') ?? 0);
+                @endphp
+
+                <div class="ct-live-chart" role="img" aria-label="Seven day shipment creation chart">
+                    @foreach ($shipmentTrend as $point)
+                        <div class="ct-live-chart-column">
+                            <span class="ct-live-chart-value">{{ $point['total'] }}</span>
+                            <div class="ct-live-chart-track">
+                                <div
+                                    class="ct-live-chart-bar"
+                                    style="height: {{ max(5, (int) round(($point['total'] / $trendMax) * 100)) }}%;"
+                                    title="{{ $point['label'] }}: {{ $point['total'] }} shipments"
+                                ></div>
+                            </div>
+                            <span class="ct-live-chart-label">{{ $point['label'] }}</span>
+                        </div>
+                    @endforeach
+                </div>
+            </article>
+
+            <article class="ct-live-panel">
+                <div class="ct-live-panel-heading">
+                    <div>
+                        <h3>Operational Snapshot</h3>
+                        <p>Current shipment condition</p>
+                    </div>
+                </div>
+
+                <div class="ct-live-insight-list">
+                    <div class="ct-live-insight">
+                        <span class="ct-live-insight-dot" style="--insight-color:#4385B8;--insight-tint:#EAF3FB;"></span>
+                        <div class="ct-live-insight-copy">
+                            <strong>In Transit</strong>
+                            <span>Shipments currently moving</span>
+                        </div>
+                        <span class="ct-live-insight-number">{{ number_format($inTransitShipments) }}</span>
+                    </div>
+
+                    <div class="ct-live-insight">
+                        <span class="ct-live-insight-dot" style="--insight-color:#287A57;--insight-tint:#E8F3EC;"></span>
+                        <div class="ct-live-insight-copy">
+                            <strong>Successfully Delivered</strong>
+                            <span>Completed shipment journeys</span>
+                        </div>
+                        <span class="ct-live-insight-number">{{ number_format($deliveredShipments) }}</span>
+                    </div>
+
+                    <div class="ct-live-insight">
+                        <span class="ct-live-insight-dot" style="--insight-color:#D99445;--insight-tint:#FFF3E5;"></span>
+                        <div class="ct-live-insight-copy">
+                            <strong>Delayed Shipments</strong>
+                            <span>Arrival time has passed</span>
+                        </div>
+                        <span class="ct-live-insight-number">{{ number_format($delayedShipments) }}</span>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
     <section class="ct-admin-section" aria-labelledby="shipment-status-heading">
         <div class="ct-admin-section-heading">
             <h2 id="shipment-status-heading">Shipment Status Overview</h2>
