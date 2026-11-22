@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
-@section('title', 'Customer Dashboard')
-@section('header', 'Customer Dashboard')
+@section('title', __('customer.dashboard'))
+@section('header', __('customer.dashboard'))
 
 @section('sidebar-menu')
-    <a href="#overview" class="active">Overview</a>
-    <a href="#my-shipments">My Shipments</a>
-    <a href="#notifications">Notifications</a>
-    <a href="{{ route('exceptions.index') }}">Shipment Exceptions</a>
+    <a href="#overview" class="active">{{ __("customer.overview") }}</a>
+    <a href="#my-shipments">{{ __("customer.my_shipments") }}</a>
+    <a href="#notifications">{{ __("customer.notifications") }}</a>
+    <a href="{{ route('exceptions.index') }}">{{ __("customer.shipment_exceptions") }}</a>
 @endsection
 
 @section('content')
@@ -312,11 +312,9 @@
     <section class="ct-customer-hero" id="overview">
         <div class="ct-customer-hero-inner">
             <div class="ct-customer-hero-copy">
-                <h1>Welcome, {{ $user->name }}!</h1>
+                <h1>{{ __("customer.welcome", ["name" => $user->name]) }}</h1>
                 <p>
-                    Selamat datang di CargoTrace. Pantau seluruh pengiriman
-                    milik Anda, lihat perkembangan status, dan dapatkan
-                    informasi terbaru mengenai perjalanan barang.
+                    {{ __("customer.welcome_description") }}
                 </p>
             </div>
             <img
@@ -329,64 +327,64 @@
 
     <section class="ct-customer-stats">
         <article class="ct-customer-stat">
-            <span>TOTAL MY SHIPMENTS</span>
+            <span>{{ __('customer.total_shipments') }}</span>
             <strong>{{ number_format($totalShipments) }}</strong>
         </article>
 
         <article class="ct-customer-stat">
-            <span>ACTIVE SHIPMENTS</span>
+            <span>{{ __('customer.active_shipments') }}</span>
             <strong>{{ number_format($activeShipments) }}</strong>
         </article>
 
         <article class="ct-customer-stat">
-            <span>DELIVERED SHIPMENTS</span>
+            <span>{{ __('customer.delivered_shipments') }}</span>
             <strong>{{ number_format($deliveredShipments) }}</strong>
         </article>
 
         <article class="ct-customer-stat">
-            <span>OPEN EXCEPTIONS</span>
+            <span>{{ __('customer.open_exceptions') }}</span>
             <strong>{{ number_format($openExceptions) }}</strong>
         </article>
 
         <article class="ct-customer-stat">
-            <span>UNREAD NOTIFICATIONS</span>
+            <span>{{ __('customer.unread_notifications') }}</span>
             <strong>{{ number_format($unreadNotifications) }}</strong>
         </article>
     </section>
 
     <section class="ct-customer-section">
-        <h2>My Shipment Status</h2>
+        <h2>{{ __("customer.shipment_status") }}</h2>
         <div class="ct-customer-panel">
             <div class="ct-customer-stats" style="margin: 0;">
                 @forelse (['CREATED', 'BOOKED', 'PICKED_UP', 'IN_TRANSIT', 'ARRIVED', 'DELIVERED'] as $status)
                     <article class="ct-customer-stat">
-                        <span>{{ str_replace('_', ' ', $status) }}</span>
+                        <span>{{ __('customer.statuses.' . $status) }}</span>
                         <strong>{{ number_format((int) ($shipmentStatusCounts[$status] ?? 0)) }}</strong>
                     </article>
                 @empty
-                    <div class="ct-customer-empty">Belum ada data status pengiriman.</div>
+                    <div class="ct-customer-empty">{{ __('customer.no_status') }}</div>
                 @endforelse
             </div>
         </div>
     </section>
 
     <section class="ct-customer-section" id="my-shipments">
-        <h2>My Recent Shipments</h2>
+        <h2>{{ __("customer.recent_shipments") }}</h2>
         <div class="ct-customer-panel">
             @if ($recentShipments->isEmpty())
                 <div class="ct-customer-empty">
-                    Anda belum memiliki pengiriman terdaftar.
+                    {{ __('customer.no_shipments') }}
                 </div>
             @else
                 <table class="ct-customer-table">
                     <thead>
                         <tr>
-                            <th>Shipment Number</th>
-                            <th>Cargo</th>
-                            <th>Route</th>
-                            <th>Carrier</th>
-                            <th>Status</th>
-                            <th>Detail</th>
+                            <th>{{ __('customer.shipment_number') }}</th>
+                            <th>{{ __('customer.cargo') }}</th>
+                            <th>{{ __('customer.route') }}</th>
+                            <th>{{ __('customer.carrier') }}</th>
+                            <th>{{ __('customer.status') }}</th>
+                            <th>{{ __('customer.detail') }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -402,11 +400,11 @@
                                 <td>{{ $shipment->carrier?->name ?? '-' }}</td>
                                 <td>
                                     <span class="ct-customer-pill">
-                                        {{ str_replace('_', ' ', $shipment->current_status) }}
+                                        {{ __('customer.statuses.' . $shipment->current_status) }}
                                     </span>
                                 </td>
                                 <td>
-                                    <a href="{{ route('shipments.show', $shipment) }}">View</a>
+                                    <a href="{{ route('shipments.show', $shipment) }}">{{ __("customer.view") }}</a>
                                 </td>
                             </tr>
                         @endforeach
@@ -417,7 +415,7 @@
     </section>
 
     <section class="ct-customer-section" id="notifications">
-        <h2>Recent Notifications</h2>
+        <h2>{{ __("customer.recent_notifications") }}</h2>
         <div class="ct-customer-panel" data-customer-notification-list>
             @if ($recentNotifications->isEmpty())
                 <div class="ct-customer-empty" data-customer-notification-empty>
@@ -429,7 +427,7 @@
                         <h3>
                             {{ $notification->title }}
                             @if (!$notification->read_at)
-                                <span class="ct-customer-pill">UNREAD</span>
+                                <span class="ct-customer-pill">{{ __("customer.unread") }}</span>
                             @endif
                         </h3>
 
@@ -438,7 +436,7 @@
                         <small>
                             {{ $notification->created_at?->format('d M Y H:i') ?? '-' }}
                             @if ($notification->shipment)
-                                · Shipment: {{ $notification->shipment->shipment_number }}
+                                &middot; {{ __("customer.shipment_label") }}: {{ $notification->shipment->shipment_number }}
                             @endif
                         </small>
                     </article>
