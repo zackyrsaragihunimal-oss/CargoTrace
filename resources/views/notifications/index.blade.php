@@ -289,20 +289,18 @@
         </div>
 
         <div class="notification-actions">
-            <span class="notification-count">
+            <span class="notification-count" data-notification-unread-label>
                 {{ $unreadCount }} unread notification(s)
             </span>
 
-            @if ($unreadCount > 0)
-                <form method="POST" action="{{ route('notifications.read-all') }}">
-                    @csrf
-                    @method('PATCH')
+            <form data-notification-mark-all-form method="POST" action="{{ route('notifications.read-all') }}" @if ($unreadCount <= 0) hidden @endif>
+                @csrf
+                @method('PATCH')
 
-                    <button type="submit" class="notification-btn">
-                        Mark All as Read
-                    </button>
-                </form>
-            @endif
+                <button type="submit" class="notification-btn">
+                    Mark All as Read
+                </button>
+            </form>
         </div>
     </div>
 
@@ -312,10 +310,10 @@
         </div>
     @endif
 
-    <div class="notification-panel">
+    <div class="notification-panel" data-notification-history-list data-shipment-url-template="{{ route('shipments.show', ['shipment' => '__SHIPMENT_ID__']) }}" data-notification-read-url-template="{{ route('notifications.read', ['notification' => '__NOTIFICATION_ID__']) }}">
         @forelse ($notifications as $notification)
             <div class="notification-list">
-                <div class="notification-item {{ $notification->read_at ? '' : 'unread' }}">
+                <div class="notification-item {{ $notification->read_at ? '' : 'unread' }}" data-notification-id="{{ $notification->id }}">
                     <div class="notification-main">
                         <div class="notification-title">
                             {{ $notification->title }}
