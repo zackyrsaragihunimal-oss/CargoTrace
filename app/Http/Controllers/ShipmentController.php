@@ -9,6 +9,7 @@ use App\Models\Carrier;
 use App\Models\Location;
 use App\Services\AdminDashboardStatsService;
 use App\Services\AuditLogService;
+use App\Services\NotificationService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
@@ -91,7 +92,7 @@ class ShipmentController extends Controller
     /**
      * Memvalidasi dan menyimpan shipment baru.
      */
-    public function store(Request $request, AuditLogService $auditLogService, AdminDashboardStatsService $adminDashboardStatsService): RedirectResponse
+    public function store(Request $request, AuditLogService $auditLogService, AdminDashboardStatsService $adminDashboardStatsService, NotificationService $notificationService): RedirectResponse
     {
         $validated = $request->validate([
             'customer_id' => [
@@ -170,7 +171,7 @@ class ShipmentController extends Controller
         } while (Shipment::where('shipment_number', $shipmentNumber)->exists());
 
         // Menyimpan shipment dalam transaksi database.
-        DB::transaction(function () use ($validated, $request, $shipmentNumber, $auditLogService) {
+        DB::transaction(function () use ($validated, $request, $shipmentNumber, $auditLogService, $notificationService) {
             $shipment = Shipment::create([
                 'shipment_number' => $shipmentNumber,
                 'customer_id' => $validated['customer_id'],
@@ -201,7 +202,41 @@ class ShipmentController extends Controller
                     'current_status' => $shipment->current_status,
                 ]
             );
-        });
+
+            // Notifikasi otomatis untuk customer.
+            $notificationService->send(
+                $shipment->customer,
+                $shipment,
+                'SHIPMENT_CREATED',
+                'Shipment baru telah dibuat',
+                'Shipment ' . $shipment->shipment_number . ' telah dibuat dan menunggu proses berikutnya.',
+                [
+                    'shipment_number' => $shipment->shipment_number,
+                    'current_status' => $shipment->current_status,
+                ]
+            );
+
+            // Notifikasi untuk admin aktif selain pengguna pembuat.
+            $admins = User::query()
+                ->where('role', 'admin')
+                ->where('is_active', true)
+                ->where('id', '!=', $request->user()->id)
+                ->get();
+
+            foreach ($admins as $admin) {
+                $notificationService->send(
+                    $admin,
+                    $shipment,
+                    'SHIPMENT_CREATED',
+                    'Shipment baru dibuat',
+                    'Shipment ' . $shipment->shipment_number . ' telah dibuat untuk customer ' . $shipment->customer->name . '.',
+                    [
+                        'shipment_number' => $shipment->shipment_number,
+                        'customer_id' => $shipment->customer_id,
+                        'current_status' => $shipment->current_status,
+                    ]
+                );
+            }        });
 
         AdminDashboardStatsUpdated::dispatch($adminDashboardStatsService->getStats());
 

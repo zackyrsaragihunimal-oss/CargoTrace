@@ -22,6 +22,12 @@ class ShipmentTest extends TestCase
             'is_active' => true,
         ])->save();
 
+        // Membuat akun admin untuk menguji notifikasi.
+        $admin = User::factory()->create();
+        $admin->forceFill([
+            'role' => 'admin',
+            'is_active' => true,
+        ])->save();
         // Membuat akun customer.
         $customer = User::factory()->create();
         $customer->forceFill([
@@ -83,6 +89,28 @@ class ShipmentTest extends TestCase
             ->firstOrFail();
 
         $this->assertEquals('CREATED', $shipment->current_status);
+        // Customer harus menerima notifikasi shipment baru.
+        $this->assertDatabaseHas('notifications', [
+            'user_id' => $customer->id,
+            'shipment_id' => $shipment->id,
+            'type' => 'SHIPMENT_CREATED',
+            'title' => 'Shipment baru telah dibuat',
+        ]);
+
+        // Admin aktif harus menerima notifikasi.
+        $this->assertDatabaseHas('notifications', [
+            'user_id' => $admin->id,
+            'shipment_id' => $shipment->id,
+            'type' => 'SHIPMENT_CREATED',
+            'title' => 'Shipment baru dibuat',
+        ]);
+
+        // Operator pembuat tidak menerima notifikasi duplikat.
+        $this->assertDatabaseMissing('notifications', [
+            'user_id' => $operator->id,
+            'shipment_id' => $shipment->id,
+            'type' => 'SHIPMENT_CREATED',
+        ]);
 
         // Memastikan pembuatan shipment tercatat dalam audit log.
         $auditLog = AuditLog::where('action', 'SHIPMENT_CREATED')

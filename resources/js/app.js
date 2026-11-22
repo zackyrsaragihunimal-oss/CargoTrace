@@ -1,5 +1,6 @@
 import './bootstrap';
 import './admin-dashboard';
+import './notifications';
 
 const sidebarLayout = document.querySelector('.app-layout');
 const sidebarToggle = document.getElementById('sidebarToggle');
