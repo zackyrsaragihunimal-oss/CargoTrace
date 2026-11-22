@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
-@section('title', 'Operator Dashboard')
-@section('header', 'Logistics Operator Dashboard')
+@section('title', __('operator.title'))
+@section('header', __('operator.header'))
 
 @section('sidebar-menu')
-    <a href="#overview" class="active">Overview</a>
-    <a href="#exceptions">Assigned Exceptions</a>
-    <a href="#tracking">My Tracking Updates</a>
-    <a href="{{ route('shipments.index') }}">Shipments</a>
+    <a href="#overview" class="active">{{ __('operator.overview') }}</a>
+    <a href="#exceptions">{{ __('operator.assigned_exceptions') }}</a>
+    <a href="#tracking">{{ __('operator.tracking_updates') }}</a>
+    <a href="{{ route('shipments.index') }}">{{ __('operator.shipments') }}</a>
 @endsection
 
 @section('content')
@@ -224,18 +224,13 @@
 
     <section class="ct-op-hero" id="overview">
         <div class="ct-op-hero-content">
-            <span class="ct-op-label">CARGOTRACE - LOGISTICS OPERATIONS</span>
+            <span class="ct-op-label">{{ __('operator.hero_label') }}</span>
 
-            <h1>Welcome, {{ $user->name }}!</h1>
+            <h1>{{ __('operator.welcome', ['name' => $user->name]) }}</h1>
 
-            <p>
-                Selamat datang di pusat operasional CargoTrace.
-                Pantau exception yang ditugaskan kepada Anda,
-                catat aktivitas tracking, dan bantu menjaga ketepatan
-                informasi perjalanan pengiriman.
-            </p>
+            <p>{{ __('operator.description') }}</p>
 
-            <span class="ct-op-access">OPERATOR ACCESS</span>
+            <span class="ct-op-access">{{ __('operator.access_label') }}</span>
         </div>
 
         <img
@@ -247,44 +242,44 @@
 
     <section class="ct-op-stats">
         <article class="ct-op-stat">
-            <span>ASSIGNED EXCEPTIONS</span>
+            <span>{{ __('operator.stats.assigned_exceptions') }}</span>
             <strong>{{ number_format($assignedExceptionCount) }}</strong>
         </article>
 
         <article class="ct-op-stat">
-            <span>OPEN / IN PROGRESS</span>
+            <span>{{ __('operator.stats.open_in_progress') }}</span>
             <strong>{{ number_format($openExceptionCount) }}</strong>
         </article>
 
         <article class="ct-op-stat">
-            <span>RESOLVED EXCEPTIONS</span>
+            <span>{{ __('operator.stats.resolved_exceptions') }}</span>
             <strong>{{ number_format($resolvedExceptionCount) }}</strong>
         </article>
 
         <article class="ct-op-stat">
-            <span>TRACKING UPDATES TODAY</span>
+            <span>{{ __('operator.stats.tracking_today') }}</span>
             <strong>{{ number_format($todayTrackingCount) }}</strong>
         </article>
     </section>
 
     <section class="ct-op-section" id="exceptions">
-        <h2>My Assigned Exceptions</h2>
+        <h2>{{ __('operator.exceptions.title') }}</h2>
 
         <div class="ct-op-panel">
             @if ($recentAssignedExceptions->isEmpty())
                 <div class="ct-op-empty">
-                    Belum ada exception yang ditugaskan kepada Anda.
+                    {{ __('operator.exceptions.empty') }}
                 </div>
             @else
                 <table class="ct-op-table">
                     <thead>
                         <tr>
-                            <th>Exception</th>
-                            <th>Shipment</th>
-                            <th>Customer</th>
-                            <th>Severity</th>
-                            <th>Status</th>
-                            <th>Detected</th>
+                            <th>{{ __('operator.exceptions.exception') }}</th>
+                            <th>{{ __('operator.exceptions.shipment') }}</th>
+                            <th>{{ __('operator.exceptions.customer') }}</th>
+                            <th>{{ __('operator.exceptions.severity') }}</th>
+                            <th>{{ __('operator.exceptions.status') }}</th>
+                            <th>{{ __('operator.exceptions.detected') }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -299,8 +294,8 @@
                                 </td>
                                 <td>{{ $exception->shipment?->shipment_number ?? '-' }}</td>
                                 <td>{{ $exception->shipment?->customer?->name ?? '-' }}</td>
-                                <td><span class="ct-op-pill">{{ $exception->severity }}</span></td>
-                                <td><span class="ct-op-pill">{{ str_replace('_', ' ', $exception->status) }}</span></td>
+                                <td><span class="ct-op-pill">{{ \Illuminate\Support\Facades\Lang::has('operator.severity.' . strtolower($exception->severity)) ? __('operator.severity.' . strtolower($exception->severity)) : str_replace('_', ' ', $exception->severity) }}</span></td>
+                                <td><span class="ct-op-pill">{{ \Illuminate\Support\Facades\Lang::has('operator.exception_status.' . strtolower($exception->status)) ? __('operator.exception_status.' . strtolower($exception->status)) : str_replace('_', ' ', $exception->status) }}</span></td>
                                 <td>{{ $exception->detected_at?->format('d M Y H:i') ?? '-' }}</td>
                             </tr>
                         @endforeach
@@ -311,22 +306,22 @@
     </section>
 
     <section class="ct-op-section" id="tracking">
-        <h2>My Recent Tracking Updates</h2>
+        <h2>{{ __('operator.tracking.title') }}</h2>
 
         <div class="ct-op-panel">
             @if ($recentTrackingEvents->isEmpty())
                 <div class="ct-op-empty">
-                    Belum ada tracking event yang dicatat oleh akun Anda.
+                    {{ __('operator.tracking.empty') }}
                 </div>
             @else
                 <table class="ct-op-table">
                     <thead>
                         <tr>
-                            <th>Shipment</th>
-                            <th>Event</th>
-                            <th>Status</th>
-                            <th>Location</th>
-                            <th>Event Time</th>
+                            <th>{{ __('operator.exceptions.shipment') }}</th>
+                            <th>{{ __('operator.tracking.event') }}</th>
+                            <th>{{ __('operator.exceptions.status') }}</th>
+                            <th>{{ __('operator.tracking.location') }}</th>
+                            <th>{{ __('operator.tracking.event_time') }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -341,8 +336,8 @@
                                         -
                                     @endif
                                 </td>
-                                <td>{{ str_replace('_', ' ', $event->event_type) }}</td>
-                                <td>{{ $event->status ?? '-' }}</td>
+                                <td>{{ \Illuminate\Support\Facades\Lang::has('operator.event_types.' . strtolower($event->event_type)) ? __('operator.event_types.' . strtolower($event->event_type)) : str_replace('_', ' ', $event->event_type) }}</td>
+                                <td>{{ $event->status ? (\Illuminate\Support\Facades\Lang::has('operator.shipment_statuses.' . strtolower($event->status)) ? __('operator.shipment_statuses.' . strtolower($event->status)) : str_replace('_', ' ', $event->status)) : '-' }}</td>
                                 <td>{{ $event->location_name ?? '-' }}</td>
                                 <td>{{ $event->event_at?->format('d M Y H:i') ?? '-' }}</td>
                             </tr>
@@ -354,9 +349,9 @@
     </section>
 
     <div class="ct-op-actions">
-        <a href="{{ route('shipments.index') }}">View Shipments</a>
-        <a href="{{ route('exceptions.index') }}">Manage Exceptions</a>
-        <a href="{{ route('notifications.index') }}">View Notifications</a>
+        <a href="{{ route('shipments.index') }}">{{ __('operator.actions.view_shipments') }}</a>
+        <a href="{{ route('exceptions.index') }}">{{ __('operator.actions.manage_exceptions') }}</a>
+        <a href="{{ route('notifications.index') }}">{{ __('operator.actions.view_notifications') }}</a>
     </div>
 
 </div>
