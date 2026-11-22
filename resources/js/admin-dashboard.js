@@ -1,7 +1,8 @@
 const dashboard = document.querySelector('[data-admin-dashboard]');
 
 if (dashboard && window.Echo) {
-    const numberFormatter = new Intl.NumberFormat('id-ID');
+    const locale = dashboard.dataset.locale === 'id' ? 'id-ID' : 'en-US';
+    const numberFormatter = new Intl.NumberFormat(locale);
     const updateIndicator = dashboard.querySelector('[data-stats-updated]');
 
     const channel = window.Echo.private('admin.dashboard');
@@ -20,20 +21,20 @@ if (dashboard && window.Echo) {
 
             if (!Number.isNaN(updatedTime.getTime())) {
                 updateIndicator.textContent =
-                    `Updated ${updatedTime.toLocaleTimeString('id-ID')}`;
+                    `${dashboard.dataset.updatedPrefix} ${updatedTime.toLocaleTimeString(locale)}`;
             }
         }
     });
 
     channel.subscribed(() => {
         if (updateIndicator) {
-            updateIndicator.textContent = 'Live updates connected';
+            updateIndicator.textContent = dashboard.dataset.liveConnected;
         }
     });
 
     channel.error(() => {
         if (updateIndicator) {
-            updateIndicator.textContent = 'Live updates unavailable';
+            updateIndicator.textContent = dashboard.dataset.liveUnavailable;
         }
     });
 }

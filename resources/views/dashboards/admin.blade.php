@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
-@section('title', 'Admin Dashboard')
-@section('header', 'Administrator Dashboard')
+@section('title', __('admin.title'))
+@section('header', __('admin.header'))
 
 @section('sidebar-menu')
-    <a href="#overview" class="active">Overview</a>
-    <a href="#shipments">Recent Shipments</a>
-    <a href="#activities">Recent Activities</a>
-    <a href="#management">System Management</a>
+    <a href="#overview" class="active">{{ __('admin.overview') }}</a>
+    <a href="#shipments">{{ __('admin.recent_shipments') }}</a>
+    <a href="#activities">{{ __('admin.recent_activities') }}</a>
+    <a href="#management">{{ __('admin.system_management') }}</a>
 @endsection
 
 @section('content')
@@ -1195,12 +1195,12 @@
     /* ===== END LIVE OPERATIONAL ANALYTICS ===== */
 </style>
 
-<div class="ct-admin-dashboard" data-admin-dashboard>
+<div class="ct-admin-dashboard" data-admin-dashboard data-locale="{{ app()->getLocale() }}" data-live-connected="{{ __('admin.live_connected') }}" data-live-unavailable="{{ __('admin.live_unavailable') }}" data-updated-prefix="{{ __('admin.updated_prefix') }}">
     <section class="ct-admin-heading" id="overview">
         <div class="ct-admin-heading-copy">
-            <p class="ct-admin-eyebrow">CargoTrace / Control Center</p>
-            <h1>Welcome back, {{ $user->name }}.</h1>
-            <p>Monitor platform activity, shipment progress, and system operations from one place.</p>
+            <p class="ct-admin-eyebrow">{{ __('admin.control_center') }}</p>
+            <h1>{{ __('admin.welcome', ['name' => $user->name]) }}</h1>
+            <p>{{ __('admin.intro') }}</p>
         </div>
 
         <div class="ct-admin-heading-side">
@@ -1213,87 +1213,87 @@
         </div>
     </section>
 
-    <section class="ct-admin-stats" aria-label="Platform statistics">
+    <section class="ct-admin-stats" aria-label="{{ __('admin.platform_statistics') }}">
         <article class="ct-admin-stat">
             <div class="ct-admin-stat-top">
-                <span class="ct-admin-stat-label">Total Shipments</span>
+                <span class="ct-admin-stat-label">{{ __('admin.total_shipments') }}</span>
                 <span class="ct-admin-stat-mark" aria-hidden="true">S</span>
             </div>
             <div class="ct-admin-stat-value" data-stat="totalShipments">{{ number_format($totalShipments) }}</div>
-            <div class="ct-admin-stat-note">All registered shipments</div>
+            <div class="ct-admin-stat-note">{{ __('admin.all_registered_shipments') }}</div>
         </article>
 
         <article class="ct-admin-stat">
             <div class="ct-admin-stat-top">
-                <span class="ct-admin-stat-label">Active Users</span>
+                <span class="ct-admin-stat-label">{{ __('admin.active_users') }}</span>
                 <span class="ct-admin-stat-mark" aria-hidden="true">U</span>
             </div>
             <div class="ct-admin-stat-value">{{ number_format($activeUsers) }}</div>
-            <div class="ct-admin-stat-note">Accounts currently active</div>
+            <div class="ct-admin-stat-note">{{ __('admin.currently_active_accounts') }}</div>
         </article>
 
         <article class="ct-admin-stat">
             <div class="ct-admin-stat-top">
-                <span class="ct-admin-stat-label">Customers</span>
+                <span class="ct-admin-stat-label">{{ __('admin.customers') }}</span>
                 <span class="ct-admin-stat-mark" aria-hidden="true">C</span>
             </div>
             <div class="ct-admin-stat-value">{{ number_format($totalCustomers) }}</div>
-            <div class="ct-admin-stat-note">Registered customer accounts</div>
+            <div class="ct-admin-stat-note">{{ __('admin.registered_customers') }}</div>
         </article>
 
         <article class="ct-admin-stat">
             <div class="ct-admin-stat-top">
-                <span class="ct-admin-stat-label">Operators</span>
+                <span class="ct-admin-stat-label">{{ __('admin.operators') }}</span>
                 <span class="ct-admin-stat-mark" aria-hidden="true">O</span>
             </div>
             <div class="ct-admin-stat-value">{{ number_format($totalOperators) }}</div>
-            <div class="ct-admin-stat-note">Registered operator accounts</div>
+            <div class="ct-admin-stat-note">{{ __('admin.registered_operators') }}</div>
         </article>
 
         <article class="ct-admin-stat">
             <div class="ct-admin-stat-top">
-                <span class="ct-admin-stat-label">Open Exceptions</span>
+                <span class="ct-admin-stat-label">{{ __('admin.open_exceptions') }}</span>
                 <span class="ct-admin-stat-mark" aria-hidden="true">!</span>
             </div>
             <div class="ct-admin-stat-value" data-stat="openExceptions">{{ number_format($openExceptions) }}</div>
-            <div class="ct-admin-stat-note">Open and in progress</div>
+            <div class="ct-admin-stat-note">{{ __('admin.open_and_progress') }}</div>
         </article>
     </section>
 
-    <section class="ct-live-analytics" aria-label="Operational analytics">
+    <section class="ct-live-analytics" aria-label="{{ __('admin.operational_analytics') }}">
         <div class="ct-admin-section-heading">
-            <h2>Operational Performance</h2>
-            <span class="ct-admin-section-caption">Shipment monitoring overview</span>
-            <span class="ct-admin-section-caption" data-stats-updated aria-live="polite">Connecting to live updates...</span>
+            <h2>{{ __('admin.operational_performance') }}</h2>
+            <span class="ct-admin-section-caption">{{ __('admin.shipment_monitoring') }}</span>
+            <span class="ct-admin-section-caption" data-stats-updated aria-live="polite">{{ __('admin.connecting_live') }}</span>
         </div>
 
         <div class="ct-live-analytics-grid">
             <article class="ct-live-metric" style="--metric-tint:#E8F3EC;--metric-color:#287A57;">
                 <span class="ct-live-metric-icon" aria-hidden="true">A</span>
-                <div class="ct-live-metric-label">Active Shipments</div>
+                <div class="ct-live-metric-label">{{ __('admin.active_shipments') }}</div>
                 <div class="ct-live-metric-value" data-stat="activeShipments">{{ number_format($activeShipments) }}</div>
-                <div class="ct-live-metric-note">Not yet delivered or cancelled</div>
+                <div class="ct-live-metric-note">{{ __('admin.not_delivered_cancelled') }}</div>
             </article>
 
             <article class="ct-live-metric" style="--metric-tint:#EAF3FB;--metric-color:#4385B8;">
                 <span class="ct-live-metric-icon" aria-hidden="true">T</span>
-                <div class="ct-live-metric-label">In Transit</div>
+                <div class="ct-live-metric-label">{{ __('admin.in_transit') }}</div>
                 <div class="ct-live-metric-value" data-stat="inTransitShipments">{{ number_format($inTransitShipments) }}</div>
-                <div class="ct-live-metric-note">Currently moving to destination</div>
+                <div class="ct-live-metric-note">{{ __('admin.moving_destination') }}</div>
             </article>
 
             <article class="ct-live-metric" style="--metric-tint:#E8F3EC;--metric-color:#287A57;">
                 <span class="ct-live-metric-icon" aria-hidden="true">D</span>
-                <div class="ct-live-metric-label">Delivered</div>
+                <div class="ct-live-metric-label">{{ __('admin.delivered') }}</div>
                 <div class="ct-live-metric-value" data-stat="deliveredShipments">{{ number_format($deliveredShipments) }}</div>
-                <div class="ct-live-metric-note">Successfully delivered shipments</div>
+                <div class="ct-live-metric-note">{{ __('admin.successfully_delivered') }}</div>
             </article>
 
             <article class="ct-live-metric" style="--metric-tint:#FFF3E5;--metric-color:#B96C22;">
                 <span class="ct-live-metric-icon" aria-hidden="true">!</span>
-                <div class="ct-live-metric-label">Delayed</div>
+                <div class="ct-live-metric-label">{{ __('admin.delayed') }}</div>
                 <div class="ct-live-metric-value" data-stat="delayedShipments">{{ number_format($delayedShipments) }}</div>
-                <div class="ct-live-metric-note">Past estimated or expected arrival</div>
+                <div class="ct-live-metric-note">{{ __('admin.past_estimated_arrival') }}</div>
             </article>
         </div>
 
@@ -1301,17 +1301,17 @@
             <article class="ct-live-panel">
                 <div class="ct-live-panel-heading">
                     <div>
-                        <h3>Shipment Creation Trend</h3>
-                        <p>Daily registered shipments over the last seven days</p>
+                        <h3>{{ __('admin.creation_trend') }}</h3>
+                        <p>{{ __('admin.daily_last_seven_days') }}</p>
                     </div>
-                    <span class="ct-live-period">LAST 7 DAYS</span>
+                    <span class="ct-live-period">{{ __('admin.last_seven_days') }}</span>
                 </div>
 
                 @php
                     $trendMax = max(1, collect($shipmentTrend)->max('total') ?? 0);
                 @endphp
 
-                <div class="ct-live-chart" role="img" aria-label="Seven day shipment creation chart">
+                <div class="ct-live-chart" role="img" aria-label="{{ __('admin.shipment_chart') }}">
                     @foreach ($shipmentTrend as $point)
                         <div class="ct-live-chart-column">
                             <span class="ct-live-chart-value">{{ $point['total'] }}</span>
@@ -1319,7 +1319,7 @@
                                 <div
                                     class="ct-live-chart-bar"
                                     style="height: {{ max(5, (int) round(($point['total'] / $trendMax) * 100)) }}%;"
-                                    title="{{ $point['label'] }}: {{ $point['total'] }} shipments"
+                                    title="{{ $point['label'] }}: {{ $point['total'] }} {{ __('admin.shipments_unit') }}"
                                 ></div>
                             </div>
                             <span class="ct-live-chart-label">{{ $point['label'] }}</span>
@@ -1331,8 +1331,8 @@
             <article class="ct-live-panel">
                 <div class="ct-live-panel-heading">
                     <div>
-                        <h3>Operational Snapshot</h3>
-                        <p>Current shipment condition</p>
+                        <h3>{{ __('admin.operational_snapshot') }}</h3>
+                        <p>{{ __('admin.current_shipment_condition') }}</p>
                     </div>
                 </div>
 
@@ -1340,8 +1340,8 @@
                     <div class="ct-live-insight">
                         <span class="ct-live-insight-dot" style="--insight-color:#4385B8;--insight-tint:#EAF3FB;"></span>
                         <div class="ct-live-insight-copy">
-                            <strong>In Transit</strong>
-                            <span>Shipments currently moving</span>
+                            <strong>{{ __('admin.in_transit') }}</strong>
+                            <span>{{ __('admin.currently_moving') }}</span>
                         </div>
                         <span class="ct-live-insight-number" data-stat="inTransitShipments">{{ number_format($inTransitShipments) }}</span>
                     </div>
@@ -1349,8 +1349,8 @@
                     <div class="ct-live-insight">
                         <span class="ct-live-insight-dot" style="--insight-color:#287A57;--insight-tint:#E8F3EC;"></span>
                         <div class="ct-live-insight-copy">
-                            <strong>Successfully Delivered</strong>
-                            <span>Completed shipment journeys</span>
+                            <strong>{{ __('admin.successfully_delivered_label') }}</strong>
+                            <span>{{ __('admin.successfully_delivered_journeys') }}</span>
                         </div>
                         <span class="ct-live-insight-number" data-stat="deliveredShipments">{{ number_format($deliveredShipments) }}</span>
                     </div>
@@ -1358,8 +1358,8 @@
                     <div class="ct-live-insight">
                         <span class="ct-live-insight-dot" style="--insight-color:#D99445;--insight-tint:#FFF3E5;"></span>
                         <div class="ct-live-insight-copy">
-                            <strong>Delayed Shipments</strong>
-                            <span>Arrival time has passed</span>
+                            <strong>{{ __('admin.delayed_shipments_label') }}</strong>
+                            <span>{{ __('admin.past_estimated_arrival') }}</span>
                         </div>
                         <span class="ct-live-insight-number" data-stat="delayedShipments">{{ number_format($delayedShipments) }}</span>
                     </div>
@@ -1369,15 +1369,15 @@
     </section>
     <section class="ct-admin-section" aria-labelledby="shipment-status-heading">
         <div class="ct-admin-section-heading">
-            <h2 id="shipment-status-heading">Shipment Status Overview</h2>
-            <span class="ct-admin-section-caption">Current platform distribution</span>
+            <h2 id="shipment-status-heading">{{ __('admin.shipment_status_overview') }}</h2>
+            <span class="ct-admin-section-caption">{{ __('admin.current_distribution') }}</span>
         </div>
         <div class="ct-admin-panel">
             <div class="ct-admin-status-grid">
                 @foreach (['CREATED', 'BOOKED', 'PICKED_UP', 'IN_TRANSIT', 'ARRIVED', 'DELIVERED'] as $status)
                     <div class="ct-admin-status-item">
                         <strong>{{ number_format((int) ($shipmentStatusCounts[$status] ?? 0)) }}</strong>
-                        <span>{{ str_replace('_', ' ', $status) }}</span>
+                        <span>{{ __( 'admin.statuses.' . strtolower($status) ) }}</span>
                     </div>
                 @endforeach
             </div>
@@ -1386,22 +1386,22 @@
 
     <section class="ct-admin-section" id="shipments">
         <div class="ct-admin-section-heading">
-            <h2>Recent Shipments</h2>
-            <span class="ct-admin-section-caption">Latest 6 registered shipments</span>
+            <h2>{{ __('admin.recent_shipments') }}</h2>
+            <span class="ct-admin-section-caption">{{ __('admin.latest_six_shipments') }}</span>
         </div>
         <div class="ct-admin-panel">
             @if ($recentShipments->isEmpty())
-                <div class="ct-admin-empty">No shipments have been recorded yet.</div>
+                <div class="ct-admin-empty">{{ __('admin.no_shipments') }}</div>
             @else
                 <div class="ct-admin-table-wrap">
                     <table class="ct-admin-table">
                         <thead>
                             <tr>
-                                <th>Shipment Number</th>
-                                <th>Customer</th>
-                                <th>Route</th>
-                                <th>Status</th>
-                                <th>Created</th>
+                                <th>{{ __('admin.shipment_number') }}</th>
+                                <th>{{ __('admin.customer') }}</th>
+                                <th>{{ __('admin.route') }}</th>
+                                <th>{{ __('admin.status') }}</th>
+                                <th>{{ __('admin.created') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -1419,7 +1419,7 @@
                                         <span class="ct-admin-route">{{ $shipment->destinationLocation?->city ?? '-' }}</span>
                                     </td>
                                     <td>
-                                        <span class="ct-admin-pill">{{ str_replace('_', ' ', $shipment->current_status) }}</span>
+                                        <span class="ct-admin-pill">{{ __( 'admin.statuses.' . strtolower($shipment->current_status) ) }}</span>
                                     </td>
                                     <td>{{ $shipment->created_at?->format('d M Y') ?? '-' }}</td>
                                 </tr>
@@ -1433,28 +1433,28 @@
 
     <section class="ct-admin-section" id="activities">
         <div class="ct-admin-section-heading">
-            <h2>Recent System Activities</h2>
-            <span class="ct-admin-section-caption">Latest 6 audit log records</span>
+            <h2>{{ __('admin.recent_activities') }}</h2>
+            <span class="ct-admin-section-caption">{{ __('admin.latest_six_activities') }}</span>
         </div>
         <div class="ct-admin-panel">
             @if ($recentActivities->isEmpty())
-                <div class="ct-admin-empty">No system activities have been recorded yet.</div>
+                <div class="ct-admin-empty">{{ __('admin.no_activities') }}</div>
             @else
                 <div class="ct-admin-table-wrap">
                     <table class="ct-admin-table">
                         <thead>
                             <tr>
-                                <th>Activity</th>
-                                <th>User</th>
-                                <th>Entity</th>
-                                <th>Time</th>
+                                <th>{{ __('admin.activity') }}</th>
+                                <th>{{ __('admin.user') }}</th>
+                                <th>{{ __('admin.entity') }}</th>
+                                <th>{{ __('admin.time') }}</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($recentActivities as $activity)
                                 <tr>
                                     <td><span class="ct-admin-pill">{{ $activity->action }}</span></td>
-                                    <td>{{ $activity->user?->name ?? 'System / Unknown' }}</td>
+                                    <td>{{ $activity->user?->name ?? __('admin.unknown_system') }}</td>
                                     <td>{{ $activity->entity_type }} #{{ $activity->entity_id ?? '-' }}</td>
                                     <td>{{ $activity->created_at?->format('d M Y H:i') ?? '-' }}</td>
                                 </tr>
@@ -1468,29 +1468,29 @@
 
     <section class="ct-admin-section" id="management">
         <div class="ct-admin-section-heading">
-            <h2>System Management</h2>
-            <span class="ct-admin-section-caption">Quick access to administration tools</span>
+            <h2>{{ __('admin.system_management') }}</h2>
+            <span class="ct-admin-section-caption">{{ __('admin.quick_access') }}</span>
         </div>
         <div class="ct-admin-panel">
             <div class="ct-admin-management">
                 <a class="ct-admin-management-link" href="{{ route('shipments.index') }}">
                     <span>
-                        <strong>Manage Shipments</strong>
-                        <small>Review and manage shipment records</small>
+                        <strong>{{ __('admin.manage_shipments') }}</strong>
+                        <small>{{ __('admin.review_shipments') }}</small>
                     </span>
                     <span class="ct-admin-management-arrow" aria-hidden="true">&rarr;</span>
                 </a>
                 <a class="ct-admin-management-link" href="{{ route('exceptions.index') }}">
                     <span>
-                        <strong>Manage Exceptions</strong>
-                        <small>Review and assign shipment issues</small>
+                        <strong>{{ __('admin.manage_exceptions') }}</strong>
+                        <small>{{ __('admin.review_exceptions') }}</small>
                     </span>
                     <span class="ct-admin-management-arrow" aria-hidden="true">&rarr;</span>
                 </a>
                 <a class="ct-admin-management-link" href="{{ route('notifications.index') }}">
                     <span>
-                        <strong>View Notifications</strong>
-                        <small>Open the system notification center</small>
+                        <strong>{{ __('admin.view_notifications') }}</strong>
+                        <small>{{ __('admin.open_notification_center') }}</small>
                     </span>
                     <span class="ct-admin-management-arrow" aria-hidden="true">&rarr;</span>
                 </a>

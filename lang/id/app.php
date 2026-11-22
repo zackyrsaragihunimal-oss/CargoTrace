@@ -33,7 +33,7 @@ return [
     'success' => 'Berhasil',
     'error' => 'Terjadi kesalahan',
     'confirm' => 'Konfirmasi',
-    'footer' => 'CargoTrace Logistics Management System.',
+    'footer' => 'Sistem Manajemen Logistik CargoTrace.',
     'toggle_sidebar' => 'Tampilkan atau sembunyikan menu',
     'show_sidebar' => 'Tampilkan menu',
     'hide_sidebar' => 'Sembunyikan menu',
