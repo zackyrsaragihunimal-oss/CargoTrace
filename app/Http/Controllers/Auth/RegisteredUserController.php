@@ -34,11 +34,19 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', Password::min(8)->letters()->numbers()],
         ]);
 
+        // Ambil bahasa yang sedang dipilih pengunjung.
+        $locale = $request->session()->get('locale', 'id');
+
+        if (! in_array($locale, ['id', 'en'], true)) {
+            $locale = 'id';
+        }
+
         $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
             'phone' => $validated['phone'] ?? null,
             'password' => Hash::make($validated['password']),
+            'preferred_language' => $locale,
         ]);
 
         event(new Registered($user));
@@ -46,6 +54,7 @@ class RegisteredUserController extends Controller
         Auth::login($user);
 
         $request->session()->regenerate();
+        $request->session()->put('locale', $locale);
 
         return redirect()->route('dashboard');
     }

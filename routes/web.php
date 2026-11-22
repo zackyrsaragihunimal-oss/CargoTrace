@@ -1,3 +1,4 @@
+
 <?php
 
 use Illuminate\Support\Facades\Route;
@@ -8,6 +9,7 @@ use App\Http\Controllers\ShipmentController;
 use App\Http\Controllers\TrackingEventController;
 use App\Http\Controllers\ShipmentExceptionController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\LanguageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,9 +17,14 @@ use App\Http\Controllers\NotificationController;
 |--------------------------------------------------------------------------
 */
 
+// Halaman utama.
 Route::get('/', function () {
     return redirect()->route('login');
 })->name('home');
+
+// Penggantian bahasa untuk pengunjung dan pengguna login.
+Route::post('/language', [LanguageController::class, 'update'])
+    ->name('language.update');
 
 /*
 |--------------------------------------------------------------------------
@@ -27,7 +34,7 @@ Route::get('/', function () {
 
 Route::middleware('guest')->group(function () {
 
-    // Login
+    // Login.
     Route::get('/login', [AuthenticatedSessionController::class, 'create'])
         ->name('login');
 
@@ -35,7 +42,7 @@ Route::middleware('guest')->group(function () {
         ->middleware('throttle:5,1')
         ->name('login.store');
 
-    // Registration
+    // Registration.
     Route::get('/register', [RegisteredUserController::class, 'create'])
         ->name('register');
 
@@ -52,11 +59,11 @@ Route::middleware('guest')->group(function () {
 
 Route::middleware(['auth', 'active'])->group(function () {
 
-    // Main Dashboard
+    // Main Dashboard.
     Route::get('/dashboard', [DashboardController::class, 'index'])
         ->name('dashboard');
 
-    // Notification Center
+    // Notification Center.
     Route::get('/notifications', [NotificationController::class, 'index'])
         ->name('notifications.index');
 
@@ -66,7 +73,7 @@ Route::middleware(['auth', 'active'])->group(function () {
     Route::patch('/notifications/{notification}/read', [NotificationController::class, 'markRead'])
         ->name('notifications.read');
 
-    // Shipment Management
+    // Shipment Management.
 
     // Menampilkan daftar shipment.
     Route::get('/shipments', [ShipmentController::class, 'index'])
@@ -93,7 +100,7 @@ Route::middleware(['auth', 'active'])->group(function () {
         ->middleware('role:admin,operator,customer')
         ->name('shipments.show');
 
-    // Exception Management
+    // Exception Management.
 
     // Daftar exception sesuai hak akses pengguna.
     Route::get('/exceptions', [ShipmentExceptionController::class, 'index'])
@@ -109,7 +116,8 @@ Route::middleware(['auth', 'active'])->group(function () {
     Route::patch('/exceptions/{exception}', [ShipmentExceptionController::class, 'update'])
         ->middleware('role:admin,operator')
         ->name('exceptions.update');
-    // Logout
+
+    // Logout.
     Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
         ->name('logout');
 });

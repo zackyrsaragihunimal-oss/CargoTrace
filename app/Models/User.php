@@ -1,7 +1,7 @@
 <?php
+
 namespace App\Models;
 
-use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -11,19 +11,20 @@ class User extends Authenticatable
     use HasFactory;
 
     /**
-     * Attributes that can be mass assigned.
+     * Atribut yang boleh diisi melalui mass assignment.
      *
-     * Role and is_active are excluded for security.
+     * Role dan is_active tetap dikecualikan demi keamanan.
      */
     protected $fillable = [
         'name',
         'email',
         'phone',
         'password',
+        'preferred_language',
     ];
 
     /**
-     * Attributes hidden during serialization.
+     * Atribut yang disembunyikan saat data pengguna diserialisasi.
      */
     protected $hidden = [
         'password',
@@ -31,7 +32,7 @@ class User extends Authenticatable
     ];
 
     /**
-     * Attribute type conversions.
+     * Konversi tipe data atribut.
      */
     protected function casts(): array
     {
@@ -43,7 +44,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Check whether the user is an administrator.
+     * Periksa apakah pengguna adalah administrator.
      */
     public function isAdmin(): bool
     {
@@ -51,7 +52,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Check whether the user is a logistics operator.
+     * Periksa apakah pengguna adalah operator logistik.
      */
     public function isOperator(): bool
     {
@@ -59,7 +60,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Check whether the user is a customer.
+     * Periksa apakah pengguna adalah customer.
      */
     public function isCustomer(): bool
     {
@@ -67,7 +68,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Shipments owned by this customer.
+     * Pengiriman yang dimiliki customer.
      */
     public function shipments(): HasMany
     {
@@ -75,7 +76,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Shipments created by this user.
+     * Pengiriman yang dibuat oleh pengguna.
      */
     public function createdShipments(): HasMany
     {
@@ -83,7 +84,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Shipments last updated by this user.
+     * Pengiriman yang terakhir diperbarui pengguna.
      */
     public function updatedShipments(): HasMany
     {
@@ -91,7 +92,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Tracking events created by this user.
+     * Tracking event yang dibuat pengguna.
      */
     public function trackingEvents(): HasMany
     {
@@ -99,7 +100,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Exceptions reported by this user.
+     * Exception yang dilaporkan pengguna.
      */
     public function reportedExceptions(): HasMany
     {
@@ -107,7 +108,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Exceptions assigned to this user.
+     * Exception yang ditugaskan kepada pengguna.
      */
     public function assignedExceptions(): HasMany
     {
@@ -115,7 +116,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Notifications belonging to this user.
+     * Notifikasi milik pengguna.
      */
     public function notifications(): HasMany
     {
@@ -123,7 +124,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Audit records created by this user.
+     * Catatan audit yang dibuat pengguna.
      */
     public function auditLogs(): HasMany
     {

@@ -1,3 +1,4 @@
+
 <?php
 
 use Illuminate\Foundation\Application;
@@ -12,11 +13,18 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+
         // Register custom middleware aliases.
         $middleware->alias([
             'active' => \App\Http\Middleware\EnsureUserIsActive::class,
             'role' => \App\Http\Middleware\EnsureUserHasRole::class,
         ]);
+
+        // Apply language settings to all web routes.
+        $middleware->appendToGroup('web', [
+            \App\Http\Middleware\SetLocaleMiddleware::class,
+        ]);
+
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
