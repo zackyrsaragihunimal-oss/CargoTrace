@@ -5,9 +5,15 @@ namespace App\Services;
 use App\Models\Shipment;
 use App\Models\TrackingEvent;
 use App\Models\ShipmentException;
+use App\Models\User;
 
 class ShipmentDelayService
 {
+    public function __construct(
+        private NotificationService $notificationService
+    ) {
+    }
+
     /**
      * Perbarui ETA dan buat exception jika keberangkatan terlambat.
      */
@@ -64,7 +70,7 @@ class ShipmentDelayService
             return;
         }
 
-        ShipmentException::create([
+        $exception = ShipmentException::create([
             'shipment_id' => $shipment->id,
             'tracking_event_id' => $trackingEvent->id,
             'reported_by' => $trackingEvent->created_by,
@@ -75,5 +81,48 @@ class ShipmentDelayService
             'status' => 'OPEN',
             'detected_at' => $actualDeparture,
         ]);
+
+        // Kirim notifikasi kepada pelanggan pemilik shipment.
+        $customer = $shipment->customer;
+
+        if ($customer) {
+            $this->notificationService->send(
+                $customer,
+                $shipment,
+                'DEPARTURE_DELAY',
+                'Keterlambatan pengiriman terdeteksi',
+                "Keberangkatan shipment {$shipment->shipment_number} terlambat {$delayMinutes} menit dari jadwal.",
+                [
+                    'exception_id' => $exception->id,
+                    'exception_code' => 'DEPARTURE_DELAY',
+                    'delay_minutes' => $delayMinutes,
+                ]
+            );
+        }
+
+        // Kirim notifikasi kepada seluruh admin yang aktif.
+        $admins = User::query()
+            ->where('role', 'admin')
+            ->where('is_active', true)
+            ->when(
+                $customer,
+                fn ($query) => $query->where('id', '!=', $customer->id)
+            )
+            ->get();
+
+        foreach ($admins as $admin) {
+            $this->notificationService->send(
+                $admin,
+                $shipment,
+                'DEPARTURE_DELAY',
+                'Keterlambatan shipment terdeteksi',
+                "Shipment {$shipment->shipment_number} mengalami keterlambatan keberangkatan {$delayMinutes} menit.",
+                [
+                    'exception_id' => $exception->id,
+                    'exception_code' => 'DEPARTURE_DELAY',
+                    'delay_minutes' => $delayMinutes,
+                ]
+            );
+        }
     }
 }

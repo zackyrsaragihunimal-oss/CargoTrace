@@ -14,6 +14,8 @@ class TrackingEventTest extends TestCase
     use RefreshDatabase;
 
     private User $operator;
+    private User $customer;
+    private User $admin;
     private Shipment $shipment;
     private int $destinationId;
 
@@ -28,6 +30,19 @@ class TrackingEventTest extends TestCase
             'is_active' => true,
         ])->save();
 
+        // Membuat akun customer khusus untuk pengujian.
+        $this->customer = User::factory()->create();
+        $this->customer->forceFill([
+            'role' => 'customer',
+            'is_active' => true,
+        ])->save();
+
+        // Membuat akun admin aktif untuk pengujian.
+        $this->admin = User::factory()->create();
+        $this->admin->forceFill([
+            'role' => 'admin',
+            'is_active' => true,
+        ])->save();
         // Membuat lokasi asal.
         $originId = DB::table('locations')->insertGetId([
             'name' => 'Gudang Tangerang',
@@ -60,7 +75,7 @@ class TrackingEventTest extends TestCase
         // Membuat shipment uji.
         $this->shipment = Shipment::create([
             'shipment_number' => 'CT-TEST-001',
-            'customer_id' => $this->operator->id,
+            'customer_id' => $this->customer->id,
             'carrier_id' => $carrierId,
             'origin_location_id' => $originId,
             'destination_location_id' => $this->destinationId,
@@ -221,6 +236,27 @@ class TrackingEventTest extends TestCase
         ]);
 
         $this->assertDatabaseCount('shipment_exceptions', 1);
+
+        // Customer harus menerima tepat satu notifikasi keterlambatan.
+        $this->assertSame(1, DB::table('notifications')
+            ->where('user_id', $this->customer->id)
+            ->where('shipment_id', $this->shipment->id)
+            ->where('type', 'DEPARTURE_DELAY')
+            ->count());
+
+        // Admin aktif harus menerima tepat satu notifikasi.
+        $this->assertSame(1, DB::table('notifications')
+            ->where('user_id', $this->admin->id)
+            ->where('shipment_id', $this->shipment->id)
+            ->where('type', 'DEPARTURE_DELAY')
+            ->count());
+
+        // Operator bukan penerima notifikasi keterlambatan.
+        $this->assertSame(0, DB::table('notifications')
+            ->where('user_id', $this->operator->id)
+            ->where('shipment_id', $this->shipment->id)
+            ->where('type', 'DEPARTURE_DELAY')
+            ->count());
     }
 
     public function test_departure_delay_of_eight_hours_updates_eta_and_creates_exception(): void
@@ -283,6 +319,12 @@ class TrackingEventTest extends TestCase
             'exception_code' => 'DEPARTURE_DELAY',
             'status' => 'OPEN',
         ]);
+
+        // Exception OPEN yang sudah ada tidak boleh memicu notifikasi baru.
+        $this->assertSame(0, DB::table('notifications')
+            ->where('shipment_id', $this->shipment->id)
+            ->where('type', 'DEPARTURE_DELAY')
+            ->count());
     }
 
     public function test_arrival_at_transit_location_keeps_in_transit_status(): void
