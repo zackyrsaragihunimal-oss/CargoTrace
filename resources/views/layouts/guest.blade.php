@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -117,6 +117,7 @@
         }
 
         .guest-form-panel {
+            position: relative;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -124,6 +125,37 @@
             min-height: 100vh;
             padding: 48px 35px;
             background: #F3F7F4;
+        }
+
+        .guest-language-switch {
+            position: absolute;
+            top: 24px;
+            right: 28px;
+            z-index: 5;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px;
+            border: 1px solid #dbe5e1;
+            border-radius: 9px;
+            background: #fff;
+        }
+
+        .guest-language-switch button {
+            min-width: 36px;
+            padding: 7px 9px;
+            border: 0;
+            border-radius: 6px;
+            background: transparent;
+            color: #526477;
+            font-size: 11px;
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        .guest-language-switch button.active {
+            background: #1556a8;
+            color: #fff;
         }
 
         .guest-form-top {
@@ -499,11 +531,12 @@
             <div class="guest-brand">CARGO<span>TRACE</span></div>
 
             <div class="guest-visual-content">
-                <h1>Smarter Logistics.<br>Clearer Tracking.</h1>
+                <h1>{{ app()->getLocale() === 'id' ? 'Logistik Lebih Cerdas.' : 'Smarter Logistics.' }}<br>{{ app()->getLocale() === 'id' ? 'Pelacakan Lebih Jelas.' : 'Clearer Tracking.' }}</h1>
 
                 <p>
-                    Kelola pengiriman, pantau perjalanan barang,
-                    dan dapatkan informasi terbaru dalam satu platform.
+                    {{ app()->getLocale() === 'id'
+                        ? 'Kelola pengiriman, pantau perjalanan barang, dan dapatkan informasi terbaru dalam satu platform.'
+                        : 'Manage shipments, track cargo journeys, and get the latest updates in one platform.' }}
                 </p>
 
                 <img
@@ -514,11 +547,26 @@
             </div>
 
             <div class="guest-visual-footer">
-                Logistics Management System
+                {{ __('app.system_name') }}
             </div>
         </aside>
 
         <main class="guest-form-panel">
+            <div class="guest-language-switch" aria-label="{{ __('app.language') }}">
+                @foreach (['id' => 'ID', 'en' => 'EN'] as $locale => $label)
+                    <form method="POST" action="{{ route('language.update') }}" style="margin:0;">
+                        @csrf
+                        <input type="hidden" name="locale" value="{{ $locale }}">
+                        <button
+                            type="submit"
+                            class="{{ app()->getLocale() === $locale ? 'active' : '' }}"
+                            aria-label="{{ $locale === 'id' ? __('app.indonesian') : __('app.english') }}"
+                            @if (app()->getLocale() === $locale) aria-current="true" @endif
+                        >{{ $label }}</button>
+                    </form>
+                @endforeach
+            </div>
+
             <div class="guest-form-top">CARGO<span>TRACE</span></div>
 
             <div class="auth-container">
@@ -526,7 +574,7 @@
             </div>
 
             <footer class="guest-bottom">
-                &copy; {{ date('Y') }} CargoTrace. All rights reserved.
+                &copy; {{ date('Y') }} CargoTrace. {{ app()->getLocale() === 'id' ? 'Hak cipta dilindungi.' : 'All rights reserved.' }}
             </footer>
         </main>
 

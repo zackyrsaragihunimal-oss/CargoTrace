@@ -1,14 +1,14 @@
 @extends('layouts.guest')
 
-@section('title', 'Login')
+@section('title', __('auth.login_title'))
 
 @section('content')
 
 <div class="auth-card">
 
     <div class="auth-heading">
-        <h1>Selamat Datang Kembali</h1>
-        <p>Masuk ke akun CargoTrace untuk mengelola dan memantau aktivitas pengiriman Anda.</p>
+        <h1>{{ __('auth.login_title') }}</h1>
+        <p>{{ __('auth.login_description') }}</p>
     </div>
 
     @if ($errors->any())
@@ -23,14 +23,14 @@
         @csrf
 
         <div class="form-group">
-            <label for="email">Alamat Email</label>
+            <label for="email">{{ __('auth.email') }}</label>
             <input
                 type="email"
                 id="email"
                 name="email"
                 class="form-control"
                 value="{{ old('email') }}"
-                placeholder="nama@email.com"
+                placeholder="{{ __('auth.email_placeholder') }}"
                 autocomplete="username"
                 required
                 autofocus
@@ -41,13 +41,13 @@
         </div>
 
         <div class="form-group">
-            <label for="password">Kata Sandi</label>
+            <label for="password">{{ __('auth.password') }}</label>
             <input
                 type="password"
                 id="password"
                 name="password"
                 class="form-control"
-                placeholder="Masukkan password"
+                placeholder="{{ __('auth.password_placeholder') }}"
                 autocomplete="current-password"
                 required
             >
@@ -58,17 +58,17 @@
 
         <label class="remember">
             <input type="checkbox" name="remember" value="1">
-            Ingat saya
+            {{ __('auth.remember_me') }}
         </label>
 
         <button type="submit" class="btn-primary">
-            Masuk ke CargoTrace
+            {{ __('auth.login_button') }}
         </button>
     </form>
 
     <div class="auth-footer">
-        Belum memiliki akun?
-        <a href="{{ route('register') }}">Daftar sekarang</a>
+        {{ __('auth.no_account') }}
+        <a href="{{ route('register') }}">{{ __('auth.register_link') }}</a>
     </div>
 
 </div>

@@ -1,14 +1,13 @@
-
 @extends('layouts.guest')
 
-@section('title', 'Registrasi')
+@section('title', __('auth.register_title'))
 
 @section('content')
 
 <div class="auth-card">
     <div class="auth-heading">
-        <h1>Buat Akun CargoTrace</h1>
-        <p>Daftarkan akun CargoTrace untuk memantau status dan informasi pengiriman barang Anda.</p>
+        <h1>{{ __('auth.register_title') }}</h1>
+        <p>{{ __('auth.register_description') }}</p>
     </div>
 
     @if ($errors->any())
@@ -23,14 +22,14 @@
         @csrf
 
         <div class="form-group">
-            <label for="name">Nama Lengkap</label>
+            <label for="name">{{ __('auth.full_name') }}</label>
             <input
                 type="text"
                 id="name"
                 name="name"
                 class="form-control"
                 value="{{ old('name') }}"
-                placeholder="Nama lengkap"
+                placeholder="{{ __('auth.name_placeholder') }}"
                 autocomplete="name"
                 maxlength="150"
                 required
@@ -41,14 +40,14 @@
         </div>
 
         <div class="form-group">
-            <label for="email">Alamat Email</label>
+            <label for="email">{{ __('auth.email') }}</label>
             <input
                 type="email"
                 id="email"
                 name="email"
                 class="form-control"
                 value="{{ old('email') }}"
-                placeholder="nama@email.com"
+                placeholder="{{ __('auth.email_placeholder') }}"
                 autocomplete="email"
                 required
             >
@@ -58,14 +57,14 @@
         </div>
 
         <div class="form-group">
-            <label for="phone">Nomor Telepon</label>
+            <label for="phone">{{ __('auth.phone') }}</label>
             <input
                 type="tel"
                 id="phone"
                 name="phone"
                 class="form-control"
                 value="{{ old('phone') }}"
-                placeholder="08xxxxxxxxxx"
+                placeholder="{{ __('auth.phone_placeholder') }}"
                 autocomplete="tel"
                 maxlength="25"
             >
@@ -75,13 +74,13 @@
         </div>
 
         <div class="form-group">
-            <label for="password">Kata Sandi</label>
+            <label for="password">{{ __('auth.password') }}</label>
             <input
                 type="password"
                 id="password"
                 name="password"
                 class="form-control"
-                placeholder="Minimal 8 karakter"
+                placeholder="{{ __('auth.password_placeholder') }}"
                 autocomplete="new-password"
                 required
             >
@@ -91,26 +90,26 @@
         </div>
 
         <div class="form-group">
-            <label for="password_confirmation">Konfirmasi Kata Sandi</label>
+            <label for="password_confirmation">{{ __('auth.password_confirmation') }}</label>
             <input
                 type="password"
                 id="password_confirmation"
                 name="password_confirmation"
                 class="form-control"
-                placeholder="Ulangi password"
+                placeholder="{{ __('auth.password_confirmation_placeholder') }}"
                 autocomplete="new-password"
                 required
             >
         </div>
 
         <button type="submit" class="btn-primary">
-            Buat Akun CargoTrace
+            {{ __('auth.register_button') }}
         </button>
     </form>
 
     <div class="auth-footer">
-        Sudah memiliki akun?
-        <a href="{{ route('login') }}">Login sekarang</a>
+        {{ __('auth.have_account') }}
+        <a href="{{ route('login') }}">{{ __('auth.login_link') }}</a>
     </div>
 </div>
 

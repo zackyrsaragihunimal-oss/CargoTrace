@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'Dashboard') | CargoTrace</title>
+    <title>@yield('title', __('app.dashboard')) | CargoTrace</title>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
@@ -14,12 +14,12 @@
     <aside class="sidebar" id="appSidebar">
         <div class="brand">CARGO<span>TRACE</span></div>
 
-        <div class="menu-label">MAIN MENU</div>
+        <div class="menu-label">{{ __('app.main_menu') }}</div>
 
-        <nav class="menu" aria-label="Main navigation">
+        <nav class="menu" aria-label="{{ __('app.main_menu') }}">
             <a href="{{ route('dashboard') }}"
                class="{{ request()->routeIs('dashboard') ? 'active' : '' }}">
-                Dashboard
+                {{ __('app.dashboard') }}
             </a>
 
             @php
@@ -30,14 +30,14 @@
             @endphp
 
             <a href="{{ route('notifications.index') }}"
-   class="{{ request()->routeIs('notifications.*') ? 'active' : '' }}">
-    <span>Notifications</span>
-    <span
-        data-notification-count
-        @if ($unreadNotificationCount === 0) hidden @endif
-        style="display:{{ $unreadNotificationCount > 0 ? 'inline-flex' : 'none' }}; background:#ef4444; color:white; border-radius:20px; padding:3px 8px; font-size:10px; font-weight:700;"
-    >{{ $unreadNotificationCount > 99 ? '99+' : $unreadNotificationCount }}</span>
-</a>
+               class="{{ request()->routeIs('notifications.*') ? 'active' : '' }}">
+                <span>{{ __('app.notifications') }}</span>
+                <span
+                    data-notification-count
+                    @if ($unreadNotificationCount === 0) hidden @endif
+                    style="display:{{ $unreadNotificationCount > 0 ? 'inline-flex' : 'none' }}; background:#ef4444; color:white; border-radius:20px; padding:3px 8px; font-size:10px; font-weight:700;"
+                >{{ $unreadNotificationCount > 99 ? '99+' : $unreadNotificationCount }}</span>
+            </a>
 
             @yield('sidebar-menu')
         </nav>
@@ -45,7 +45,9 @@
         <div class="sidebar-bottom">
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
-                <button type="submit" class="btn-logout">Sign Out</button>
+                <button type="submit" class="btn-logout">
+                    {{ __('app.sign_out') }}
+                </button>
             </form>
         </div>
     </aside>
@@ -56,21 +58,38 @@
                 type="button"
                 class="sidebar-toggle"
                 id="sidebarToggle"
-                aria-label="Toggle sidebar"
+                aria-label="{{ __('app.toggle_sidebar') }}"
                 aria-controls="appSidebar"
                 aria-expanded="true"
-                title="Show or hide navigation"
+                title="{{ __('app.toggle_sidebar') }}"
             >
-                <span aria-hidden="true">☰</span>
+                <span aria-hidden="true">&#9776;</span>
             </button>
 
             <div class="topbar-title">
-                <h2>@yield('header', 'Dashboard')</h2>
+                <h2>@yield('header', __('app.dashboard'))</h2>
             </div>
 
-            <div class="user-info">
-                <strong>{{ auth()->user()->name }}</strong>
-                {{ ucfirst(auth()->user()->role) }}
+            <div style="display:flex; align-items:center; gap:14px; flex-wrap:wrap;">
+                <div class="language-switch" style="display:flex; align-items:center; gap:5px; padding:4px; border:1px solid #dbe5e1; border-radius:9px; background:#fff;">
+                    @foreach (['id' => 'ID', 'en' => 'EN'] as $locale => $label)
+                        <form method="POST" action="{{ route('language.update') }}" style="margin:0;">
+                            @csrf
+                            <input type="hidden" name="locale" value="{{ $locale }}">
+                            <button
+                                type="submit"
+                                aria-label="{{ $locale === 'id' ? __('app.indonesian') : __('app.english') }}"
+                                @if (app()->getLocale() === $locale) aria-current="true" @endif
+                                style="min-width:36px; padding:6px 9px; border:0; border-radius:6px; cursor:pointer; font-size:11px; font-weight:800; background:{{ app()->getLocale() === $locale ? '#1556a8' : 'transparent' }}; color:{{ app()->getLocale() === $locale ? '#fff' : '#526477' }};"
+                            >{{ $label }}</button>
+                        </form>
+                    @endforeach
+                </div>
+
+                <div class="user-info">
+                    <strong>{{ auth()->user()->name }}</strong>
+                    {{ ucfirst(auth()->user()->role) }}
+                </div>
             </div>
         </header>
 
@@ -79,7 +98,7 @@
         </main>
 
         <footer class="app-footer">
-            &copy; {{ date('Y') }} CargoTrace Logistics Management System.
+            &copy; {{ date('Y') }} {{ __('app.footer') }}
         </footer>
     </div>
 </div>
