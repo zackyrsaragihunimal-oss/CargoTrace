@@ -418,14 +418,14 @@
 
     <section class="ct-customer-section" id="notifications">
         <h2>Recent Notifications</h2>
-        <div class="ct-customer-panel">
+        <div class="ct-customer-panel" data-customer-notification-list>
             @if ($recentNotifications->isEmpty())
-                <div class="ct-customer-empty">
+                <div class="ct-customer-empty" data-customer-notification-empty>
                     Belum ada notifikasi untuk akun Anda.
                 </div>
             @else
                 @foreach ($recentNotifications as $notification)
-                    <article class="ct-customer-notification">
+                    <article class="ct-customer-notification" data-notification-id="{{ $notification->id }}">
                         <h3>
                             {{ $notification->title }}
                             @if (!$notification->read_at)
