@@ -478,4 +478,22 @@ class TrackingEventTest extends TestCase
         $this->assertDatabaseCount('tracking_events', 0);
         $this->assertDatabaseCount('audit_logs', 0);
     }
+
+    /**
+     * Customer tidak boleh membuat tracking event.
+     */
+    public function test_customer_cannot_create_tracking_event(): void
+    {
+        $this->actingAs($this->customer)
+            ->post(route('shipments.tracking.store', $this->shipment), [
+                'event_type' => 'INSPECTION',
+                'event_at' => '2026-11-18 15:00:00',
+                'location_name' => 'Medan',
+                'description' => 'Pengujian pembatasan akses Customer.',
+            ])
+            ->assertForbidden();
+
+        $this->assertDatabaseCount('tracking_events', 0);
+        $this->assertDatabaseCount('audit_logs', 0);
+    }
 }
