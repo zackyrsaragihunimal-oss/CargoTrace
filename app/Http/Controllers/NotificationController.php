@@ -50,7 +50,7 @@ class NotificationController extends Controller
 
         return redirect()
             ->route('notifications.index')
-            ->with('success', 'Notifikasi berhasil ditandai sudah dibaca.');
+            ->with('success', __('notifications.success_read'));
     }
 
     /**
@@ -67,6 +67,6 @@ class NotificationController extends Controller
 
         return redirect()
             ->route('notifications.index')
-            ->with('success', 'Semua notifikasi berhasil ditandai sudah dibaca.');
+            ->with('success', __('notifications.success_read_all'));
     }
 }

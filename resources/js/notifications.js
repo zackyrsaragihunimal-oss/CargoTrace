@@ -1,4 +1,25 @@
 const notificationUserId = document.body?.dataset.notificationUser;
+const notificationLocale =
+    document.body?.dataset.notificationLocale === 'en' ? 'en-US' : 'id-ID';
+
+const notificationTranslations = {
+    unread_count: document.body?.dataset.notificationUnreadCount || '',
+    unread: document.body?.dataset.notificationUnread || '',
+    view_shipment: document.body?.dataset.notificationViewShipment || '',
+    mark_read: document.body?.dataset.notificationMarkRead || '',
+    new_notification: document.body?.dataset.notificationNewNotification || '',
+    shipment: document.body?.dataset.notificationShipment || '',
+};
+
+function translate(key, replacements = {}) {
+    let value = notificationTranslations[key] || key;
+
+    Object.entries(replacements).forEach(([name, replacement]) => {
+        value = value.replaceAll(`:${name}`, String(replacement));
+    });
+
+    return value;
+}
 const notificationCount = document.querySelector('[data-notification-count]');
 const notificationToast = document.querySelector('[data-notification-toast]');
 const toastTitle = notificationToast?.querySelector('[data-notification-toast-title]');
@@ -41,7 +62,7 @@ function formatNotificationDate(dateValue) {
         return '-';
     }
 
-    return new Intl.DateTimeFormat('id-ID', {
+    return new Intl.DateTimeFormat(notificationLocale, {
         day: '2-digit',
         month: 'short',
         year: 'numeric',
@@ -76,7 +97,7 @@ function updateUnreadCount(notification) {
     }
 
     if (unreadLabel) {
-        unreadLabel.textContent = `${count} unread notification(s)`;
+        unreadLabel.textContent = translate("unread_count", { count });
     }
 
     if (markAllForm) {
@@ -103,11 +124,11 @@ function addCustomerNotification(notification) {
     article.dataset.notificationId = String(notification.id);
 
     const heading = document.createElement('h3');
-    heading.textContent = notification.title || 'Notifikasi baru';
+    heading.textContent = notification.title || translate('new_notification');
 
     const unreadPill = document.createElement('span');
     unreadPill.className = 'ct-customer-pill';
-    unreadPill.textContent = 'UNREAD';
+    unreadPill.textContent = translate('unread');
     heading.appendChild(document.createTextNode(' '));
     heading.appendChild(unreadPill);
 
@@ -118,7 +139,7 @@ function addCustomerNotification(notification) {
     let metaText = formatNotificationDate(notification.created_at);
 
     if (notification.shipment_number) {
-        metaText += ` · Shipment: ${notification.shipment_number}`;
+        metaText += ` · ${translate("shipment")} ${notification.shipment_number}`;
     }
 
     meta.textContent = metaText;
@@ -180,7 +201,7 @@ function addHistoryNotification(notification) {
 
     const title = document.createElement('div');
     title.className = 'notification-title';
-    title.textContent = notification.title || 'Notifikasi baru';
+    title.textContent = notification.title || translate('new_notification');
 
     const message = document.createElement('div');
     message.className = 'notification-message';
@@ -195,13 +216,13 @@ function addHistoryNotification(notification) {
 
     if (notification.shipment_number) {
         const shipment = document.createElement('span');
-        shipment.textContent = `Shipment: ${notification.shipment_number}`;
+        shipment.textContent = `${translate("shipment")} ${notification.shipment_number}`;
         meta.appendChild(shipment);
     }
 
     const status = document.createElement('span');
     status.className = 'notification-status notification-unread';
-    status.textContent = 'UNREAD';
+    status.textContent = translate('unread');
     meta.appendChild(status);
 
     main.appendChild(title);
@@ -223,7 +244,7 @@ function addHistoryNotification(notification) {
         shipmentLink.className =
             'notification-btn notification-btn-secondary';
 
-        shipmentLink.textContent = 'View Shipment';
+        shipmentLink.textContent = translate('view_shipment');
         actions.appendChild(shipmentLink);
     }
 
@@ -250,7 +271,7 @@ function addHistoryNotification(notification) {
         const readButton = document.createElement('button');
         readButton.type = 'submit';
         readButton.className = 'notification-btn';
-        readButton.textContent = 'Mark as Read';
+        readButton.textContent = translate('mark_read');
 
         form.appendChild(csrfInput);
         form.appendChild(methodInput);
@@ -288,7 +309,7 @@ function showNotificationToast(notification) {
         return;
     }
 
-    toastTitle.textContent = notification.title || 'Notifikasi baru';
+    toastTitle.textContent = notification.title || translate('new_notification');
     toastMessage.textContent = notification.message || '';
 
     notificationToast.style.display = 'block';

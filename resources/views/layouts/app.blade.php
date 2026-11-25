@@ -9,7 +9,16 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body data-notification-user="{{ auth()->id() }}">
+<body
+    data-notification-user="{{ auth()->id() }}"
+    data-notification-locale="{{ app()->getLocale() }}"
+    data-notification-unread-count="{{ __('notifications.javascript.unread_count') }}"
+    data-notification-unread="{{ __('notifications.javascript.unread') }}"
+    data-notification-view-shipment="{{ __('notifications.javascript.view_shipment') }}"
+    data-notification-mark-read="{{ __('notifications.javascript.mark_read') }}"
+    data-notification-new-notification="{{ __('notifications.javascript.new_notification') }}"
+    data-notification-shipment="{{ __('notifications.shipment') }}"
+>
 <div class="app-layout">
     <aside class="sidebar" id="appSidebar">
         <div class="brand">CARGO<span>TRACE</span></div>

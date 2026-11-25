@@ -1,17 +1,17 @@
 @extends('layouts.app')
 
-@section('title', 'Notifications')
-@section('header', 'Notifications')
+@section('title', __('notifications.page_title'))
+@section('header', __('notifications.page_title'))
 
 @section('sidebar-menu')
     <a href="{{ route('shipments.index') }}"
        class="{{ request()->routeIs('shipments.*') ? 'active' : '' }}">
-        Shipments
+        {{ __('notifications.shipments') }}
     </a>
 
     <a href="{{ route('exceptions.index') }}"
        class="{{ request()->routeIs('exceptions.*') ? 'active' : '' }}">
-        Exceptions
+        {{ __('notifications.exceptions') }}
     </a>
 @endsection
 
@@ -284,13 +284,13 @@
 
     <div class="notification-heading">
         <div>
-            <h2>Your Notifications</h2>
-            <p>Stay informed about shipment updates and activities.</p>
+            <h2>{{ __('notifications.your_notifications') }}</h2>
+            <p>{{ __('notifications.page_description') }}</p>
         </div>
 
         <div class="notification-actions">
             <span class="notification-count" data-notification-unread-label>
-                {{ $unreadCount }} unread notification(s)
+                {{ __('notifications.unread_count', ['count' => $unreadCount]) }}
             </span>
 
             <form data-notification-mark-all-form method="POST" action="{{ route('notifications.read-all') }}" @if ($unreadCount <= 0) hidden @endif>
@@ -298,7 +298,7 @@
                 @method('PATCH')
 
                 <button type="submit" class="notification-btn">
-                    Mark All as Read
+                    {{ __('notifications.mark_all_read') }}
                 </button>
             </form>
         </div>
@@ -330,18 +330,18 @@
 
                             @if ($notification->shipment)
                                 <span>
-                                    Shipment:
+                                    {{ __('notifications.shipment') }}
                                     {{ $notification->shipment->shipment_number }}
                                 </span>
                             @endif
 
                             @if ($notification->read_at)
                                 <span class="notification-status notification-read">
-                                    READ
+                                    {{ __('notifications.read') }}
                                 </span>
                             @else
                                 <span class="notification-status notification-unread">
-                                    UNREAD
+                                    {{ __('notifications.unread') }}
                                 </span>
                             @endif
                         </div>
@@ -351,7 +351,7 @@
                         @if ($notification->shipment)
                             <a href="{{ route('shipments.show', $notification->shipment->id) }}"
                                class="notification-btn notification-btn-secondary">
-                                View Shipment
+                                {{ __('notifications.view_shipment') }}
                             </a>
                         @endif
 
@@ -362,7 +362,7 @@
                                 @method('PATCH')
 
                                 <button type="submit" class="notification-btn">
-                                    Mark as Read
+                                    {{ __('notifications.mark_read') }}
                                 </button>
                             </form>
                         @endif
@@ -371,8 +371,8 @@
             </div>
         @empty
             <div class="notification-empty">
-                <strong>No notifications yet</strong>
-                You will see shipment updates and other important activities here.
+                <strong>{{ __('notifications.empty_title') }}</strong>
+                {{ __('notifications.empty_description') }}
             </div>
         @endforelse
 
